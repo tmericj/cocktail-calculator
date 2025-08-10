@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Calcolatore Gradazione Alcolica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        input, textarea {
+            -webkit-user-select: text;
+            -khtml-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+        }
+
+        .results {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #856404;
+        }
+
+        .cocktail-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .cocktail-item {
+            padding: 15px;
+            border-bottom: 1px solid #e1e8ed;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .cocktail-item:active {
+            background: #e9ecef;
+        }
+
+        .cocktail-item:last-child {
+            border-bottom: none;
+        }
+
+        .cocktail-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .cocktail-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .tab:active {
+            transform: scale(0.98);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .legal-status {
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        .legal-ok {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .legal-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .legal-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .added-drink {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .added-drink button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .total-alcol {
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: right;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                margin: 0;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .content {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍸 Gradazione Alcolica</h1>
+            <p>Calcola gradazione e alcolemia dei cocktail</p>
+        </div>
+        
+        <div class="content">
+            <div class="tabs">
+                <div class="tab active" data-section="search">Cerca</div>
+                <div class="tab" data-section="alcolemia">Alcolemia</div>
+                <div class="tab" data-section="lista">Lista</div>
+            </div>
+
+            <!-- Sezione Ricerca Cocktail -->
+            <div id="search" class="section active">
+                <div class="form-group">
+                    <label>Cerca un cocktail</label>
+                    <input type="text" id="searchInput" placeholder="Es: Negroni, Spritz Aperol...">
+                </div>
+                
+                <div id="searchResults"></div>
+            </div>
+
+            <!-- Sezione Calcolo Alcolemia -->
+            <div id="alcolemia" class="section">
+                <div class="form-group">
+                    <label>Inserisci nome cocktail</label>
+                    <input type="text" id="cocktailName" placeholder="Nome cocktail...">
+                </div>
+
+                <div class="form-group">
+                    <input type="number" id="quantita" placeholder="Quantità (default 1)" min="1" value="1">
+                </div>
+
+                <button class="btn btn-secondary" id="aggiungiDrinkBtn">Aggiungi Drink</button>
+
+                <div id="addedDrinks" class="cocktail-list"></div>
+
+                <div class="total-alcol">Totale alcol puro: <span id="totalAlcol">0</span> g</div>
+
+                <div id="cocktailInfo" style="display: none;">
+                    <div class="results">
+                        <div class="result-item">
+                            <span class="result-label">Gradazione:</span>
+                            <span class="result-value" id="gradazione">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Alcol puro:</span>
+                            <span class="result-value" id="alcolPuro">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>I tuoi dati</label>
+                    <select id="genere">
+                        <option value="uomo">Uomo</option>
+                        <option value="donna">Donna</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <input type="number" id="peso" placeholder="Peso (kg)" min="30" max="200">
+                </div>
+
+                <div class="form-group">
+                    <input type="number" id="altezza" placeholder="Altezza (cm)" min="120" max="220">
+                </div>
+
+                <div class="form-group">
+                    <input type="number" id="eta" placeholder="Età (anni)" min="18" max="100">
+                </div>
+
+                <div class="form-group">
+                    <label>Stomaco</label>
+                    <select id="stomaco">
+                        <option value="false">Vuoto (digiuno)</option>
+                        <option value="true">Pieno (ho mangiato)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Durata totale sessione (minuti)</label>
+                    <input type="number" id="durataMinuti" placeholder="Es: 120 per 2 ore" min="0" value="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Minuti dal primo drink</label>
+                    <input type="number" id="minutiPrimo" placeholder="Es: 180 per 3 ore fa" min="0" value="0">
+                </div>
+
+                <button class="btn" id="calcolaBtn">Calcola Alcolemia</button>
+
+                <div id="alcolemiaResults"></div>
+            </div>
+
+            <!-- Sezione Lista Cocktail -->
+            <div id="lista" class="section">
+                <div class="search-box">
+                    <input type="text" id="filterInput" placeholder="Filtra cocktail...">
+                </div>
+                <div class="cocktail-list" id="cocktailList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Database cocktail completo (tutti i 59 cocktail dal CSV)
+        const cocktailDatabase = [
+            {nome: "Americano", categoria: "The Unforgettables", ingredienti: [{nome: "Campari", volume: 30, gradazione: 25}, {nome: "Vermouth Rosso", volume: 30, gradazione: 16}, {nome: "Soda Water", volume: 30, gradazione: 0}], bicchiere: 200, note: "Servito con ghiaccio e mezza fetta d'arancia"},
+            {nome: "Negroni", categoria: "The Unforgettables", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Campari", volume: 30, gradazione: 25}, {nome: "Vermouth Rosso", volume: 30, gradazione: 16}], bicchiere: 150, note: "Servito con ghiaccio e scorza d'arancia"},
+            {nome: "Gin Tonic", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Acqua Tonica", volume: 150, gradazione: 0}], bicchiere: 200, note: "Servito con ghiaccio e lime"},
+            {nome: "Mojito", categoria: "Contemporary Classics", ingredienti: [{nome: "Rum Bianco", volume: 50, gradazione: 40}, {nome: "Menta", volume: 10, gradazione: 0}, {nome: "Zucchero", volume: 10, gradazione: 0}, {nome: "Lime", volume: 15, gradazione: 0}, {nome: "Soda Water", volume: 100, gradazione: 0}], bicchiere: 200, note: "Pestare menta e zucchero"},
+            {nome: "Daiquiri", categoria: "The Unforgettables", ingredienti: [{nome: "Rum Bianco", volume: 50, gradazione: 40}, {nome: "Succo di Lime", volume: 20, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 15, gradazione: 0}], bicchiere: 120, note: "Shakerato e servito up"},
+            {nome: "Manhattan", categoria: "The Unforgettables", ingredienti: [{nome: "Whiskey", volume: 50, gradazione: 40}, {nome: "Vermouth Rosso", volume: 25, gradazione: 16}, {nome: "Angostura Bitters", volume: 5, gradazione: 35}], bicchiere: 120, note: "Servito con ciliegia"},
+            {nome: "Martini", categoria: "The Unforgettables", ingredienti: [{nome: "Gin", volume: 60, gradazione: 40}, {nome: "Vermouth Secco", volume: 10, gradazione: 18}], bicchiere: 120, note: "Servito con oliva o scorza limone"},
+            {nome: "Old Fashioned", categoria: "The Unforgettables", ingredienti: [{nome: "Whiskey", volume: 60, gradazione: 40}, {nome: "Zucchero", volume: 10, gradazione: 0}, {nome: "Angostura Bitters", volume: 5, gradazione: 35}, {nome: "Acqua", volume: 10, gradazione: 0}], bicchiere: 120, note: "Servito con ghiaccio e scorza arancia"},
+            {nome: "Margarita", categoria: "Contemporary Classics", ingredienti: [{nome: "Tequila", volume: 50, gradazione: 40}, {nome: "Triple Sec", volume: 25, gradazione: 40}, {nome: "Succo di Lime", volume: 25, gradazione: 0}], bicchiere: 150, note: "Servito con bordo salato"},
+            {nome: "Cosmopolitan", categoria: "Contemporary Classics", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Triple Sec", volume: 15, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Succo di Mirtillo", volume: 30, gradazione: 0}], bicchiere: 150, note: "Servito in coppa Martini"},
+            {nome: "Bloody Mary", categoria: "Contemporary Classics", ingredienti: [{nome: "Vodka", volume: 45, gradazione: 40}, {nome: "Succo di Pomodoro", volume: 90, gradazione: 0}, {nome: "Salsa Worcestershire", volume: 5, gradazione: 0}, {nome: "Tabasco", volume: 2, gradazione: 0}, {nome: "Sale", volume: 2, gradazione: 0}], bicchiere: 200, note: "Servito con sedano e spezie"},
+            {nome: "Whiskey Sour", categoria: "The Unforgettables", ingredienti: [{nome: "Whiskey", volume: 50, gradazione: 40}, {nome: "Succo di Limone", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 20, gradazione: 0}], bicchiere: 150, note: "Opzionale albume d'uovo"},
+            {nome: "Caipirinha", categoria: "Contemporary Classics", ingredienti: [{nome: "Cachaça", volume: 50, gradazione: 38}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], bicchiere: 150, note: "Pestare lime e zucchero"},
+            {nome: "Piña Colada", categoria: "Contemporary Classics", ingredienti: [{nome: "Rum Bianco", volume: 30, gradazione: 40}, {nome: "Rum Scuro", volume: 30, gradazione: 40}, {nome: "Latte di Cocco", volume: 60, gradazione: 0}, {nome: "Succo di Ananas", volume: 120, gradazione: 0}], bicchiere: 250, note: "Servito in coppa hurricane"},
+            {nome: "Long Island", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 15, gradazione: 40}, {nome: "Rum Bianco", volume: 15, gradazione: 40}, {nome: "Gin", volume: 15, gradazione: 40}, {nome: "Tequila", volume: 15, gradazione: 40}, {nome: "Triple Sec", volume: 15, gradazione: 40}, {nome: "Succo di Limone", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 20, gradazione: 0}, {nome: "Cola", volume: 120, gradazione: 0}], bicchiere: 250, note: "Completare con Cola"},
+            {nome: "Mai Tai", categoria: "Contemporary Classics", ingredienti: [{nome: "Rum Scuro", volume: 30, gradazione: 40}, {nome: "Rum Bianco", volume: 30, gradazione: 40}, {nome: "Triple Sec", volume: 15, gradazione: 40}, {nome: "Sciroppo d'Orzata", volume: 15, gradazione: 0}, {nome: "Succo di Lime", volume: 30, gradazione: 0}], bicchiere: 200, note: "Servito con frutta tropicale"},
+            {nome: "Black Russian", categoria: "Contemporary Classics", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Kahlúa", volume: 25, gradazione: 20}], bicchiere: 120, note: "Servito con ghiaccio"},
+            {nome: "White Russian", categoria: "Contemporary Classics", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Kahlúa", volume: 25, gradazione: 20}, {nome: "Panna", volume: 25, gradazione: 0}], bicchiere: 150, note: "Versione cremosa del Black Russian"},
+            {nome: "Moscow Mule", categoria: "Contemporary Classics", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Ginger Beer", volume: 150, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}], bicchiere: 200, note: "Servito in tazza di rame"},
+            {nome: "Cuba Libre", categoria: "Classic", ingredienti: [{nome: "Rum", volume: 50, gradazione: 40}, {nome: "Cola", volume: 120, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}], bicchiere: 200, note: "Servito con ghiaccio e lime"},
+            {nome: "Spritz Aperol", categoria: "Contemporary Classics", ingredienti: [{nome: "Aperol", volume: 60, gradazione: 11}, {nome: "Prosecco", volume: 90, gradazione: 11}, {nome: "Soda Water", volume: 30, gradazione: 0}], bicchiere: 200, note: "Servito con fetta d'arancia"},
+            {nome: "Bellini", categoria: "Contemporary Classics", ingredienti: [{nome: "Prosecco", volume: 100, gradazione: 11}, {nome: "Purè di Pesca", volume: 50, gradazione: 0}], bicchiere: 180, note: "Servito in flute"},
+            {nome: "Mimosa", categoria: "Contemporary Classics", ingredienti: [{nome: "Champagne", volume: 75, gradazione: 12}, {nome: "Succo d'Arancia", volume: 75, gradazione: 0}], bicchiere: 180, note: "Servito in flute"},
+            {nome: "Espresso Martini", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Kahlúa", volume: 25, gradazione: 20}, {nome: "Espresso", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 10, gradazione: 0}], bicchiere: 150, note: "Servito in coppa Martini"},
+            {nome: "Sex on the Beach", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 30, gradazione: 40}, {nome: "Peach Schnapps", volume: 30, gradazione: 20}, {nome: "Succo di Ananas", volume: 60, gradazione: 0}, {nome: "Succo di Mirtillo", volume: 60, gradazione: 0}], bicchiere: 200, note: "Servito con ghiaccio"},
+            {nome: "Tequila Sunrise", categoria: "Contemporary Classics", ingredienti: [{nome: "Tequila", volume: 50, gradazione: 40}, {nome: "Succo d'Arancia", volume: 120, gradazione: 0}, {nome: "Granatina", volume: 10, gradazione: 0}], bicchiere: 200, note: "Servito con gradiente di colore"},
+            {nome: "Pisco Sour", categoria: "New Era", ingredienti: [{nome: "Pisco", volume: 50, gradazione: 40}, {nome: "Succo di Limone", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 20, gradazione: 0}, {nome: "Albume", volume: 15, gradazione: 0}, {nome: "Angostura", volume: 2, gradazione: 35}], bicchiere: 150, note: "Servito con schiuma"},
+            {nome: "Aviation", categoria: "The Unforgettables", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Maraschino", volume: 15, gradazione: 32}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Crème de Violette", volume: 1, gradazione: 20}], bicchiere: 120, note: "Servito in coppa cocktail"},
+            {nome: "Bee's Knees", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Miele", volume: 20, gradazione: 0}, {nome: "Succo di Limone", volume: 20, gradazione: 0}], bicchiere: 120, note: "Sciroppo di miele e limone"},
+            {nome: "Tom Collins", categoria: "Contemporary Classics", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Succo di Limone", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 15, gradazione: 0}, {nome: "Soda Water", volume: 100, gradazione: 0}], bicchiere: 200, note: "Versione lunga del Gin Sour"},
+            {nome: "Gimlet", categoria: "The Unforgettables", ingredienti: [{nome: "Gin", volume: 60, gradazione: 40}, {nome: "Succo di Lime", volume: 20, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 15, gradazione: 0}], bicchiere: 120, note: "Servito ghiacciato"},
+            {nome: "French 75", categoria: "The Unforgettables", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 15, gradazione: 0}, {nome: "Champagne", volume: 60, gradazione: 12}], bicchiere: 150, note: "Servito in flute"},
+            {nome: "Bramble", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 40, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 10, gradazione: 0}, {nome: "Crème de Mure", volume: 15, gradazione: 16}], bicchiere: 120, note: "Servito con more fresche"},
+            {nome: "Clover Club", categoria: "The Unforgettables", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Sciroppo di Lampone", volume: 15, gradazione: 0}, {nome: "Albume", volume: 15, gradazione: 0}], bicchiere: 120, note: "Servito con schiuma rosa"},
+            {nome: "Ramos Gin Fizz", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 15, gradazione: 0}, {nome: "Albume", volume: 30, gradazione: 0}], bicchiere: 150, note: "Lungo shaking richiesto"},
+            {nome: "Boulevardier", categoria: "The Unforgettables", ingredienti: [{nome: "Bourbon", volume: 45, gradazione: 40}, {nome: "Campari", volume: 30, gradazione: 25}, {nome: "Vermouth Rosso", volume: 30, gradazione: 16}], bicchiere: 120, note: "Versione whiskey del Negroni"},
+            {nome: "Sazerac", categoria: "The Unforgettables", ingredienti: [{nome: "Whiskey Rye", volume: 50, gradazione: 40}, {nome: "Zucchero", volume: 5, gradazione: 0}, {nome: "Peychaud's Bitters", volume: 3, gradazione: 35}, {nome: "Assenzio", volume: 2, gradazione: 68}], bicchiere: 120, note: "Cocktail storico di New Orleans"},
+            {nome: "Vieux Carré", categoria: "New Era", ingredienti: [{nome: "Whiskey Rye", volume: 30, gradazione: 40}, {nome: "Cognac", volume: 30, gradazione: 40}, {nome: "Vermouth Rosso", volume: 30, gradazione: 16}, {nome: "Bénédictine", volume: 15, gradazione: 40}, {nome: "Peychaud's Bitters", volume: 2, gradazione: 35}], bicchiere: 150, note: "Cocktail complesso di New Orleans"},
+            {nome: "Corpse Reviver #2", categoria: "Contemporary Classics", ingredienti: [{nome: "Gin", volume: 22.5, gradazione: 40}, {nome: "Cointreau", volume: 22.5, gradazione: 40}, {nome: "Lillet Blanc", volume: 22.5, gradazione: 17}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}, {nome: "Assenzio", volume: 1, gradazione: 68}], bicchiere: 120, note: "Servito con scorza limone"},
+            {nome: "Paper Plane", categoria: "New Era", ingredienti: [{nome: "Bourbon", volume: 22.5, gradazione: 40}, {nome: "Aperol", volume: 22.5, gradazione: 11}, {nome: "Amaro Nonino", volume: 22.5, gradazione: 35}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}], bicchiere: 120, note: "Cocktail bilanciato moderno"},
+            {nome: "Irish Coffee", categoria: "Contemporary Classics", ingredienti: [{nome: "Whiskey Irlandese", volume: 40, gradazione: 40}, {nome: "Caffè", volume: 120, gradazione: 0}, {nome: "Zucchero", volume: 10, gradazione: 0}, {nome: "Panna", volume: 30, gradazione: 0}], bicchiere: 200, note: "Servito caldo con panna montata"},
+            {nome: "Hot Toddy", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 50, gradazione: 40}, {nome: "Miele", volume: 15, gradazione: 0}, {nome: "Succo di Limone", volume: 10, gradazione: 0}, {nome: "Acqua Calda", volume: 100, gradazione: 0}, {nome: "Spezie", volume: 5, gradazione: 0}], bicchiere: 200, note: "Drink caldo invernale"},
+            {nome: "Mint Julep", categoria: "The Unforgettables", ingredienti: [{nome: "Bourbon", volume: 70, gradazione: 40}, {nome: "Menta", volume: 20, gradazione: 0}, {nome: "Zucchero", volume: 10, gradazione: 0}], bicchiere: 150, note: "Servito con molto ghiaccio tritato"},
+            {nome: "Dark 'n' Stormy", categoria: "Contemporary Classics", ingredienti: [{nome: "Rum Scuro", volume: 50, gradazione: 40}, {nome: "Ginger Beer", volume: 150, gradazione: 0}, {nome: "Succo di Lime", volume: 10, gradazione: 0}], bicchiere: 200, note: "Trademark di Gosling's"},
+            {nome: "Painkiller", categoria: "New Era", ingredienti: [{nome: "Rum Scuro", volume: 60, gradazione: 40}, {nome: "Succo di Ananas", volume: 120, gradazione: 0}, {nome: "Succo d'Arancia", volume: 30, gradazione: 0}, {nome: "Latte di Cocco", volume: 30, gradazione: 0}], bicchiere: 250, note: "Servito con noce moscata"},
+            {nome: "Jungle Bird", categoria: "New Era", ingredienti: [{nome: "Rum Scuro", volume: 45, gradazione: 40}, {nome: "Campari", volume: 22.5, gradazione: 25}, {nome: "Succo di Ananas", volume: 45, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Sciroppo", volume: 7.5, gradazione: 0}], bicchiere: 150, note: "Tiki cocktail malese"},
+            {nome: "Zombie", categoria: "New Era", ingredienti: [{nome: "Rum Bianco", volume: 30, gradazione: 40}, {nome: "Rum Scuro", volume: 30, gradazione: 40}, {nome: "Rum Agricolo", volume: 30, gradazione: 50}, {nome: "Succo di Lime", volume: 20, gradazione: 0}, {nome: "Granatina", volume: 10, gradazione: 0}], bicchiere: 200, note: "Cocktail tiki molto forte"},
+            {nome: "Gin Lemon", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Limonata", volume: 150, gradazione: 0}], bicchiere: 200, note: "Servito con fette di limone"},
+            {nome: "Novebuche", categoria: "Contemporary Classics", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Campari", volume: 30, gradazione: 25}, {nome: "Succo di Pompelmo", volume: 60, gradazione: 0}], bicchiere: 150, note: "Servito con ghiaccio"},
+            {nome: "Gin Soda e Lime", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Soda Water", volume: 150, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}], bicchiere: 200, note: "Servito con fette di lime"},
+            {nome: "Whiskey Soda", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 50, gradazione: 40}, {nome: "Soda Water", volume: 150, gradazione: 0}], bicchiere: 200, note: "Highball classico con limone"},
+            {nome: "Agua de Valencia", categoria: "Contemporary Classics", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Succo d'Arancia", volume: 500, gradazione: 0}, {nome: "Cava", volume: 500, gradazione: 11}, {nome: "Zucchero", volume: 30, gradazione: 0}], bicchiere: 1000, note: "Cocktail spagnolo da pitcher"},
+            {nome: "Spritz Select", categoria: "Contemporary Classics", ingredienti: [{nome: "Select", volume: 60, gradazione: 17.5}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 200, note: "Spritz classico con Select"},
+            {nome: "Spritz Select Veneziana", categoria: "Contemporary Classics", ingredienti: [{nome: "Select", volume: 90, gradazione: 17.5}, {nome: "Prosecco", volume: 90, gradazione: 11}], bicchiere: 200, note: "Spritz Select senza soda water"},
+            {nome: "Spritz Campari", categoria: "Contemporary Classics", ingredienti: [{nome: "Campari", volume: 60, gradazione: 25}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 200, note: "Spritz classico con Campari"},
+            {nome: "Spritz Campari Veneziana", categoria: "Contemporary Classics", ingredienti: [{nome: "Campari", volume: 90, gradazione: 25}, {nome: "Prosecco", volume: 90, gradazione: 11}], bicchiere: 200, note: "Spritz Campari senza soda water"},
+            {nome: "Spritz Aperol Veneziana", categoria: "Contemporary Classics", ingredienti: [{nome: "Aperol", volume: 90, gradazione: 11}, {nome: "Prosecco", volume: 90, gradazione: 11}], bicchiere: 200, note: "Spritz Aperol senza soda water"},
+            {nome: "Leone", categoria: "Aperitivi Regionali", ingredienti: [{nome: "Aperitivo Leone", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 30, gradazione: 0}], bicchiere: 120, note: "Aperitivo tipico del Veneto servito con ghiaccio"},
+            {nome: "Te+", categoria: "Aperitivi Regionali", ingredienti: [{nome: "Te+ (Origin Bassano)", volume: 250, gradazione: 9.5}], bicchiere: 250, note: "Estratto alcolico al tè pesca - Origin Bar Bassano del Grappa"}
+
+        ];
+
+        let addedDrinks = [];
+
+        // Funzioni di calcolo (tradotte da Python)
+        function calcolaTBW(peso, altezza, eta, genere) {
+            if (genere.toLowerCase() === 'uomo') {
+                return Math.max(2.447 - (0.09145 * eta) + (0.1074 * altezza) + (0.3362 * peso), 1.0);
+            } else {
+                return Math.max(-2.097 + (0.1069 * altezza) + (0.2466 * peso), 1.0);
+            }
+        }
+
+        function calcolaFattoreWidmark(genere, peso, altezza, eta) {
+            const tbw = calcolaTBW(peso, altezza, eta, genere);
+            return tbw / peso;
+        }
+
+        function calcolaGradazione(ingredienti) {
+            let alcolTotale = 0;
+            let volumeTotale = 0;
+
+            for (const ing of ingredienti) {
+                const alcolPuro = ing.volume * (ing.gradazione / 100);
+                alcolTotale += alcolPuro;
+                volumeTotale += ing.volume;
+            }
+
+            if (volumeTotale === 0) return 0;
+            return (alcolTotale / volumeTotale) * 100;
+        }
+
+        function calcolaGrammiAlcol(ingredienti) {
+            let alcolTotale = 0;
+            for (const ing of ingredienti) {
+                alcolTotale += ing.volume * (ing.gradazione / 100);
+            }
+            return alcolTotale * 0.789; // peso specifico etanolo
+        }
+
+        function calcolaAlcolemiaMultipla(totalGrammiAlcol, genere, peso, altezza, eta, stomacoPieno = false, durataMinuti = 0, minutiPrimo = 0) {
+            const fattoreWidmark = calcolaFattoreWidmark(genere, peso, altezza, eta);
+            const grammiEffettivi = totalGrammiAlcol * (stomacoPieno ? 0.7 : 1.0);
+            const alcolemiaPicco = grammiEffettivi / (peso * fattoreWidmark);
+            const betaPerOra = genere.toLowerCase() === 'uomo' ? 0.15 : 0.17;
+            const betaPerMinuto = betaPerOra / 60;
+            let timeFromEnd = minutiPrimo - durataMinuti;
+            if (timeFromEnd < 0) timeFromEnd = 0;
+            const alcolemiaAttuale = Math.max(0, alcolemiaPicco - (betaPerMinuto * timeFromEnd));
+            const minutiAzzeramentoCurrent = alcolemiaAttuale / betaPerMinuto;
+            const minutiPerGuidareCurrent = Math.max(0, (alcolemiaAttuale - 0.5) / betaPerMinuto);
+            
+            return {
+                alcolemiaPicco: Math.round(alcolemiaPicco * 1000) / 1000,
+                alcolemiaAttuale: Math.round(alcolemiaAttuale * 1000) / 1000,
+                grammiEffettivi: Math.round(grammiEffettivi * 10) / 10,
+                fattoreWidmark: Math.round(fattoreWidmark * 1000) / 1000,
+                tbw: Math.round(calcolaTBW(peso, altezza, eta, genere) * 10) / 10,
+                oreAzzeramento: Math.round(minutiAzzeramentoCurrent / 60 * 10) / 10,
+                orePerGuidare: Math.round(minutiPerGuidareCurrent / 60 * 10) / 10,
+                betaPerOra: betaPerOra,
+                statoLegale: getStatoLegale(alcolemiaAttuale),
+                funzioneAlcolemia: (additionalMin) => Math.max(0, alcolemiaAttuale - (betaPerMinuto * additionalMin))
+            };
+        }
+
+        function getStatoLegale(alcolemia) {
+            if (alcolemia <= 0.5) return {status: 'ok', text: 'Entro i limiti (guida consentita)'};
+            else if (alcolemia <= 0.8) return {status: 'warning', text: 'OLTRE I LIMITI - Sanzione amministrativa'};
+            else if (alcolemia <= 1.5) return {status: 'danger', text: 'OLTRE I LIMITI - Sanzione penale'};
+            else return {status: 'danger', text: 'OLTRE I LIMITI - Sanzione penale grave'};
+        }
+
+        // Funzioni di interfaccia
+        function showSection(sectionId, tab) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            tab.classList.add('active');
+            
+            if (sectionId === 'lista') {
+                loadCocktailList();
+            } else if (sectionId === 'alcolemia') {
+                // No need for loadCocktailSelect since now text input
+            }
+        }
+
+        function searchCocktail() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const results = document.getElementById('searchResults');
+            
+            if (query.length < 2) {
+                results.innerHTML = '';
+                return;
+            }
+
+            const matches = cocktailDatabase.filter(c => 
+                c.nome.toLowerCase().includes(query) || 
+                c.categoria.toLowerCase().includes(query)
+            );
+
+            if (matches.length === 0) {
+                results.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Nessun cocktail trovato</p>';
+                return;
+            }
+
+            results.innerHTML = matches.map(cocktail => {
+                const gradazione = calcolaGradazione(cocktail.ingredienti);
+                const alcolPuro = calcolaGrammiAlcol(cocktail.ingredienti);
+                
+                return `
+                    <div class="results">
+                        <h3 style="color: #333; margin-bottom: 10px;">${cocktail.nome}</h3>
+                        <div class="result-item">
+                            <span class="result-label">Categoria:</span>
+                            <span class="result-value">${cocktail.categoria}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Gradazione:</span>
+                            <span class="result-value">${gradazione.toFixed(1)}% vol</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Alcol puro:</span>
+                            <span class="result-value">${alcolPuro.toFixed(1)} g</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Bicchiere:</span>
+                            <span class="result-value">${cocktail.bicchiere} ml</span>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <strong>Ingredienti:</strong><br>
+                            ${cocktail.ingredienti.map(ing => 
+                                `• ${ing.nome}: ${ing.volume} ml${ing.gradazione > 0 ? ` (${ing.gradazione}% vol)` : ' (analcolico)'}`
+                            ).join('<br>')}
+                        </div>
+                        ${cocktail.note !== 'N/A' ? `<div style="margin-top: 10px; font-style: italic; color: #666;">${cocktail.note}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateCocktailInfo() {
+            const input = document.getElementById('cocktailName');
+            const info = document.getElementById('cocktailInfo');
+            const name = input.value.trim().toLowerCase();
+            
+            const cocktail = cocktailDatabase.find(c => c.nome.toLowerCase() === name);
+            
+            if (!cocktail) {
+                info.style.display = 'none';
+                return;
+            }
+
+            const gradazione = calcolaGradazione(cocktail.ingredienti);
+            const alcolPuro = calcolaGrammiAlcol(cocktail.ingredienti);
+
+            document.getElementById('gradazione').textContent = `${gradazione.toFixed(1)}% vol`;
+            document.getElementById('alcolPuro').textContent = `${alcolPuro.toFixed(1)} g`;
+            
+            info.style.display = 'block';
+        }
+
+        function aggiungiDrink() {
+            const nameInput = document.getElementById('cocktailName');
+            const quantitaInput = document.getElementById('quantita');
+            const name = nameInput.value.trim().toLowerCase();
+            const cocktail = cocktailDatabase.find(c => c.nome.toLowerCase() === name);
+            if (!cocktail) {
+                alert('Cocktail non trovato!');
+                return;
+            }
+            const qty = parseInt(quantitaInput.value) || 1;
+            if (qty <= 0) {
+                alert('Quantità deve essere almeno 1!');
+                return;
+            }
+            const index = cocktailDatabase.indexOf(cocktail);
+            addedDrinks.push({index, qty});
+            updateAddedDrinks();
+            quantitaInput.value = '1';
+            nameInput.value = '';
+            document.getElementById('cocktailInfo').style.display = 'none';
+        }
+
+        function removeDrink(i) {
+            addedDrinks.splice(i, 1);
+            updateAddedDrinks();
+        }
+
+        function updateAddedDrinks() {
+            const list = document.getElementById('addedDrinks');
+            list.innerHTML = '';
+            let total = 0;
+            addedDrinks.forEach((drink, i) => {
+                const cocktail = cocktailDatabase[drink.index];
+                const alcol = calcolaGrammiAlcol(cocktail.ingredienti) * drink.qty;
+                total += alcol;
+                const div = document.createElement('div');
+                div.className = 'added-drink';
+                div.innerHTML = `
+                    ${cocktail.nome} x ${drink.qty} - Alcol: ${alcol.toFixed(1)}g
+                    <button onclick="removeDrink(${i})">X</button>
+                `;
+                list.appendChild(div);
+            });
+            document.getElementById('totalAlcol').textContent = total.toFixed(1);
+        }
+
+        function calcolaAlcolemia() {
+            if (addedDrinks.length === 0) {
+                document.getElementById('alcolemiaResults').innerHTML = '<div class="warning">Aggiungi almeno un drink!</div>';
+                return;
+            }
+            const genere = document.getElementById('genere').value;
+            const peso = parseFloat(document.getElementById('peso').value);
+            const altezza = parseFloat(document.getElementById('altezza').value);
+            const eta = parseInt(document.getElementById('eta').value);
+            const stomacoPieno = document.getElementById('stomaco').value === 'true';
+            const durataMinuti = parseInt(document.getElementById('durataMinuti').value) || 0;
+            const minutiPrimo = parseInt(document.getElementById('minutiPrimo').value) || 0;
+            const resultsDiv = document.getElementById('alcolemiaResults');
+
+            if (!peso || !altezza || !eta) {
+                resultsDiv.innerHTML = '<div class="warning">Compila tutti i campi!</div>';
+                return;
+            }
+
+            if (durataMinuti > minutiPrimo) {
+                resultsDiv.innerHTML = '<div class="warning">Durata non può essere maggiore dei minuti dal primo drink!</div>';
+                return;
+            }
+
+            let totalGrammiAlcol = 0;
+            addedDrinks.forEach(drink => {
+                const cocktail = cocktailDatabase[drink.index];
+                totalGrammiAlcol += calcolaGrammiAlcol(cocktail.ingredienti) * drink.qty;
+            });
+            
+            if (totalGrammiAlcol === 0) {
+                resultsDiv.innerHTML = '<div class="warning">Nessun alcol nei drink selezionati!</div>';
+                return;
+            }
+
+            const risultato = calcolaAlcolemiaMultipla(totalGrammiAlcol, genere, peso, altezza, eta, stomacoPieno, durataMinuti, minutiPrimo);
+            
+            let timelineHTML = '<h4>Timeline Alcolemia</h4>';
+            for (let h = 1; h <= 6; h++) {
+                const futAlc = risultato.funzioneAlcolemia(h * 60);
+                if (futAlc <= 0) break;
+                timelineHTML += `<div class="result-item">
+                    <span class="result-label">Tra ${h} ore:</span>
+                    <span class="result-value">${futAlc.toFixed(3)} g/L</span>
+                </div>`;
+            }
+
+            resultsDiv.innerHTML = `
+                <div class="results">
+                    <h3 style="color: #333; margin-bottom: 15px;">Risultati Alcolemia</h3>
+                    <div class="result-item">
+                        <span class="result-label">Alcolemia al picco (fine bevute):</span>
+                        <span class="result-value">${risultato.alcolemiaPicco} g/L</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Alcolemia attuale:</span>
+                        <span class="result-value">${risultato.alcolemiaAttuale} g/L</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">TBW:</span>
+                        <span class="result-value">${risultato.tbw} litri</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Fattore Widmark:</span>
+                        <span class="result-value">${risultato.fattoreWidmark}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Ore per azzeramento:</span>
+                        <span class="result-value">${risultato.oreAzzeramento > 0 ? risultato.oreAzzeramento + ' ore' : 'Subito'}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Ore per guidare:</span>
+                        <span class="result-value">${risultato.orePerGuidare > 0 ? risultato.orePerGuidare + ' ore' : 'Subito'}</span>
+                    </div>
+                    <div class="legal-status legal-${risultato.statoLegale.status}">
+                        ${risultato.statoLegale.text}
+                    </div>
+                    ${timelineHTML}
+                </div>
+                <div class="warning">
+                    ⚠️ <strong>ATTENZIONE:</strong> Questo è un calcolo teorico!<br>
+                    L'alcolemia reale può variare per fattori individuali.<br>
+                    Non guidare mai dopo aver bevuto alcol!
+                </div>
+            `;
+        }
+
+        function loadCocktailList() {
+            const list = document.getElementById('cocktailList');
+            list.innerHTML = cocktailDatabase.map(cocktail => {
+                const gradazione = calcolaGradazione(cocktail.ingredienti);
+                const alcolPuro = calcolaGrammiAlcol(cocktail.ingredienti);
+                
+                return `
+                    <div class="cocktail-item">
+                        <div class="cocktail-name">${cocktail.nome}</div>
+                        <div class="cocktail-info">
+                            ${gradazione.toFixed(1)}% vol • ${alcolPuro.toFixed(1)}g alcol • ${cocktail.categoria}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterCocktails() {
+            const filter = document.getElementById('filterInput').value.toLowerCase();
+            const items = document.querySelectorAll('.cocktail-item');
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(filter) ? 'block' : 'none';
+            });
+        }
+
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCocktailList();
+            
+            // Event listeners semplici
+            document.getElementById('searchInput').addEventListener('input', searchCocktail);
+            document.getElementById('filterInput').addEventListener('input', filterCocktails);
+            document.getElementById('cocktailName').addEventListener('input', updateCocktailInfo);
+            document.getElementById('aggiungiDrinkBtn').addEventListener('click', aggiungiDrink);
+            document.getElementById('calcolaBtn').addEventListener('click', calcolaAlcolemia);
+            
+            // Tab navigation
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const sectionId = this.getAttribute('data-section');
+                    showSection(sectionId, this);
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
