@@ -1,0 +1,60 @@
+nome_cocktail,categoria,ingrediente_1,ml_1,gradazione_1,ingrediente_2,ml_2,gradazione_2,ingrediente_3,ml_3,gradazione_3,ingrediente_4,ml_4,gradazione_4,ingrediente_5,ml_5,gradazione_5,bicchiere_standard_ml,note
+Americano,The Unforgettables,Campari,30,25,Vermouth Rosso,30,16,Soda Water,30,0,,,,,,,200,Servito con ghiaccio e mezza fetta d'arancia
+Negroni,The Unforgettables,Gin,30,40,Campari,30,25,Vermouth Rosso,30,16,,,,,,,150,Servito con ghiaccio e scorza d'arancia
+Gin Tonic,Classic,Gin,50,40,Acqua Tonica,150,0,,,,,,,,,200,Servito con ghiaccio e lime
+Mojito,Contemporary Classics,Rum Bianco,50,40,Menta,10,0,Zucchero,10,0,Lime,15,0,Soda Water,100,0,200,Pestare menta e zucchero
+Daiquiri,The Unforgettables,Rum Bianco,50,40,Succo di Lime,20,0,Sciroppo di Zucchero,15,0,,,,,,,120,Shakerato e servito up
+Manhattan,The Unforgettables,Whiskey,50,40,Vermouth Rosso,25,16,Angostura Bitters,5,35,,,,,,,120,Servito con ciliegia
+Martini,The Unforgettables,Gin,60,40,Vermouth Secco,10,18,,,,,,,,,120,Servito con oliva o scorza limone
+Old Fashioned,The Unforgettables,Whiskey,60,40,Zucchero,10,0,Angostura Bitters,5,35,Acqua,10,0,,,120,Servito con ghiaccio e scorza arancia
+Margarita,Contemporary Classics,Tequila,50,40,Triple Sec,25,40,Succo di Lime,25,0,,,,,,,150,Servito con bordo salato
+Cosmopolitan,Contemporary Classics,Vodka,40,40,Triple Sec,15,40,Succo di Lime,15,0,Succo di Mirtillo,30,0,,,150,Servito in coppa Martini
+Bloody Mary,Contemporary Classics,Vodka,45,40,Succo di Pomodoro,90,0,Salsa Worcestershire,5,0,Tabasco,2,0,Sale,2,0,200,Servito con sedano e spezie
+Whiskey Sour,The Unforgettables,Whiskey,50,40,Succo di Limone,25,0,Sciroppo di Zucchero,20,0,,,,,,,150,Opzionale albume d'uovo
+Caipirinha,Contemporary Classics,Cachaça,50,38,Lime,30,0,Zucchero di Canna,20,0,,,,,,,150,Pestare lime e zucchero
+Piña Colada,Contemporary Classics,Rum Bianco,30,40,Rum Scuro,30,40,Latte di Cocco,60,0,Succo di Ananas,120,0,,,250,Servito in coppa hurricane
+Long Island,New Era,Vodka,15,40,Rum Bianco,15,40,Gin,15,40,Tequila,15,40,Triple Sec,15,40,250,Completare con Cola
+Mai Tai,Contemporary Classics,Rum Scuro,30,40,Rum Bianco,30,40,Triple Sec,15,40,Sciroppo d'Orzata,15,0,Succo di Lime,30,0,200,Servito con frutta tropicale
+Black Russian,Contemporary Classics,Vodka,50,40,Kahlúa,25,20,,,,,,,,,120,Servito con ghiaccio
+White Russian,Contemporary Classics,Vodka,50,40,Kahlúa,25,20,Panna,25,0,,,,,,,150,Versione cremosa del Black Russian
+Moscow Mule,Contemporary Classics,Vodka,50,40,Ginger Beer,150,0,Succo di Lime,15,0,,,,,,,200,Servito in tazza di rame
+Cuba Libre,Classic,Rum,50,40,Cola,120,0,Succo di Lime,15,0,,,,,,,200,Servito con ghiaccio e lime
+Spritz Aperol,Contemporary Classics,Aperol,60,11,Prosecco,90,11,Soda Water,30,0,,,,,,,200,Servito con fetta d'arancia
+Bellini,Contemporary Classics,Prosecco,100,11,Purè di Pesca,50,0,,,,,,,,,180,Servito in flute
+Mimosa,Contemporary Classics,Champagne,75,12,Succo d'Arancia,75,0,,,,,,,,,180,Servito in flute
+Espresso Martini,New Era,Vodka,50,40,Kahlúa,25,20,Espresso,25,0,Sciroppo di Zucchero,10,0,,,150,Servito in coppa Martini
+Sex on the Beach,New Era,Vodka,30,40,Peach Schnapps,30,20,Succo di Ananas,60,0,Succo di Mirtillo,60,0,,,200,Servito con ghiaccio
+Tequila Sunrise,Contemporary Classics,Tequila,50,40,Succo d'Arancia,120,0,Granatina,10,0,,,,,,,200,Servito con gradiente di colore
+Pisco Sour,New Era,Pisco,50,40,Succo di Limone,30,0,Sciroppo di Zucchero,20,0,Albume,15,0,Angostura,2,35,150,Servito con schiuma
+Aviation,The Unforgettables,Gin,45,40,Maraschino,15,32,Succo di Limone,15,0,Crème de Violette,1,20,,,120,Servito in coppa cocktail
+Bee's Knees,New Era,Gin,50,40,Miele,20,0,Succo di Limone,20,0,,,,,,,120,Sciroppo di miele e limone
+Tom Collins,Contemporary Classics,Gin,50,40,Succo di Limone,25,0,Sciroppo di Zucchero,15,0,Soda Water,100,0,,,200,Versione lunga del Gin Sour
+Gimlet,The Unforgettables,Gin,60,40,Succo di Lime,20,0,Sciroppo di Zucchero,15,0,,,,,,,120,Servito ghiacciato
+French 75,The Unforgettables,Gin,30,40,Succo di Limone,15,0,Sciroppo di Zucchero,15,0,Champagne,60,12,,,150,Servito in flute
+Bramble,New Era,Gin,40,40,Succo di Limone,15,0,Sciroppo di Zucchero,10,0,Crème de Mure,15,16,,,120,Servito con more fresche
+Clover Club,The Unforgettables,Gin,45,40,Succo di Limone,15,0,Sciroppo di Lampone,15,0,Albume,15,0,,,120,Servito con schiuma rosa
+Ramos Gin Fizz,New Era,Gin,45,40,Succo di Limone,15,0,Succo di Lime,15,0,Sciroppo di Zucchero,15,0,Albume,30,0,150,Lungo shaking richiesto
+Boulevardier,The Unforgettables,Bourbon,45,40,Campari,30,25,Vermouth Rosso,30,16,,,,,,,120,Versione whiskey del Negroni
+Sazerac,The Unforgettables,Whiskey Rye,50,40,Zucchero,5,0,Peychaud's Bitters,3,35,Assenzio,2,68,,,120,Cocktail storico di New Orleans
+Vieux Carré,New Era,Whiskey Rye,30,40,Cognac,30,40,Vermouth Rosso,30,16,Bénédictine,15,40,Peychaud's Bitters,2,35,150,Cocktail complesso di New Orleans
+Corpse Reviver #2,Contemporary Classics,Gin,22.5,40,Cointreau,22.5,40,Lillet Blanc,22.5,17,Succo di Limone,22.5,0,Assenzio,1,68,120,Servito con scorza limone
+Paper Plane,New Era,Bourbon,22.5,40,Aperol,22.5,11,Amaro Nonino,22.5,35,Succo di Limone,22.5,0,,,120,Cocktail bilanciato moderno
+Irish Coffee,Contemporary Classics,Whiskey Irlandese,40,40,Caffè,120,0,Zucchero,10,0,Panna,30,0,,,200,Servito caldo con panna montata
+Hot Toddy,Classic,Whiskey,50,40,Miele,15,0,Succo di Limone,10,0,Acqua Calda,100,0,Spezie,5,0,200,Drink caldo invernale
+Mint Julep,The Unforgettables,Bourbon,70,40,Menta,20,0,Zucchero,10,0,,,,,,,150,Servito con molto ghiaccio tritato
+Dark 'n' Stormy,Contemporary Classics,Rum Scuro,50,40,Ginger Beer,150,0,Succo di Lime,10,0,,,,,,,200,Trademark di Gosling's
+Painkiller,New Era,Rum Scuro,60,40,Succo di Ananas,120,0,Succo d'Arancia,30,0,Latte di Cocco,30,0,,,250,Servito con noce moscata
+Jungle Bird,New Era,Rum Scuro,45,40,Campari,22.5,25,Succo di Ananas,45,0,Succo di Lime,15,0,Sciroppo,7.5,0,150,Tiki cocktail malese
+Zombie,New Era,Rum Bianco,30,40,Rum Scuro,30,40,Rum Agricolo,30,50,Succo di Lime,20,0,Granatina,10,0,200,Cocktail tiki molto forte
+Gin Lemon,Classic,Gin,50,40,Limonata,150,0,,,,,,,,,200,Servito con fette di limone
+Novebuche,Contemporary Classics,Gin,45,40,Campari,30,25,Succo di Pompelmo,60,0,,,,,,,150,Servito con ghiaccio
+Gin Soda e Lime,Classic,Gin,50,40,Soda Water,150,0,Succo di Lime,15,0,,,,,,,200,Servito con fette di lime
+Whiskey Soda,Classic,Whiskey,50,40,Soda Water,150,0,,,,,,,,,200,Highball classico con limone
+Agua de Valencia,Contemporary Classics,Gin,50,40,Vodka,50,40,Succo d'Arancia,500,0,Cava,500,11,Zucchero,30,0,1000,Cocktail spagnolo da pitcher
+Spritz Select,Contemporary Classics,Select,60,17.5,Prosecco,60,11,Soda Water,60,0,,,,,,,200,Spritz classico con Select
+Spritz Select Veneziana,Contemporary Classics,Select,90,17.5,Prosecco,90,11,,,,,,,,,200,Spritz Select senza soda water
+Spritz Campari,Contemporary Classics,Campari,60,25,Prosecco,60,11,Soda Water,60,0,,,,,,,200,Spritz classico con Campari
+Spritz Campari Veneziana,Contemporary Classics,Campari,90,25,Prosecco,90,11,,,,,,,,,200,Spritz Campari senza soda water
+Spritz Aperol Veneziana,Contemporary Classics,Aperol,90,11,Prosecco,90,11,,,,,,,,,200,Spritz Aperol senza soda water
+Leone,Aperitivi Regionali,Aperitivo Leone,60,11,Soda Water,30,0,,,,,,,,,120,Aperitivo tipico del Veneto servito con ghiaccio
+Te+,Aperitivi Regionali,Te+ (Origin Bassano),250,9.5,,,,,,,,,,,250,Estratto alcolico al te pesca - Origin Bar Bassano del Grappa
