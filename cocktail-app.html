@@ -437,6 +437,10 @@
                 <div class="cocktail-list" id="cocktailList"></div>
             </div>
         </div>
+        <!-- Copyright -->
+        <div style="text-align: center; padding: 15px 20px; font-size: 11px; color: #888; border-top: 1px solid #e1e8ed; background: rgba(248,249,250,0.5);">
+            © 2025 Tommaso Merici - Alcohol Gradation & BAC Estimator
+        </div>
     </div>
 
     <script>
@@ -500,7 +504,31 @@
             {nome: "Spritz Campari Veneziana", categoria: "Contemporary Classics", ingredienti: [{nome: "Campari", volume: 90, gradazione: 25}, {nome: "Prosecco", volume: 90, gradazione: 11}], bicchiere: 200, note: "Spritz Campari senza soda water"},
             {nome: "Spritz Aperol Veneziana", categoria: "Contemporary Classics", ingredienti: [{nome: "Aperol", volume: 90, gradazione: 11}, {nome: "Prosecco", volume: 90, gradazione: 11}], bicchiere: 200, note: "Spritz Aperol senza soda water"},
             {nome: "Leone", categoria: "Aperitivi Regionali", ingredienti: [{nome: "Aperitivo Leone", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 30, gradazione: 0}], bicchiere: 120, note: "Aperitivo tipico del Veneto servito con ghiaccio"},
-            {nome: "Te+", categoria: "Aperitivi Regionali", ingredienti: [{nome: "Te+ (Origin Bassano)", volume: 250, gradazione: 9.5}], bicchiere: 250, note: "Estratto alcolico al tè pesca - Origin Bar Bassano del Grappa"}
+            {nome: "Te+", categoria: "Aperitivi Regionali", ingredienti: [{nome: "Te+ (Origin Bassano)", volume: 250, gradazione: 9.5}], bicchiere: 250, note: "Estratto alcolico al tè pesca - Origin Bar Bassano del Grappa"},
+            
+            // BIRRE
+            {nome: "Lager Piccola", categoria: "Birre", ingredienti: [{nome: "Birra Lager", volume: 330, gradazione: 4.8}], bicchiere: 330, note: "Birra chiara tipo Heineken, Stella Artois"},
+            {nome: "Lager Media", categoria: "Birre", ingredienti: [{nome: "Birra Lager", volume: 400, gradazione: 4.8}], bicchiere: 400, note: "Birra chiara tipo Heineken, Stella Artois"},
+
+            {nome: "Weiss Piccola", categoria: "Birre", ingredienti: [{nome: "Birra Weiss", volume: 330, gradazione: 5.0}], bicchiere: 330, note: "Birra di frumento tipo Paulaner, Erdinger"},
+            {nome: "Weiss Media", categoria: "Birre", ingredienti: [{nome: "Birra Weiss", volume: 400, gradazione: 5.0}], bicchiere: 400, note: "Birra di frumento tipo Paulaner, Erdinger"},
+
+            {nome: "IPA Piccola", categoria: "Birre", ingredienti: [{nome: "Birra IPA", volume: 330, gradazione: 6.2}], bicchiere: 330, note: "India Pale Ale tipo BrewDog, Baladin"},
+            {nome: "IPA Media", categoria: "Birre", ingredienti: [{nome: "Birra IPA", volume: 400, gradazione: 6.2}], bicchiere: 400, note: "India Pale Ale tipo BrewDog, Baladin"},
+
+            {nome: "Scura Piccola", categoria: "Birre", ingredienti: [{nome: "Birra Scura", volume: 330, gradazione: 5.2}], bicchiere: 330, note: "Birra scura tipo Guinness, Menabrea"},
+            {nome: "Scura Media", categoria: "Birre", ingredienti: [{nome: "Birra Scura", volume: 400, gradazione: 5.2}], bicchiere: 400, note: "Birra scura tipo Guinness, Menabrea"},
+
+            {nome: "Doppio Malto Piccola", categoria: "Birre", ingredienti: [{nome: "Birra Doppio Malto", volume: 330, gradazione: 7.0}], bicchiere: 330, note: "Birra forte tipo Chimay, Duvel"},
+            {nome: "Doppio Malto Media", categoria: "Birre", ingredienti: [{nome: "Birra Doppio Malto", volume: 400, gradazione: 7.0}], bicchiere: 400, note: "Birra forte tipo Chimay, Duvel"},
+
+            // VINI - Standard 150ml
+            {nome: "Vino Rosso", categoria: "Vini", ingredienti: [{nome: "Vino Rosso", volume: 150, gradazione: 13.0}], bicchiere: 150, note: "Calice standard vino rosso tipo Chianti, Barolo, Sangiovese"},
+            {nome: "Vino Bianco", categoria: "Vini", ingredienti: [{nome: "Vino Bianco", volume: 150, gradazione: 12.0}], bicchiere: 150, note: "Calice standard vino bianco tipo Pinot Grigio, Chardonnay, Sauvignon"},
+            {nome: "Vino Rosato", categoria: "Vini", ingredienti: [{nome: "Vino Rosato", volume: 150, gradazione: 12.0}], bicchiere: 150, note: "Calice standard vino rosato tipo Cerasuolo, Rosé di Provenza"},
+            {nome: "Prosecco", categoria: "Vini", ingredienti: [{nome: "Prosecco", volume: 150, gradazione: 11.5}], bicchiere: 150, note: "Flute standard prosecco tipo Valdobbiadene, Conegliano"},
+            {nome: "Champagne", categoria: "Vini", ingredienti: [{nome: "Champagne", volume: 150, gradazione: 12.2}], bicchiere: 150, note: "Flute standard champagne tipo Moët, Dom Pérignon, Veuve Clicquot"},
+            {nome: "Vino Dolce", categoria: "Vini", ingredienti: [{nome: "Vino Dolce", volume: 150, gradazione: 13.5}], bicchiere: 150, note: "Vino dolce tipo Passito, Moscato, Sauternes"}
         ];
 
         let addedDrinks = [];
@@ -557,6 +585,18 @@
                 alcolTotale += ing.volume * (ing.gradazione / 100);
             }
             return alcolTotale * 0.789; // peso specifico etanolo
+        }
+
+        function formatTime(hoursDecimal) {
+            if (hoursDecimal <= 0) return 'Subito';
+            const totalMin = Math.round(hoursDecimal * 60);
+            if (totalMin < 60) {
+                return totalMin + ' minuti';
+            } else {
+                const hours = Math.floor(totalMin / 60);
+                const min = totalMin % 60;
+                return hours + ':' + (min < 10 ? '0' + min : min) + ' ore';
+            }
         }
 
         // FUNZIONE PRINCIPALE AGGIORNATA con parametro fitness
@@ -857,12 +897,12 @@
                         <span class="result-value">${risultato.betaPerOra} g/L/h</span>
                     </div>
                     <div class="result-item">
-                        <span class="result-label">Ore per azzeramento:</span>
-                        <span class="result-value">${risultato.oreAzzeramento > 0 ? risultato.oreAzzeramento + ' ore' : 'Subito'}</span>
+                        <span class="result-label">Tempo per azzeramento:</span>
+                        <span class="result-value">${formatTime(risultato.oreAzzeramento)}</span>
                     </div>
                     <div class="result-item">
-                        <span class="result-label">Ore per guidare:</span>
-                        <span class="result-value">${risultato.orePerGuidare > 0 ? risultato.orePerGuidare + ' ore' : 'Subito'}</span>
+                        <span class="result-label">Tempo per guidare:</span>
+                        <span class="result-value">${formatTime(risultato.orePerGuidare)}</span>
                     </div>
                     <div class="legal-status legal-${risultato.statoLegale.status}">
                         ${risultato.statoLegale.text}
