@@ -2,8 +2,8 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-2.0-blue?style=flat-square)
-![Version](https://img.shields.io/badge/version-3.0-blue?style=flat-square)
+![Current Version](https://img.shields.io/badge/current-v2.0-blue?style=flat-square)
+![Next Version](https://img.shields.io/badge/coming%20soon-v3.0-orange?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-web-green?style=flat-square)
 ![Language](https://img.shields.io/badge/javascript-vanilla-yellow?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-orange?style=flat-square)
@@ -134,22 +134,16 @@ L'applicazione mantiene lo stato delle bevute aggiunte in memoria, permettendo m
 
 ### Evolution Comparison (front page)
 <div align="center">
-  <table>
-    <tr>
-      <td align="center">
-        <img src="/Users/tommaso/Desktop/Progetti esterni/Gradiente alcolico/Evolution Comparison/Python_Version.png" alt="Version 1.0" width="400"><br>
-        <strong>v2.0 - Python Terminal</strong>
-      </td>
-      <td align="center">
-        <img src="/Users/tommaso/Desktop/Progetti esterni/Gradiente alcolico/Evolution Comparison/First_Web_App.png" alt="Version 2.0" width="400"><br>
-        <strong>v2.0 - First Web App</strong>
-      </td>
-      <td align="center">
-        <img src="/Users/tommaso/Desktop/Progetti esterni/Gradiente alcolico/Evolution Comparison/Second_Web_App.png" alt="Version 3.0" width="400"><br>
-        <strong>v3.0 - Second Web App</strong>
-      </td>
-    </tr>
-  </table>
+  
+**v1.0 - Python Terminal**  
+<img src="Evolution_Comparison/Python_Version.png" alt="Version 1.0" width="600">
+
+**v2.0 - First Web App**  
+<img src="Evolution_Comparison/First_Web_App.png" alt="Version 2.0" width="600">
+
+**v3.0 - Modern Web App**  
+<img src="Evolution_Comparison/Second_Web_App.png" alt="Version 3.0" width="600">
+
 </div>
 
 
