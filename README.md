@@ -122,13 +122,13 @@ L'applicazione mantiene lo stato delle bevute aggiunte in memoria, permettendo m
 
 ### Desktop Experience
 <div align="center">
-  <img src="assets/screenshots/desktop-v3-overview.png" alt="_Desktop Interface v3.0" width="800">
+  <img src="assets/screenshots/desktop-v3-overview.png" alt="_Desktop Interface v3.0" width="50">
   <p><em>Soon to be Added – Interfaccia desktop v3.0: Sezione calcolo alcolemia</em></p>
 </div>
 
 ### Mobile Experience  
 <div align="center">
-  <img src="assets/screenshots/mobile-v3-responsive.png" alt="_Mobile Interface v3.0" width="300">
+  <img src="assets/screenshots/mobile-v3-responsive.png" alt="_Mobile Interface v3.0" width="50">
   <p><em>Soon to be Added – Design mobile-first ottimizzato per uso pratico</em></p>
 </div>
 
@@ -174,6 +174,7 @@ L'applicazione serve esclusivamente per scopi educativi e di awareness, non sost
 ```
 ├── cocktail-app.html           # Applicazione principale (self-contained, version 2.0)
 ├── README.md                   # Documentazione
+├── Evolution_Comparison        # Evoluzione delle versioni
 └── [legacy]/                   # Versione Python originale
     ├── gradazione_tool.py
     ├── database_ricette.csv
