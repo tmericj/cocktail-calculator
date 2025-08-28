@@ -25,7 +25,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #5a7ff7 0%, #8a5be2 100%);
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             min-height: 100vh;
             padding: 20px;
             color: #333;
@@ -56,21 +56,39 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #ff9d6b 0%, #ff7e24 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 30px 20px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .header h1 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 5px;
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
         }
 
-        .header p {
-            font-size: 14px;
-            opacity: 0.9;
+        @keyframes shimmer {
+            0%, 100% { 
+                transform: translateX(-20px) translateY(-20px); 
+                opacity: 0; 
+            }
+            50% { 
+                transform: translateX(20px) translateY(20px); 
+                opacity: 1; 
+            }
+        }
+
+        .header h1, .header p {
+            position: relative;
+            z-index: 1;
         }
 
         .content {
@@ -82,7 +100,7 @@
             display: none;
             opacity: 0;
             transform: translateY(10px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
         }
 
         .section.active {
@@ -124,7 +142,7 @@
         .btn {
             width: 100%;
             padding: 18px;
-            background: linear-gradient(135deg, #5a7ff7 0%, #8a5be2 100%);
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
             border: none;
             border-radius: 12px;
@@ -141,12 +159,26 @@
             transform: scale(0.98);
         }
 
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+        }
+
         .btn-secondary {
-            background: linear-gradient(135deg, #ff9d6b 0%, #ff7e24 100%);
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #373748;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 8px 25px rgba(168, 237, 234, 0.4);
+            color: #222;
         }
 
         .results {
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 1px solid rgba(79, 172, 254, 0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
             border-radius: 12px;
             padding: 20px;
             margin-top: 20px;
@@ -187,13 +219,21 @@
         .cocktail-list {
             max-height: 300px;
             overflow-y: auto;
-            background: #f8f9fa;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 1px solid rgba(79, 172, 254, 0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
             -webkit-overflow-scrolling: touch;
             display: grid;
             grid-template-columns: 1fr;
             gap: 10px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .results:hover, .cocktail-list:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
         }
 
         .cocktail-item {
@@ -283,24 +323,199 @@
                 transform: translateY(-2px);
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             }
-
-            .cocktail-item:hover {
-                background: #f0f4f8;
-            }
         }
 
         /* Effetti touch specifici per mobile */
         @media (hover: none) and (pointer: coarse) {
-            .filter-chip:active {
-                transform: scale(0.95);
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-                transition: all 0.1s ease;
-            }
-    
             .filter-chip {
                 /* Feedback visivo migliore per touch */
                 -webkit-tap-highlight-color: transparent;
                 touch-action: manipulation;
+            }
+
+            .filter-chip:active {
+                transform: scale(0.95);
+                box-shadow: 0 2px 8px rgba(79, 172, 254, 0.3);
+                transition: all 0.1s ease;
+            }
+
+            /* Touch feedback per bottoni */
+            .btn:active {
+                transform: scale(0.96) translateY(1px);
+                box-shadow: 0 4px 15px rgba(79, 172, 254, 0.5);
+                transition: all 0.15s ease;
+            }
+
+            .btn-secondary:active {
+                box-shadow: 0 4px 15px rgba(168, 237, 234, 0.5);
+            }
+
+            /* Touch feedback per tabs */
+            .tab:active {
+                transform: scale(0.95);
+                background: rgba(79, 172, 254, 0.1);
+                transition: all 0.1s ease;
+            }
+
+            .tab.active:active {
+                transform: scale(0.97);
+                box-shadow: 0 2px 10px rgba(79, 172, 254, 0.6);
+            }
+
+            /* Touch feedback per cocktail items */
+            .cocktail-item {
+                transition: all 0.2s ease;
+                border-radius: 8px;
+                margin-bottom: 3px;
+            }
+
+            .cocktail-item:active {
+                background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                color: white;
+                transform: scale(0.98);
+                box-shadow: 0 3px 15px rgba(79, 172, 254, 0.4);
+            }
+
+            .cocktail-item:active .cocktail-name {
+                color: white;
+            }
+
+            .cocktail-item:active .cocktail-info {
+                color: rgba(255, 255, 255, 0.9);
+            }
+
+            /* Touch feedback per input fields */
+            input:focus, select:focus {
+                transform: scale(1.02);
+                transition: all 0.2s ease;
+            }
+
+            /* Touch feedback per results e cocktail-list */
+            .results, .cocktail-list {
+                touch-action: pan-y;
+            }
+
+            /* Miglioramento scrolling per cocktail-list */
+            .cocktail-list {
+                -webkit-overflow-scrolling: touch;
+                scroll-behavior: smooth;
+            }
+
+            /* Touch feedback per added-drink buttons */
+            .added-drink button:active {
+                transform: scale(0.9);
+                box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+                transition: all 0.1s ease;
+            }
+
+            /* Vibration effect per legal status (se supportato) */
+            .legal-danger, .legal-warning {
+                animation: mobileAlert 0.5s ease-in-out;
+            }
+
+            @keyframes mobileAlert {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+                20%, 40%, 60%, 80% { transform: translateX(2px); }
+            }
+
+            /* Feedback tattile per form validation errors */
+            input:invalid:focus {
+                animation: shakeInput 0.3s ease-in-out;
+                border-color: #fd79a8;
+                box-shadow: 0 0 0 3px rgba(253, 121, 168, 0.2);
+            }
+
+            @keyframes shakeInput {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                75% { transform: translateX(5px); }
+            }
+
+            /* Smooth section transitions ottimizzate per touch */
+            .section.active {
+                animation: mobileSectionEnter 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+
+            @keyframes mobileSectionEnter {
+                0% {
+                    opacity: 0;
+                    transform: translateY(20px) scale(0.97);
+                }
+                60% {
+                    opacity: 0.8;
+                    transform: translateY(-5px) scale(1.01);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+            }
+
+            /* Touch target improvements */
+            .tab {
+                min-height: 48px; /* Linee guida Material Design per touch targets */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .filter-chip {
+                min-height: 48px;
+            }
+
+            /* Focus states per navigazione con switch control */
+            .btn:focus,
+            .tab:focus,
+            .cocktail-item:focus,
+            .filter-chip:focus {
+                outline: 3px solid #4facfe;
+                outline-offset: 2px;
+            }
+
+            /* Stati di caricamento per feedback immediato */
+            .btn.loading {
+                position: relative;
+                color: transparent;
+            }
+
+            .btn.loading::after {
+                content: '';
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                top: 50%;
+                left: 50%;
+                margin-left: -8px;
+                margin-top: -8px;
+                border-radius: 50%;
+                border: 2px solid #ffffff;
+                border-color: #ffffff transparent #ffffff transparent;
+                animation: spin 1.2s linear infinite;
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+            /* Miglioramento per landscape mode mobile */
+            @media (orientation: landscape) {
+                .header {
+                    padding: 15px 20px;
+                }
+        
+                .content {
+                    padding: 15px 20px;
+                }
+        
+                .cocktail-list {
+                    max-height: 180px;
+                }
+        
+                .section {
+                    min-height: 250px;
+                }
             }
         }
 
@@ -322,7 +537,8 @@
 
         .tabs {
             display: flex;
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
             border-radius: 12px;
             margin-bottom: 20px;
             overflow: hidden;
@@ -330,7 +546,7 @@
 
         .tab {
             flex: 1;
-            padding: 12px;
+            padding: 15px 12px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -345,6 +561,8 @@
         .tab.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+            transform: translateY(-2px);
         }
 
         .legal-status {
@@ -587,7 +805,7 @@
     <script>
         // Database cocktail completo. Classificazioni IBA rivisitate.
         const cocktailDatabase = [
-            // Cocktail Classic (The Unforgettables)
+            // Cocktail Classic (The Unforgettables) 24
             {nome: "Alexander", categoria: "Classic", ingredienti: [{nome: "Cognac", volume: 30, gradazione: 40}, {nome: "Crème de Cacao (Brown)", volume: 30, gradazione: 24}, {nome: "Fresh Cream", volume: 30, gradazione: 0}], bicchiere: 120, note: "Servito con noce moscata fresca macinata"},
             {nome: "Americano", categoria: "Classic", ingredienti: [{nome: "Campari", volume: 60, gradazione: 25}, {nome: "Vermouth Rosso", volume: 60, gradazione: 16}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e mezza fetta d'arancia"},
             {nome: "Aviation", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Maraschino", volume: 15, gradazione: 30}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Crème de Violette", volume: 1, gradazione: 20}], bicchiere: 120, note: "Servito in coppa cocktail"},
@@ -613,7 +831,7 @@
             {nome: "Whiskey Sour", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 20, gradazione: 0}], bicchiere: 200, note: "Opzionale albume d'uovo"},
             {nome: "White Lady", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 40, gradazione: 40}, {nome: "Triple Sec", volume: 30, gradazione: 30}, {nome: "Succo di Limone", volume: 15, gradazione: 0}], bicchiere: 120, note: "Servito in coppa cocktail"},
 
-            // Cocktail Contemporary Classics (The Contemporary)
+            // Cocktail Contemporary Classics (The Contemporary) 33
             {nome: "Black Russian", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Kahlúa", volume: 25, gradazione: 20}], bicchiere: 200, note: "Servito con ghiaccio"},
             {nome: "Bloody Mary", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 45, gradazione: 40}, {nome: "Succo di Pomodoro", volume: 90, gradazione: 0}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Salsa Worcestershire", volume: 2, gradazione: 0}, {nome: "Tabasco", volume: 1, gradazione: 0}, {nome: "Sale", volume: 1, gradazione: 0}], bicchiere: 250, note: "Servito con sedano e spezie"},
             {nome: "Caipirão", categoria: "Contemporary", ingredienti: [{nome: "Licor Beirão", volume: 60, gradazione: 22}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], bicchiere: 200, note: "Pestare lime e zucchero"},
@@ -648,7 +866,7 @@
             {nome: "White Russian", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Kahlúa", volume: 25, gradazione: 20}, {nome: "Panna", volume: 25, gradazione: 0}], bicchiere: 200, note: "Versione cremosa del Black Russian"},
             {nome: "Zombie", categoria: "Contemporary", ingredienti: [{nome: "Rum Bianco (Gold Puerto Rican)", volume: 45, gradazione: 40}, {nome: "Rum Scuro (Jamaican)", volume: 45, gradazione: 40}, {nome: "Rum Agricolo (Demerara)", volume: 30, gradazione: 43}, {nome: "Succo di Lime", volume: 20, gradazione: 0}, {nome: "Falernum", volume: 15, gradazione: 11}, {nome: "Donn’s Mix", volume: 15, gradazione: 0}, {nome: "Sciroppo di Granatina", volume: 5, gradazione: 0}, {nome: "Angostura bitter", volume: 1, gradazione: 44.7}, {nome: "Liquore all'anice (Pernod)", volume: 0.3, gradazione: 40}], bicchiere: 200, note: "Servire con foglie di menta"},
 
-            // Cocktail New Era (The New Era)
+            // Cocktail New Era (The New Era) 30
             {nome: "Bee's Knees", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 52.5, gradazione: 40}, {nome: "Sciroppo al Miele", volume: 10, gradazione: 0}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}, {nome: "Succo d'Arancia", volume: 22.5, gradazione: 0}], bicchiere: 120, note: "Guarnizione facoltativa con una scorza di limone o di arancia"},
             {nome: "Bramble", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Succo di Limone", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 12.5, gradazione: 0}, {nome: "Crème de Mure", volume: 15, gradazione: 16}], bicchiere: 120, note: "Guarnizione facoltativa con una fetta di limone e more fresche"},
             {nome: "Cedro Tonic", categoria: "New Era", ingredienti: [{nome: "Acqua di Cedro", volume: 50, gradazione: 29}, {nome: "Acqua Tonica", volume: 150, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e scorza di cedro. Acqua di Cedro è un liquore fruttato distillato da Nardini"},
@@ -678,6 +896,7 @@
             {nome: "Vieux Carré", categoria: "New Era", ingredienti: [{nome: "Whiskey Rye", volume: 30, gradazione: 40}, {nome: "Cognac", volume: 30, gradazione: 40}, {nome: "Vermouth Rosso", volume: 30, gradazione: 19}, {nome: "Bénédictine", volume: 15, gradazione: 40}, {nome: "Peychaud's Bitters", volume: 2, gradazione: 35}], bicchiere: 150, note: "Prende il nome dal quartiere Vieux Carré, il centro storico più antico di New Orleans"},
             {nome: "Vodka Redbull", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Redbull", volume: 150, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio"},
             {nome: "Vodka Soda", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Soda Water", volume: 150, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e fetta di lime (opzionale)"},
+            {nome: "Vodka Tonic", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Acqua Tonica", volume: 150, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e fetta di lime (opzionale)"},
 
             // APERITIVI
             {nome: "Agua de Valencia", categoria: "Aperitivo", ingredienti: [{nome: "Gin", volume: 5, gradazione: 40}, {nome: "Vodka", volume: 5, gradazione: 40}, {nome: "Succo d'Arancia", volume: 40, gradazione: 0}, {nome: "Cava", volume: 130, gradazione: 11}, {nome: "Zucchero", volume: 5, gradazione: 0}], bicchiere: 250, note: "Cocktail spagnolo originariamente servito in pitcher"},            
