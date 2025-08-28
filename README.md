@@ -1,11 +1,33 @@
 # Calcolatore Gradazione Alcolica e Stima Alcolemia - Web App
 
+<div align="center">
+
+![Version](https://img.shields.io/badge/version-2.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-3.0-blue?style=flat-square)
+![Platform](https://img.shields.io/badge/platform-web-green?style=flat-square)
+![Language](https://img.shields.io/badge/javascript-vanilla-yellow?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-orange?style=flat-square)
+![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)
+![Mobile](https://img.shields.io/badge/mobile-optimized-purple?style=flat-square)
+
+</div>
+
 Una sera d'estate di un non meglio specificato giorno della settimana, mi trovavo con i miei amici in un bar nella mia città. La noia, quella tagliente compagna che si materializza nei momenti più inaspettati, mi stava divorando, così ho cominciato a guardare intensamente il bicchiere di gin tonic saldo nella mia mano sinistra (mai tenere il drink con la mano dominante...). Chissà qual è il grado alcolico effettivo di questa bevanda, pensai. Il mio sguardo si perse per un fugace attimo nella folla di giovani che consumavano allegramente bevande alcoliche, raccolti in gruppetti trainati da innocente spensieratezza. Quanti di loro lo vorrebbero sapere? Quanti di loro vorrebbero conoscere il proprio tasso alcolemico dopo una serata, con la stessa precisione con cui consultano il saldo del conto corrente e si promettono poi di smettere?</br>
 Molti, secondo me. Tutti, probabilmente.</br>
 Quante volte lanciamo i dadi e ci abbandoniamo alla dea fortuna in un insensato gioco probabilistico dal valore atteso certamente negativo? Più spesso di quello che immaginiamo, d'altronde anche gli esperti inciampano nella _gambler’s fallacy_, anche se per gradi di difficoltà diversi dal comune mortale che ordina "ancora uno, l'ultimo" convinto di essere perfettamente lucido.</br>
 E quindi, sia mai vietarmi una metaforica passeggiata che si sarebbe presto trasformata in 40 ciclotimici giorni nel deserto. Sia mai che io mi perda una battaglia persa.
 
 È così, foriero d'un lampo, che nasce questa applicazione web per il calcolo scientifico della gradazione alcolica dei cocktail, compresa di una stima dell'alcolemia basata sulla formula di Widmark avanzata. Il progetto è nato come strumento educativo per la consapevolezza del consumo di alcol e la prevenzione della guida in stato di ebbrezza.
+
+### Versione Attuale (v2.0 - Open Source)
+```
+https://tmericj.github.io/cocktail-calculator/cocktail-app.html
+
+```
+### Prossima Release (v3.0 - Rolling out Soon)
+La versione 3.0 sarà disponibile come applicazione web distribuita tramite link diretto.</br>
+Nessuna installazione è richiesta, funziona su qualsiasi dispositivo moderno.</br>
+Requisiti: Browser moderno (Chrome 80+, Firefox 75+, Safari 13+)
 
 ### Evoluzione del Progetto
 Questo tool ha attraversato una significativa trasformazione architetturale, passando da una primitiva applicazione Python da terminale a una web app completa. La versione originale, basata su un database di 52 cocktail e un sistema di calcolo più semplice, è stata completamente riprogettata per offrire un'esperienza utente moderna e calcoli scientificamente più accurati.
@@ -22,10 +44,10 @@ L'applicazione è strutturata in tre sezioni principali accessibili tramite navi
 ### Database delle Bevande
 Il database contiene 120+ bevande categorizzate scientificamente:
 
-86 cocktail IBA ufficiali (Classic, Contemporary, New Era) con l'aggiunta di alcune varianti famose
-16 aperitivi, inclusi cocktail regionali italiani (per ora solo Veneti)
-10 tipologie di birra con gradazioni medie
-7 categorie di vino con gradazioni e quantità medie
+87 cocktail IBA ufficiali (Classic, Contemporary, New Era) con l'aggiunta di alcune varianti famose</br>
+17 aperitivi, inclusi cocktail regionali italiani (per ora solo Veneti)</br>
+10 tipologie di birra con gradazioni medie</br>
+7 categorie di vino con gradazioni e quantità medie</br>
 
 Ogni voce contiene ingredienti con volumi precisi e gradazioni alcoliche, permettendo calcoli accurati della gradazione finale e del contenuto di alcol puro.
 
@@ -66,14 +88,14 @@ Fonte: P E Watson, I D Watson, R D Batt, (1980). Total body water volumes for ad
 - Media (300ml): +1.5% (TBW base più alto, dunque BAC iniziale inferiore)
 - Alta (>1000ml): +2.5% (TBW base più alto, dunque BAC iniziale inferiore)
 
-Riassumendo, le persone allenate metabolizzano l'alcol più efficacemente grazie a una migliore funzionalità epatica e una maggiore proporzione di massa magra, che processa l'alcol più velocemente rispetto al tessuto adiposo. Inoltre, poiché l'alcol si distribuisce nell'acqua corporea e i muscoli contengono circa il 75% di acqua contro il 10% del tessuto adiposo, gli atleti hanno un volume di distribuzione maggiore che diluisce inizialmente di più l'alcol nel sangue. Anche per questo motivo viene considerato il livello di idratazione, che incide positivamente nel calcolo della TBW, aiutando a ridurre marginalmente l'effetto dell'alcol. Tuttavia, se l'utente si è allenato lo stesso giorno del consumo, il sistema applica una riduzione del 10% del tasso di eliminazione
+Da ciò si evince che le **persone allenate** metabolizzano l'alcol più efficacemente grazie a una migliore funzionalità epatica e una maggiore proporzione di massa magra, che processa l'alcol più velocemente rispetto al tessuto adiposo. Inoltre, poiché l'alcol si distribuisce nell'acqua corporea e i muscoli contengono circa il 75% di acqua contro il 10% del tessuto adiposo, gli atleti hanno un volume di distribuzione maggiore che comporta una diluizione iniziale superiore dell'alcol nel sangue. Anche per questo motivo viene considerato il livello di idratazione, che incide positivamente nel calcolo della TBW, aiutando a ridurre marginalmente l'effetto dell'alcol. Tuttavia, se l'utente si è allenato lo stesso giorno del consumo, il sistema applica una riduzione del 1% del tasso di eliminazione a causa della disidratazione muscolare.
 
-In conclusione, una persona allenata e idratata presenta un metabolismo più rapido e una maggiore capacità di diluizione iniziale, motivi per cui registra un livello alcolemico più basso che smaltisce più velocemente.
+In conclusione, una persona **allenata** e **idratata** presenta un **metabolismo più rapido** e una maggiore capacità di diluizione iniziale, motivi per cui registra un livello alcolemico più basso che smaltisce più velocemente.
 
 ### Simulazione Temporale
 Per sessioni di bevute multiple, l'algoritmo simula l'assorbimento e l'eliminazione nel tempo:
 - Calcola gli intervalli tra le ingestioni basandosi sulla durata totale
-- Applica la curva di eliminazione lineare per ogni drink
+- Applica una curva di eliminazione lineare per ogni drink
 - Considera l'effetto dello stomaco pieno (-30% assorbimento)
 - Genera una timeline predittiva fino a 6 ore
 
@@ -95,6 +117,40 @@ L'interfaccia utilizza CSS Grid e Flexbox per un layout completamente responsivo
 Tutti i calcoli sono eseguiti client-side in JavaScript, garantendo privacy assoluta (nessun dato personale trasmesso) e performance immediate. L'architettura single-page elimina latenze di rete.
 
 L'applicazione mantiene lo stato delle bevute aggiunte in memoria, permettendo modifiche dinamiche della composizione della sessione senza perdita di dati.
+
+## Interface Preview
+
+### Desktop Experience
+<div align="center">
+  <img src="assets/screenshots/desktop-v3-overview.png" alt="_Desktop Interface v3.0" width="800">
+  <p><em>Soon to be Added – Interfaccia desktop v3.0: Sezione calcolo alcolemia</em></p>
+</div>
+
+### Mobile Experience  
+<div align="center">
+  <img src="assets/screenshots/mobile-v3-responsive.png" alt="_Mobile Interface v3.0" width="300">
+  <p><em>Soon to be Added – Design mobile-first ottimizzato per uso pratico</em></p>
+</div>
+
+### Evolution Comparison (front page)
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <img src="/Users/tommaso/Desktop/Progetti esterni/Gradiente alcolico/Evolution Comparison/Python_Version.png" alt="Version 1.0" width="400"><br>
+        <strong>v2.0 - Python Terminal</strong>
+      </td>
+      <td align="center">
+        <img src="/Users/tommaso/Desktop/Progetti esterni/Gradiente alcolico/Evolution Comparison/First_Web_App.png" alt="Version 2.0" width="400"><br>
+        <strong>v2.0 - First Web App</strong>
+      </td>
+      <td align="center">
+        <img src="/Users/tommaso/Desktop/Progetti esterni/Gradiente alcolico/Evolution Comparison/Second_Web_App.png" alt="Version 3.0" width="400"><br>
+        <strong>v3.0 - Second Web App</strong>
+      </td>
+    </tr>
+  </table>
+</div>
 
 
 ## Sviluppi Futuri
@@ -122,7 +178,7 @@ L'applicazione serve esclusivamente per scopi educativi e di awareness, non sost
 
 ## Struttura Codebase
 ```
-├── cocktail-app.html           # Applicazione principale (self-contained)
+├── cocktail-app.html           # Applicazione principale (self-contained, version 2.0)
 ├── README.md                   # Documentazione
 └── [legacy]/                   # Versione Python originale
     ├── gradazione_tool.py
@@ -130,7 +186,7 @@ L'applicazione serve esclusivamente per scopi educativi e di awareness, non sost
     └── test_tool.py
 ```
 
-L'architettura (per ora) single-file facilita distribuzione e deployment, contenendo HTML, CSS, JavaScript e database in un unico documento auto-contenuto.
+L'architettura (per ora) single-file facilita distribuzione e deployment, contenendo HTML, CSS, JavaScript e database in un unico documento.
 
 ## Changelog Versioni
 ### Changelog v1.0 - Foundation Release
