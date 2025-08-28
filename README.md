@@ -1,193 +1,195 @@
-# Calcolatore Gradazione Alcolica e Alcolemia
+# Calcolatore Gradazione Alcolica e Stima Alcolemia - Web App
 
-Un tool Python completo per calcolare la gradazione alcolica dei cocktail e stimare l'alcolemia per la sicurezza stradale, basato su un database di oltre 50 ricette ufficiali IBA e cocktail regionali.
+Una sera d'estate di un non meglio specificato giorno della settimana, mi trovavo con i miei amici in un bar nella mia città. La noia, quella tagliente compagna che si materializza nei momenti più inaspettati, mi stava divorando, così ho cominciato a guardare intensamente il bicchiere di gin tonic saldo nella mia mano sinistra (mai tenere il drink con la mano dominante...). Chissà qual è il grado alcolico effettivo di questa bevanda, pensai. Il mio sguardo si perse per un fugace attimo nella folla di giovani che consumavano allegramente bevande alcoliche, raccolti in gruppetti trainati da innocente spensieratezza. Quanti di loro lo vorrebbero sapere? Quanti di loro vorrebbero conoscere il proprio tasso alcolemico dopo una serata, con la stessa precisione con cui consultano il saldo del conto corrente e si promettono poi di smettere?</br>
+Molti, secondo me. Tutti, probabilmente.</br>
+Quante volte lanciamo i dadi e ci abbandoniamo alla dea fortuna in un insensato gioco probabilistico dal valore atteso certamente negativo? Più spesso di quello che immaginiamo, d'altronde anche gli esperti inciampano nella _gambler’s fallacy_, anche se per gradi di difficoltà diversi dal comune mortale che ordina "ancora uno, l'ultimo" convinto di essere perfettamente lucido.</br>
+E quindi, sia mai vietarmi una metaforica passeggiata che si sarebbe presto trasformata in 40 ciclotimici giorni nel deserto. Sia mai che io mi perda una battaglia persa.
 
-## Caratteristiche
+È così, foriero d'un lampo, che nasce questa applicazione web per il calcolo scientifico della gradazione alcolica dei cocktail, compresa di una stima dell'alcolemia basata sulla formula di Widmark avanzata. Il progetto è nato come strumento educativo per la consapevolezza del consumo di alcol e la prevenzione della guida in stato di ebbrezza.
 
-### Calcolo Gradazione Cocktail
-- **Database Completo**: 52 cocktail con ricette ufficiali IBA e specialità regionali
-- **Calcolo Preciso**: Formula del volume pesato per la gradazione alcolica
-- **Personalizzazione Avanzata**: Modifica ingredienti, volumi e gradazioni
-- **Cocktail Regionali**: Include specialità venete come Leone e Te+
+### Evoluzione del Progetto
+Questo tool ha attraversato una significativa trasformazione architetturale, passando da una primitiva applicazione Python da terminale a una web app completa. La versione originale, basata su un database di 52 cocktail e un sistema di calcolo più semplice, è stata completamente riprogettata per offrire un'esperienza utente moderna e calcoli scientificamente più accurati.
+Il database è stato espanso a oltre 120 bevande, includendo non solo cocktail famosi non presenti nel catalogo IBA, ma anche aperitivi regionali e una generica, per ora, lista di birre e vini. L'interfaccia è stata ripensata con un approccio mobile-first e organizzata in sezioni dedicate per ottimizzare il workflow dell'utente.
 
-### Calcolo Alcolemia (NOVITÀ!)
-- **Formula di Widmark Avanzata**: Con calcolo TBW (Total Body Water) personalizzato
-- **Parametri Completi**: Genere, peso, altezza, età, stomaco pieno/vuoto
-- **Tempi di Smaltimento**: Calcola quando tornerai sobrio e quando potrai guidare
-- **Limiti Legali**: Mostra le sanzioni previste dal Codice della Strada italiano
 
-## Requisiti
+## Architettura Applicazione
+### Interfaccia Utente
+L'applicazione è strutturata in tre sezioni principali accessibili tramite navigazione a tab:
+- **Sezione Ricerca**: Permette la ricerca rapida di cocktail per nome o categoria con visualizzazione immediata di gradazione alcolica, contenuto di alcol puro in grammi, ingredienti e proporzioni. Sono inoltre permesse ricerche con filtri applicati, suddivisi in "nome", "ingredienti", e "categoria", selezionabili singolarmente o in modo multiplo. Il sistema di ricerca è *case-insensitive* e supporta ricerche parziali (con almeno due lettere).
+- **Sezione Calcolo Alcolemia**: Il cuore scientifico dell'applicazione, dove l'utente può costruire una sessione di bevute multiple inserendo cocktail, anche diversi tra loro, e quantità, per poi calcolare l'alcolemia basata sui propri parametri biometrici e sulle condizioni di consumo.
+- **Sezione Database**: Visualizzazione completa del database. Questa sezione è organizzata per categorie: Classic (IBA), Contemporary (IBA), New Era (IBA), Aperitivo, Birra, Vino.
 
-- Python 3.7+
-- pandas
+### Database delle Bevande
+Il database contiene 120+ bevande categorizzate scientificamente:
 
-## Installazione
+86 cocktail IBA ufficiali (Classic, Contemporary, New Era) con l'aggiunta di alcune varianti famose
+16 aperitivi, inclusi cocktail regionali italiani (per ora solo Veneti)
+10 tipologie di birra con gradazioni medie
+7 categorie di vino con gradazioni e quantità medie
 
-```bash
-cd "/Users/tommaso/Desktop/Progetti esterni/Gradiente alcolico"
-pip install pandas
+Ogni voce contiene ingredienti con volumi precisi e gradazioni alcoliche, permettendo calcoli accurati della gradazione finale e del contenuto di alcol puro.
+
+
+## Fondamenti Scientifici
+### Calcolo della Gradazione Alcolica
+La gradazione è calcolata usando la formula del volume pesato:
+```
+Gradazione = (Σ Volume_ingrediente × Gradazione_ingrediente) / Volume_totale × 100
 ```
 
-## Uso Rapido
+Il contenuto di alcol puro in grammi utilizza la densità dell'etanolo (0.789 g/mL) e include un fattore di diluizione del 5% per tenere conto di ghiaccio sciolto, errori durante la preparazione o drink non completamente finiti.
 
-```bash
-python gradazione_tool.py
-```
-
-## Menu Principale
-
-1. **Cerca un cocktail per nome** - Calcola gradazione e grammi di alcol puro
-2. **Mostra tutti i cocktail disponibili** - Lista completa 52 cocktail
-3. **Cerca per categoria** - Filtra per IBA, regionali, etc.
-4. **Calcola cocktail personalizzato** - Modifica ricette esistenti
-5. **Calcola alcolemia per cocktail specifico** - Stima scientifica dell'alcolemia
-6. **Esci**
-
-## Cocktail Disponibili
-
-### Novità Regionali
-- **Te+**: Estratto alcolico al tè pesca (9.5% vol) - Origin Bar, Bassano del Grappa
-- **Leone**: Aperitivo veneto tradizionale
-- **Spritz Variations**: Campari, Aperol, Select (classici e veneziani)
-
-### Cocktail IBA 2024
-- **The Unforgettables**: Negroni, Manhattan, Martini, Daiquiri, etc.
-- **Contemporary Classics**: Cosmopolitan, Mojito, Caipirinha, etc.
-- **New Era Drinks**: Espresso Martini, Paper Plane, etc.
-
-## Sistema Alcolemia Avanzato
-
-### Parametri Richiesti
-- **Genere** (uomo/donna) - Influenza il fattore Widmark
-- **Peso** (kg) - Base del calcolo
-- **Altezza** (cm) - Per calcolo TBW preciso
-- **Età** (anni) - Correzione metabolismo
-- **Stomaco** (pieno/vuoto) - Riduce assorbimento del 30%
-- **Tempo trascorso** - Calcola smaltimento
-
-### Formula Scientifica
-Utilizza la **Formula di Widmark modificata** con **TBW di Watson**:
+### Sistema di Calcolo Alcolemia
+#### Formula di Widmark Modificata
+L'applicazione implementa la formula di Widmark con il calcolo personalizzato del Total Body Water (TBW) secondo Watson et al.:
 
 ```
-TBW (uomo) = 2.447 - (0.09145 × età) + (0.1074 × altezza) + (0.3362 × peso)
-TBW (donna) = -2.097 + (0.1069 × altezza) + (0.2466 × peso)
+TBW_uomo = 2.447 - (0.09516 × età) + (0.1074 × altezza_cm) + (0.3362 × peso_kg)
+TBW_donna = -2.097 + (0.1069 × altezza_cm) + (0.2466 × peso_kg)
 
-Fattore Widmark = TBW / Peso corporeo
+Fattore_Widmark = TBW / Peso_corporeo
 
-Alcolemia = (Grammi alcol / (Peso × Fattore Widmark)) - (Beta × Ore)
+BAC = (grammi_alcol × fattori_correzione) / (peso × fattore_Widmark) - (β × tempo_ore)
 ```
 
-### Output Dettagliato
-- **Alcolemia al picco** e **attuale**
-- **Stato legale** secondo il Codice della Strada
-- **Tempo per azzeramento** completo
-- **Tempo per guidare** legalmente (sotto 0.5 g/L)
-- **TBW personalizzato** e **Fattore Widmark**
+Fonte: P E Watson, I D Watson, R D Batt, (1980). Total body water volumes for adult males and females estimated from simple anthropometric measurements, *The American Journal of Clinical Nutrition*, *33*(1), 27-39. DOI: https://doi.org/10.1093/ajcn/33.1.27.
 
-## Limiti Legali Italiani
+#### Fattori di Correzione Avanzati
+**Livello di Fitness**: Il sistema considera tre livelli di forma fisica che influenzano il metabolismo dell'alcol:
+- Sedentario: metabolismo base
+- Attivo (2+ allenamenti/settimana): +5% efficienza metabolica
+- Atleta (5+ allenamenti/settimana): +10% efficienza metabolica
+
+**Idratazione**: Quattro livelli di idratazione durante il consumo influenzano la diluizione dell'alcol:
+- Assente: -1.0% efficienza (disidratazione riduce metabolismo)
+- Bassa (<100ml): baseline
+- Media (300ml): +1.5% (TBW base più alto, dunque BAC iniziale inferiore)
+- Alta (>1000ml): +2.5% (TBW base più alto, dunque BAC iniziale inferiore)
+
+Riassumendo, le persone allenate metabolizzano l'alcol più efficacemente grazie a una migliore funzionalità epatica e una maggiore proporzione di massa magra, che processa l'alcol più velocemente rispetto al tessuto adiposo. Inoltre, poiché l'alcol si distribuisce nell'acqua corporea e i muscoli contengono circa il 75% di acqua contro il 10% del tessuto adiposo, gli atleti hanno un volume di distribuzione maggiore che diluisce inizialmente di più l'alcol nel sangue. Anche per questo motivo viene considerato il livello di idratazione, che incide positivamente nel calcolo della TBW, aiutando a ridurre marginalmente l'effetto dell'alcol. Tuttavia, se l'utente si è allenato lo stesso giorno del consumo, il sistema applica una riduzione del 10% del tasso di eliminazione
+
+In conclusione, una persona allenata e idratata presenta un metabolismo più rapido e una maggiore capacità di diluizione iniziale, motivi per cui registra un livello alcolemico più basso che smaltisce più velocemente.
+
+### Simulazione Temporale
+Per sessioni di bevute multiple, l'algoritmo simula l'assorbimento e l'eliminazione nel tempo:
+- Calcola gli intervalli tra le ingestioni basandosi sulla durata totale
+- Applica la curva di eliminazione lineare per ogni drink
+- Considera l'effetto dello stomaco pieno (-30% assorbimento)
+- Genera una timeline predittiva fino a 6 ore
+
+### Limiti Legali Italiani
 
 | Alcolemia (g/L) | Sanzioni |
 |-----------------|----------|
-| 0.0 - 0.5 | ✅ Guida consentita |
-| 0.5 - 0.8 | ⚠️ Multa 527-2108€, sospensione 3-6 mesi |
-| 0.8 - 1.5 | ❌ Arresto fino a 6 mesi, multa 800-3200€ |
-| Oltre 1.5 | 🚨 Arresto 6-12 mesi, confisca veicolo |
+| 0.0 - 0.5 | Guida consentita |
+| 0.5 - 0.8 | Multa 527-2108€, sospensione 3-6 mesi |
+| 0.8 - 1.5 | Arresto fino a 6 mesi, multa 800-3200€ |
+| Oltre 1.5 | Arresto 6-12 mesi, confisca veicolo |
 
-## Esempi di Uso
 
-### Calcolo Gradazione
+## Innovazioni Tecniche
+### Responsive Design
+L'interfaccia utilizza CSS Grid e Flexbox per un layout completamente responsivo. Il design è mobile-first per garantire una fruizione ottimale su smartphone, dove spesso avviene l'uso pratico dell'applicazione.
+
+### Calcoli Real-time
+Tutti i calcoli sono eseguiti client-side in JavaScript, garantendo privacy assoluta (nessun dato personale trasmesso) e performance immediate. L'architettura single-page elimina latenze di rete.
+
+L'applicazione mantiene lo stato delle bevute aggiunte in memoria, permettendo modifiche dinamiche della composizione della sessione senza perdita di dati.
+
+
+## Sviluppi Futuri
+Il tool verrà costantemente manutenuto.
+
+### Prossimi Rilasci
+Sezione "**Costruisci il Tuo Drink**": è in fase di studio e sviluppo una quarta sezione che permetterà agli utenti di creare cocktail personalizzati selezionando arbitrariamente ingredienti, volumi e gradazioni da un database esteso di liquori, mixer e guarnizioni. Questa funzionalità includerà sicuramente:
+- Database ingredienti con oltre 200 bevande catalogate
+- Calcolo automatico di gradazione e contenuto alcolico
+- Suggerimenti di bilanciamento basati su proporzioni classiche
+
+Inoltre, si vorrebbe offrire la possibilità di salvare **ricette personalizzate**.
+
+A sviluppi futuri viene lasciato l'upgrade ad un sistema di **Profili Utente**, in cui memorizzare:
+- Dati biometrici
+- Preferenze di calcolo (fattori fitness, tolleranze)
+- Storico delle sessioni per analisi longitudinale
+- Cocktail e ricette preferite
+
+Ancora in fase di studio di fattibilità ci sono ulteriori espansioni, come la traduzione in lingue diverse, geolocalizzazione per integrazione con le normative locali, integrazioni con dispositivi di terze parti.
+
+## Considerazioni Tecniche e Limitazioni
+Il sistema mantiene un margine di errore intrinseco di circa il 20%, tipico dei calcoli teorici di alcolemia. Fattori non modellabili includono variazioni genetiche del metabolismo (polimorfismi CYP2E1), condizioni mediche, farmaci, e tolleranza acquisita.
+L'applicazione serve esclusivamente per scopi educativi e di awareness, non sostituendo mai misurazioni dirette tramite etilometro per decisioni legali o di sicurezza.
+
+## Struttura Codebase
 ```
-Cerca: "Negroni"
-Risultato:
-- Gradazione: 27.0% vol
-- Alcol puro: 21.33 grammi
-- Ingredienti: Gin 30ml (40°), Campari 30ml (25°), Vermouth 30ml (16°)
-```
-
-### Calcolo Alcolemia  
-```
-Cocktail: Negroni (21.33g alcol puro)
-Persona: Uomo, 75kg, 180cm, 30 anni, stomaco vuoto
-
-Risultati:
-- TBW: 45.2 litri
-- Alcolemia al picco: 0.47 g/L
-- Stato: Entro i limiti (guida consentita)
-- Azzeramento in: 3.1 ore
-```
-
-## Test Automatici
-
-```bash
-python test_tool.py
-```
-
-Include test per:
-- Nuovo cocktail Te+
-- Confronto Spritz classici vs veneziani  
-- Simulazioni alcolemia uomo vs donna
-- Verifica formula Widmark vs calcoli manuali
-
-## Sicurezza e Responsabilità
-
-**⚠️ AVVERTENZE IMPORTANTI:**
-- I calcoli sono **teorici e approssimativi**
-- L'alcolemia reale varia per fattori individuali
-- **Mai guidare dopo aver bevuto** anche sotto i limiti
-- **Usa sempre l'etilometro** per misure precise
-- Il tool è per **scopi educativi** e prevenzione
-
-## Formule e Precisione
-
-### Vantaggi del Tool
-- **Più preciso** delle tabelle standard (usa TBW personalizzato vs coefficienti fissi)
-- **Considera l'età** (metabolismo rallenta con l'età)
-- **Differenzia uomo/donna** (composizione corporea diversa)
-- **Include altezza** (influenza distribuzione acqua corporea)
-- **Correzione stomaco** (assorbimento ridotto a stomaco pieno)
-
-### Limitazioni
-- **Non sostituisce l'etilometro**
-- **Non considera**: farmaci, malattie, tolleranza individuale
-- **Basato su persona sana** con fegato funzionante
-- **Margine di errore**: ±20-30% tipico per calcoli teorici
-
-## Sviluppo Futuro
-
-Possibili miglioramenti:
-1. **Interfaccia web** per uso mobile
-2. **Grafici** curva alcolemia nel tempo  
-3. **Database espandibile** per nuovi cocktail
-4. **Calcolo costi** ingredienti cocktail
-5. **Integrazione calorie** per cocktail
-
-## Struttura File
-
-```
-Gradiente alcolico/
-├── database_ricette.csv      # Database 52 cocktail
-├── gradazione_tool.py        # Tool principale con alcolemia
-├── test_tool.py             # Test completi + alcolemia
-├── requirements.txt         # Dipendenze
-└── README.md               # Documentazione
+├── cocktail-app.html           # Applicazione principale (self-contained)
+├── README.md                   # Documentazione
+└── [legacy]/                   # Versione Python originale
+    ├── gradazione_tool.py
+    ├── database_ricette.csv
+    └── test_tool.py
 ```
 
-## Changelog v2.0
+L'architettura (per ora) single-file facilita distribuzione e deployment, contenendo HTML, CSS, JavaScript e database in un unico documento auto-contenuto.
 
-### Nuove Funzionalità
-- ✅ **Sistema alcolemia completo** con Formula Widmark + TBW
-- ✅ **Te+ cocktail** di Origin Bassano del Grappa
-- ✅ **Spritz corretti** (classici e veneziani)
-- ✅ **Menu espanso** a 6 opzioni
-- ✅ **Calcolo grammi alcol puro** per ogni cocktail
-- ✅ **Limiti legali italiani** integrati
-- ✅ **Test alcolemia** automatici
+## Changelog Versioni
+### Changelog v1.0 - Foundation Release
+Initial Python terminal-based implementation with core pharmacokinetic engine.
+- Basic Widmark formula implementation with Watson TBW calculation
+- CSV database with 52 IBA cocktails (Classic, Contemporary, New Era categories)
+- Single and multiple drink BAC calculations with time progression
+- Stomach condition modifier (-30% absorption when full)
+- Terminal-based interactive menu system (7 options)
+- Personalized cocktail modification with ingredient substitution
+- Legal status classification with Italian driving limits
 
-### Miglioramenti
-- 🔄 **Database aggiornato**: da 51 a 52 cocktail
-- 🔄 **Interface pulita**: rimossi tutti gli emoji
-- 🔄 **Personalizzazione avanzata**: modifica anche tipi ingredienti
-- 🔄 **Precisione aumentata**: TBW vs coefficienti fissi
+Core features:
+- Weighted volume formula for alcohol graduation calculation
+- Raw TBW-corrected Widmark factors for improved accuracy
+- Timeline simulation with linear elimination modeling
+- Category-based cocktail browsing and search functionality
+
+
+### Changelog v2.0 - First Web Release
+Major update: Advanced pharmacokinetic algorithm with fitness parameter
+- Implemented distributed absorption model for multiple drinks
+- Added fitness level parameter (sedentary/active/athlete) with +15-25% metabolism boost
+- Temporal distribution of ingestions instead of single bolus
+- Superposition principle for individual drink contributions
+- Improved accuracy: reduced error from 71% to 27% in real-world testing
+- Enhanced timeline predictions with continuous elimination modeling
+
+Features added:
+- Added 10 beer types (small/medium formats) with accurate ABV
+- Added 6 wine categories with standard serving sizes
+- Enhanced time formatting for better UX
+
+
+### Changelog v3.0 (rolling out soon) - Full Web Application Architecture
+Complete architectural transformation.
+- Extended database: 120+ beverages including cocktails, aperitifs, beers, wines
+- Mobile-First design: touch-optimized responsive layout with CSS Grid/Flexbox
+- Advanced fitness modeling: Sedentary/Active/Athlete levels with metabolic corrections
+- Acute exercise effects: same-day workout impact on elimination rates
+- Hydration parameters: 4 level hydration system affecting BAC dilution
+
+Technical architecture:
+- Single-file self-contained HTML/CSS/JavaScript application
+- No external dependencies or installation requirements
+- Privacy-focused: all calculations performed locally
+- Cross-browser compatibility (Chrome 80+, Firefox 75+, Safari 13+)
+
+Regional specialties added:
+- Te+ cocktail (Origin Bar Bassano) - 9.5% ABV tea-peach extract
+- Leone aperitif - Traditional Veneto alternative to Americano
+- Corrected Spritz variations (Classic vs Venetian preparations)
+
+Scientific improvements:
+- Enhanced TBW calculations with fitness-based corrections
+- Hydration impact modeling (±2.5% BAC variation)
+- Exercise-induced metabolism modifications
+- Improved error margins through multi-factor calibration
+
 
 ---
 

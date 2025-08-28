@@ -1,0 +1,23 @@
+# File di sistema Mac
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# File di backup e temporanei
+*backup*
+*_future_*
+*temp*
+*.tmp
+
+# Documenti Word/Office
+*.docx
+*.xlsx
+*.pptx
+*.doc
+*.xls
+*.ppt
+
+# File di log
+*.log
