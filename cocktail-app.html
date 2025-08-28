@@ -15,6 +15,7 @@
     </script>
     <title>Calcolatore Gradazione Alcolica</title>
     <style>
+        /* CSS */
         * {
             margin: 0;
             padding: 0;
@@ -79,10 +80,15 @@
         .section {
             margin-bottom: 30px;
             display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         .section.active {
             display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .form-group {
@@ -220,6 +226,100 @@
             margin-bottom: 20px;
         }
 
+        /* Stili per i filtri di ricerca */
+        .search-filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: nowrap; /* Impedisce ai filtri di andare a capo */
+            -webkit-overflow-scrolling: touch; /* Scorrimento fluido su iOS */
+            /* overflow-x: auto; /* Abilita lo scorrimento orizzontale */
+        }
+
+        .filter-chip {
+            flex: 1; /* Ogni chip occupa spazio uguale */
+            padding: 12px 8px; /* Aumentato da 8px a 12px per mobile */
+            background: #f8f9fa;
+            border: 1px solid #e1e8ed;
+            border-radius: 12px; /* Allineato con il border-radius degli input */
+            font-size: 14px; /* Aumentato da 12px per leggibilità mobile */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            text-align: center; /* Centra il testo */
+            min-height: 44px; /* Altezza minima per touch targets */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .filter-chip.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            transform: scale(1.02); /* Leggero effetto di "pressione" */
+        }
+
+        /* Hover solo su dispositivi che supportano il hover (desktop) */
+        @media (hover: hover) and (pointer: fine) {
+            .filter-chip:active {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+
+            .filter-chip:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                transition: all 0.2s ease;
+            }
+
+            .filter-chip.active:hover {
+                transform: translateY(-1px) scale(1.02);
+            }
+
+            .tab:hover, .btn:hover {
+                opacity: 0.9;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .cocktail-item:hover {
+                background: #f0f4f8;
+            }
+        }
+
+        /* Effetti touch specifici per mobile */
+        @media (hover: none) and (pointer: coarse) {
+            .filter-chip:active {
+                transform: scale(0.95);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                transition: all 0.1s ease;
+            }
+    
+            .filter-chip {
+                /* Feedback visivo migliore per touch */
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
+            }
+        }
+
+        .search-stats {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 15px;
+            text-align: center;
+            min-height: 18px; /* Previene il "salto" della UI quando appare/scompare */
+        }
+
+        .ingredient-highlight {
+            background: #fff3cd;
+            padding: 1px 4px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #856404;
+        }
+
         .tabs {
             display: flex;
             background: #f8f9fa;
@@ -303,26 +403,6 @@
             color: #0c5460;
         }
 
-        .section {
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        
-        .section.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .tab:hover, .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        .cocktail-item:hover {
-            background: #f0f4f8;
-        }
-
         @media (max-width: 480px) {
             body {
                 padding: 10px;
@@ -368,6 +448,15 @@
                     <input type="text" id="searchInput" placeholder="Es: Negroni, Spritz Aperol..." aria-label="Cerca cocktail">
                 </div>
                 
+                <!-- Filtri di ricerca -->
+                <div class="search-filters" id="searchFilters">
+                    <div class="filter-chip active" data-filter="nome">Nome</div>
+                    <div class="filter-chip" data-filter="ingredienti">Ingredienti</div>
+                    <div class="filter-chip" data-filter="categoria">Categoria</div>
+                </div>
+
+                <div class="search-stats" id="searchStats"></div>
+
                 <div id="searchResults"></div>
             </div>
 
@@ -427,11 +516,11 @@
                     <label>Livello di forma fisica</label>
                     <select id="fitnessLevel">
                         <option value="sedentario">Sedentario</option>
-                        <option value="attivo">Attivo (~3 allenamenti/settimana)</option>
+                        <option value="attivo">Attivo (~2 allenamenti/settimana)</option>
                         <option value="atleta">Atleta (5+ allenamenti/settimana)</option>
                     </select>
                     <div class="fitness-info">
-                        L'allenamento migliora il metabolismo (+10/20%)
+                        L'allenamento migliora il metabolismo (+5/10%)
                     </div>
                     <div id="esercizioSameDayGroup" class="form-group" style="display: none;">
                         <label>Allenato oggi?</label>
@@ -439,7 +528,7 @@
                             <option value="no">No</option>
                             <option value="si">Sì</option>
                         </select>
-                    <div class="fitness-info">Esercizio acuto rallenta metabolismo (-10%, fino 24h)</div>
+                    <div class="fitness-info">Esercizio acuto rallenta metabolismo (-1.0%, fino 24h)</div>
                 </div>
                 </div>
 
@@ -447,11 +536,12 @@
                 <div class="form-group">
                     <label>Idratazione durante bevuta</label>
                     <select id="idratazione">
-                        <option value="bassa">Bassa (< 200 ml)</option>
-                        <option value="media">Media (200 ml)</option>
-                        <option value="alta">Alta (500 ml)</option>
+                        <option value="assente">Assente</option>
+                        <option value="bassa" selected="selected">Bassa (< 100 ml)</option>
+                        <option value="media">Media (300 ml)</option>
+                        <option value="alta">Alta (> 1000 ml)</option>
                     </select>
-                    <div class="fitness-info">Bere acqua pura diluisce l'alcol (±10% BAC) <br> Acqua in cocktail non conta</div>
+                    <div class="fitness-info">Bere acqua pura diluisce l'alcol (±2.5/5% BAC) <br> Con 3+ cocktail e no idratazione attiva scegli "bassa"</div>
                 </div>
 
                 <!-- Stato dello stomaco -->
@@ -466,13 +556,13 @@
                 <!-- Sessione bevuta -->
                 <div class="form-group">
                     <label>Durata totale sessione (minuti)</label>
-                    <input type="number" id="durataMinuti" placeholder="Es: 120 per 2 ore" min="0" value="0">
+                    <input type="number" id="durataMinuti" placeholder="Es: 120 per 2 ore" min="0">
                 </div>
 
                 <div class="form-group">
                     <label>Minuti dal primo drink</label>
-                    <input type="number" id="minutiPrimo" placeholder="Es: 180 per 3 ore fa" min="0" value="0">
-                    <div class="fitness-info">During drinking, BAC rises; after, it declines.</div>
+                    <input type="number" id="minutiPrimo" placeholder="Es: 180 per 3 ore fa" min="0">
+                    <div class="fitness-info">Durante la bevuta, il BAC aumenta; dopo, diminuisce.</div>
                 </div>
 
                 <button class="btn" id="calcolaBtn">Calcola Alcolemia</button>
@@ -499,17 +589,17 @@
         const cocktailDatabase = [
             // Cocktail Classic (The Unforgettables)
             {nome: "Alexander", categoria: "Classic", ingredienti: [{nome: "Cognac", volume: 30, gradazione: 40}, {nome: "Crème de Cacao (Brown)", volume: 30, gradazione: 24}, {nome: "Fresh Cream", volume: 30, gradazione: 0}], bicchiere: 120, note: "Servito con noce moscata fresca macinata"},
-            {nome: "Americano", categoria: "Classic", ingredienti: [{nome: "Campari", volume: 30, gradazione: 25}, {nome: "Vermouth Rosso", volume: 30, gradazione: 16}, {nome: "Soda Water", volume: 30, gradazione: 0}], bicchiere: 200, note: "Servito con ghiaccio e mezza fetta d'arancia"},
+            {nome: "Americano", categoria: "Classic", ingredienti: [{nome: "Campari", volume: 60, gradazione: 25}, {nome: "Vermouth Rosso", volume: 60, gradazione: 16}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e mezza fetta d'arancia"},
             {nome: "Aviation", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Maraschino", volume: 15, gradazione: 30}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Crème de Violette", volume: 1, gradazione: 20}], bicchiere: 120, note: "Servito in coppa cocktail"},
-            {nome: "Boulevardier", categoria: "Classic", ingredienti: [{nome: "Bourbon", volume: 45, gradazione: 40}, {nome: "Campari", volume: 30, gradazione: 25}, {nome: "Vermouth Rosso", volume: 30, gradazione: 16}], bicchiere: 200, note: "Versione whiskey del Negroni"},
+            {nome: "Boulevardier", categoria: "Classic", ingredienti: [{nome: "Bourbon", volume: 40, gradazione: 40}, {nome: "Campari", volume: 60, gradazione: 25}, {nome: "Vermouth Rosso", volume: 60, gradazione: 16}], bicchiere: 250, note: "Versione whiskey del Negroni. <br> IBA vorrebbe 45, 30, 30."},
             {nome: "Clover Club", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Sciroppo di Lampone", volume: 15, gradazione: 0}, {nome: "Albume", volume: 15, gradazione: 0}], bicchiere: 120, note: "Servito con schiuma rosa"},
             {nome: "Daiquiri", categoria: "Classic", ingredienti: [{nome: "Rum Bianco", volume: 60, gradazione: 40}, {nome: "Succo di Lime", volume: 20, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 10, gradazione: 0}], bicchiere: 110, note: "Shakerato e servito up"},                        
-            {nome: "Dirty Martini", categoria: "Classic", ingredienti: [{nome: "Gin o Vodka", volume: 60, gradazione: 40}, {nome: "Vermouth Secco", volume: 10, gradazione: 18}, {nome: "Acqua di Oliva", volume: 10, gradazione: 0}], bicchiere: 120, note: "Gin o Vodka a scelta; Guarnizione: olive verdi; Metodo: mescolato o shakerato; Coppa Martini ben fredda"},
-            {nome: "Dry Martini", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 60, gradazione: 40}, {nome: "Vermouth Secco", volume: 10, gradazione: 18}], bicchiere: 120, note: "Gin e Vermouth (Martini Dry/Extra Dry) a scelta; Guarnizione: olive verdi (in salamoia o meno) o scorza di limone; Metodo: mescolato (stirred) o shakerato (shaken); Coppa Martini ben fredda"},
+            {nome: "Dirty Martini", categoria: "Classic", ingredienti: [{nome: "Gin o Vodka", volume: 60, gradazione: 40}, {nome: "Vermouth Secco", volume: 10, gradazione: 18}, {nome: "Acqua di Oliva", volume: 10, gradazione: 0}], bicchiere: 120, note: "Gin o Vodka a scelta; <br> Guarnizione: olive verdi; <br> Metodo: mescolato o shakerato; <br> Coppa Martini ben fredda"},
+            {nome: "Dry Martini", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 60, gradazione: 40}, {nome: "Vermouth Secco", volume: 10, gradazione: 18}], bicchiere: 120, note: "Gin e Vermouth (Martini Dry/Extra Dry) a scelta; <br> Guarnizione: olive verdi (in salamoia o meno) o scorza di limone; <br> Metodo: mescolato (stirred) o shakerato (shaken); <br> Coppa Martini ben fredda"},
             {nome: "Gin Fizz", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 10, gradazione: 0}, {nome: "Soda Water", volume: 45, gradazione: 0}], bicchiere: 200, note: "Servire senza ghiaccio (IBA)"},
-            {nome: "Gin Lemon", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Limonata", volume: 150, gradazione: 0}], bicchiere: 200, note: "Servito con fette di limone"},
-            {nome: "Gin Soda e Lime", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Soda Water", volume: 150, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}], bicchiere: 200, note: "Servito con fette di lime"},
-            {nome: "Gin Tonic", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Acqua Tonica", volume: 150, gradazione: 0}], bicchiere: 200, note: "Servito con ghiaccio e lime"},
+            {nome: "Gin Lemon", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Limonata", volume: 150, gradazione: 0}], bicchiere: 250, note: "Servito con fette di limone"},
+            {nome: "Gin Soda e Lime", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Soda Water", volume: 150, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}], bicchiere: 250, note: "Servito con fette di lime"},
+            {nome: "Gin Tonic", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Acqua Tonica", volume: 150, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e lime o scorza di limone"},
             {nome: "Manhattan", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 50, gradazione: 40}, {nome: "Vermouth Rosso", volume: 20, gradazione: 17}, {nome: "Angostura Bitter", volume: 1, gradazione: 44.7}], bicchiere: 120, note: "Servito con ciliegia"},
             {nome: "Martinez", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Vermouth Rosso", volume: 45, gradazione: 17}, {nome: "Maraschino Luxardo", volume: 5, gradazione: 40}, {nome: "Orange Bitters", volume: 1, gradazione: 28}], bicchiere: 120, note: "Servito con scorza di limone"},
             {nome: "Negroni", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Campari", volume: 30, gradazione: 25}, {nome: "Vermouth Rosso", volume: 30, gradazione: 16}], bicchiere: 200, note: "Servito con ghiaccio e scorza d'arancia"},
@@ -538,7 +628,7 @@
             {nome: "French 75", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 15, gradazione: 0}, {nome: "Champagne", volume: 60, gradazione: 12}], bicchiere: 150, note: "Servito in flute"},
             {nome: "French Connection", categoria: "Contemporary", ingredienti: [{nome: "Cognac", volume: 35, gradazione: 40}, {nome: "Amaretto", volume: 35, gradazione: 28}], bicchiere: 120, note: "Servito con ghiaccio"},
             {nome: "Garibaldi", categoria: "Contemporary", ingredienti: [{nome: "Campari", volume: 45, gradazione: 25}, {nome: "Succo d'arancia", volume: 120, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e scorza di arancia"},
-            {nome: "Hemingway Special", categoria: "Contemporary", ingredienti: [{nome: "Rum", volume: 60, gradazione: 40}, {nome: "Grapefruit Juice", volume: 40, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Maraschino (Luxardo)", volume: 15, gradazione: 40}], bicchiere: 150, note: "Servito in coppa cocktail"},
+            {nome: "Hemingway Special", categoria: "Contemporary", ingredienti: [{nome: "Rum", volume: 60, gradazione: 40}, {nome: "Succo di Pompelmo", volume: 40, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Maraschino (Luxardo)", volume: 15, gradazione: 40}], bicchiere: 150, note: "Servito in coppa cocktail"},
             {nome: "Irish Coffee", categoria: "Contemporary", ingredienti: [{nome: "Whiskey Irlandese", volume: 50, gradazione: 40}, {nome: "Caffè", volume: 120, gradazione: 0}, {nome: "Zucchero", volume: 10, gradazione: 0}, {nome: "Panna", volume: 50, gradazione: 0}], bicchiere: 200, note: "Servito caldo con panna montata"},
             {nome: "Lemon Drop Martini", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 30, gradazione: 40}, {nome: "Triple Sec", volume: 20, gradazione: 30}, {nome: "Succo di Limone", volume: 15, gradazione: 0}], bicchiere: 120, note: "A scelta, servito con zucchero sul bordo"},
             {nome: "London Mule", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Ginger Beer", volume: 120, gradazione: 0}, {nome: "Succo di Lime", volume: 10, gradazione: 0}], bicchiere: 200, note: "Servito in tazza di rame"},
@@ -561,6 +651,7 @@
             // Cocktail New Era (The New Era)
             {nome: "Bee's Knees", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 52.5, gradazione: 40}, {nome: "Sciroppo al Miele", volume: 10, gradazione: 0}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}, {nome: "Succo d'Arancia", volume: 22.5, gradazione: 0}], bicchiere: 120, note: "Guarnizione facoltativa con una scorza di limone o di arancia"},
             {nome: "Bramble", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Succo di Limone", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 12.5, gradazione: 0}, {nome: "Crème de Mure", volume: 15, gradazione: 16}], bicchiere: 120, note: "Guarnizione facoltativa con una fetta di limone e more fresche"},
+            {nome: "Cedro Tonic", categoria: "New Era", ingredienti: [{nome: "Acqua di Cedro", volume: 50, gradazione: 29}, {nome: "Acqua Tonica", volume: 150, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e scorza di cedro. Acqua di Cedro è un liquore fruttato distillato da Nardini"},
             {nome: "Chartreuse Swizzle", categoria: "New Era", ingredienti: [{nome: "Green Chartreuse", volume: 45, gradazione: 55}, {nome: "Succo di Lime", volume: 22.5, gradazione: 0}, {nome: "Sciroppo d'Ananas", volume: 30, gradazione: 0}, {nome: "Liquore speziato (Falernum)", volume: 15, gradazione: 11}], bicchiere: 150, note: "Guarnizione con foglie di menta e noce moscata grattugiata"},
             {nome: "Dark 'n' Stormy", categoria: "New Era", ingredienti: [{nome: "Rum Scuro (Goslings)", volume: 60, gradazione: 75.5}, {nome: "Ginger Beer", volume: 100, gradazione: 0}, {nome: "Succo di Lime", volume: 10, gradazione: 0}], bicchiere: 200, note: "Guarnizione con uno spicchio di lime o una fetta di lime. Trademark di Gosling's"},
             {nome: "Don's Special Daiquiri", categoria: "New Era", ingredienti: [{nome: "Gold Jamaican Rum", volume: 30, gradazione: 40}, {nome: "Cuban Rum", volume: 15, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Sciroppo al Passion Fruit", volume: 15, gradazione: 0}, {nome: "Sciroppo al Miele", volume: 15, gradazione: 0}], bicchiere: 150, note: "Guarnizione con 1/2 passion fruit. Servito con ghiaccio tritato"},
@@ -568,31 +659,41 @@
             {nome: "Fernandito", categoria: "New Era", ingredienti: [{nome: "Fernet Branca", volume: 50, gradazione: 39}, {nome: "Cola", volume: 150, gradazione: 0}], bicchiere: 200, note: "Servito con ghiaccio e fetta di limone (opzionale)"},
             {nome: "French Martini", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 45, gradazione: 40}, {nome: "Liquore di Lamponi (Chambord)", volume: 15, gradazione: 16.5}, {nome: "Succo di Ananas", volume: 15, gradazione: 0}], bicchiere: 100, note: "Spremere l'olio dalla buccia di limone sulla bevanda. Servito in coppa cocktail"},
             {nome: "Gimlet", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 60, gradazione: 40}, {nome: "Cordiale di Lime", volume: 30, gradazione: 0}], bicchiere: 120, note: "Servito ghiacciato. Possibile sostituzione del Gin con Vodka"},
-            {nome: "Gin Basil Smash", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 60, gradazione: 40}, {nome: "Basilico Fresco", volume: 5, gradazione: 0}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 22.5, gradazione: 0}], bicchiere: 200, note: "Pestare basilico e zucchero"},
+            {nome: "Gin Basil Smash", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 60, gradazione: 40}, {nome: "Basilico Fresco", volume: 5, gradazione: 0}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 22.5, gradazione: 0}], bicchiere: 180, note: "Pestare basilico e zucchero"},
             {nome: "Grand Margarita", categoria: "New Era", ingredienti: [{nome: "Agave Tequila", volume: 45, gradazione: 42.5}, {nome: "Grand Marnier", volume: 30, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}], bicchiere: 200, note: "Guarnizione con una fetta di lime"},
             {nome: "Hot Toddy", categoria: "New Era", ingredienti: [{nome: "Whiskey", volume: 50, gradazione: 40}, {nome: "Miele", volume: 10, gradazione: 0}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Acqua Calda", volume: 120, gradazione: 0}], bicchiere: 250, note: "Drink caldo invernale. Aggiungere spezie come Cannella e Chiodi di Garofano"},
             {nome: "Iba Tiki", categoria: "New Era", ingredienti: [{nome: "Rum Bianco (Profundo Havana Club)", volume: 30, gradazione: 35}, {nome: "Rum Scuro (Smoky Havana Club)", volume: 30, gradazione: 40}, {nome: "Amaretto", volume: 15, gradazione: 28}, {nome: "Liquore alle Nocciole (Frangelico)", volume: 5, gradazione: 36.5}, {nome: "Maraschino (Luxardo)", volume: 3, gradazione: 40}, {nome: "Purea di Passion Fruit", volume: 30, gradazione: 0}, {nome: "Succo d'Ananas", volume: 90, gradazione: 0}, {nome: "Succo di Lime", volume: 30, gradazione:0}], bicchiere: 300, note: "Guarnizione con agrumi e una fetta d'ananas disidratato"},
+            {nome: "Jager Bomb", categoria: "New Era", ingredienti: [{nome: "Jägermeister", volume: 50, gradazione: 35}, {nome: "Energy Drink", volume: 150, gradazione: 0}], bicchiere: 250, note: "Preferibilmente servito con un bicchierino di Jägermeister da far cadere nell'energy drink"},
             {nome: "Naked and Famous", categoria: "New Era", ingredienti: [{nome: "Mezcal", volume: 22.5, gradazione: 60}, {nome: "Aperol", volume: 22.5, gradazione: 11}, {nome: "Yellow Chartreuse", volume: 22.5, gradazione: 43}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}], bicchiere: 120, note: "Cocktail affumicato e agrumato"},
             {nome: "New York Sour", categoria: "New Era", ingredienti: [{nome: "Whiskey", volume: 60, gradazione: 41.5}, {nome: "Succo di Limone", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 22.5, gradazione: 0}, {nome: "Vino Rosso", volume: 15, gradazione: 13.5}], bicchiere: 200, note: "Aggiungere alcune gocce di albume d'uovo. Guarnizione con scorza di limone o arancia e ciliegia"},
             {nome: "Old Cuban", categoria: "New Era", ingredienti: [{nome: "Rum Scuro (Aged)", volume: 45, gradazione: 40}, {nome: "Champagne/Prosecco (Brut)", volume: 60, gradazione: 12}, {nome: "Succo di Lime", volume: 22.5, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 30, gradazione: 0}, {nome: "Angostura bitter", volume: 1, gradazione: 44.7}], bicchiere: 200, note: "Guarnizione con menta fresca e scorza di lime"},
             {nome: "Painkiller", categoria: "New Era", ingredienti: [{nome: "Rum Scuro (Pusser's)", volume: 60, gradazione: 40}, {nome: "Succo di Ananas", volume: 60, gradazione: 0}, {nome: "Succo d'Arancia", volume: 30, gradazione: 0}, {nome: "Latte di Cocco", volume: 30, gradazione: 0}], bicchiere: 250, note: "Guarnizione con noce moscata grattuggiata"},          
             {nome: "Paloma", categoria: "New Era", ingredienti: [{nome: "Agave Tequila", volume: 50, gradazione: 42.5}, {nome: "Pink Grapefruit Soda", volume: 100, gradazione: 0}, {nome: "Succo di Lime", volume: 5, gradazione: 0}], bicchiere: 250, note: "Servito con sale sul bordo"},
             {nome: "Paper Plane", categoria: "New Era", ingredienti: [{nome: "Bourbon", volume: 30, gradazione: 40}, {nome: "Aperol", volume: 30, gradazione: 11}, {nome: "Amaro Nonino", volume: 30, gradazione: 35}, {nome: "Succo di Limone", volume: 30, gradazione: 0}], bicchiere: 150, note: "Un tempo pensato con il Campari; rivisitazione del cocktail Last Word"},
-            {nome: "Porn Star Martini", categoria: "New Era", ingredienti: [{nome: "Vanilla Vodka", volume: 50, gradazione: 38}, {nome: "Liquore al Passion Fruit", volume: 20, gradazione: 17}, {nome: "Purea di Passion Fruit", volume: 50, gradazione: 0}, {nome: "Vanilla Syrup", volume: 10, gradazione: 0}, {nome: "Champagne", volume: 50, gradazione: 12.2}], bicchiere: 150, note: "Accompagnare con un bicchierino di Champagne (50 ml)"},
+            {nome: "Porn Star Martini", categoria: "New Era", ingredienti: [{nome: "Vanilla Vodka", volume: 50, gradazione: 38}, {nome: "Liquore al Passion Fruit", volume: 20, gradazione: 17}, {nome: "Purea di Passion Fruit", volume: 50, gradazione: 0}, {nome: "Sciroppo alla Vaniglia", volume: 10, gradazione: 0}, {nome: "Champagne", volume: 50, gradazione: 12.2}], bicchiere: 150, note: "Accompagnare con un bicchierino di Champagne (50 ml)"},
+            {nome: "Skinny Bitch", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Soda Water", volume: 150, gradazione: 0}], bicchiere: 250, note: "Versione leggera del Vodka Soda"},
             {nome: "Suffering Bastard", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Cognac/Brandy", volume: 30, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Ginger Beer", volume: 90, gradazione: 0}], bicchiere: 250, note: "Servito con Ginger Beer a parte"},
             {nome: "Tom Collins", categoria: "New Era", ingredienti: [{nome: "Gin (Old Tom)", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 15, gradazione: 0}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 200, note: "Guarnizione con fetta di limone. Versione lunga del Gin Sour"},
             {nome: "Tommy's Margarita", categoria: "New Era", ingredienti: [{nome: "Agave Tequila", volume: 60, gradazione: 42.5}, {nome: "Succo di Lime", volume: 30, gradazione: 0}, {nome: "Sciroppo di Agave", volume: 30, gradazione: 0}], bicchiere: 150, note: "Versione senza Triple Sec"},
             {nome: "Vieux Carré", categoria: "New Era", ingredienti: [{nome: "Whiskey Rye", volume: 30, gradazione: 40}, {nome: "Cognac", volume: 30, gradazione: 40}, {nome: "Vermouth Rosso", volume: 30, gradazione: 19}, {nome: "Bénédictine", volume: 15, gradazione: 40}, {nome: "Peychaud's Bitters", volume: 2, gradazione: 35}], bicchiere: 150, note: "Prende il nome dal quartiere Vieux Carré, il centro storico più antico di New Orleans"},
+            {nome: "Vodka Redbull", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Redbull", volume: 150, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio"},
+            {nome: "Vodka Soda", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Soda Water", volume: 150, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e fetta di lime (opzionale)"},
 
             // APERITIVI
             {nome: "Agua de Valencia", categoria: "Aperitivo", ingredienti: [{nome: "Gin", volume: 5, gradazione: 40}, {nome: "Vodka", volume: 5, gradazione: 40}, {nome: "Succo d'Arancia", volume: 40, gradazione: 0}, {nome: "Cava", volume: 130, gradazione: 11}, {nome: "Zucchero", volume: 5, gradazione: 0}], bicchiere: 250, note: "Cocktail spagnolo originariamente servito in pitcher"},            
             {nome: "Bellini", categoria: "Aperitivo", ingredienti: [{nome: "Prosecco", volume: 100, gradazione: 11}, {nome: "Purè di Pesca", volume: 50, gradazione: 0}], bicchiere: 180, note: "Servito in flute"},
             {nome: "Hugo", categoria: "Aperitivo", ingredienti: [{nome: "Liquore di Fiori di Sambuco (St-Germain)", volume: 40, gradazione: 20}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}, {nome: "Menta Fresca", volume: 5, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e lime"},
-            {nome: "Leone", categoria: "Aperitivo", ingredienti: [{nome: "Aperitivo Leone", volume: 45, gradazione: 20}, {nome: "Soda Water", volume: 45, gradazione: 0}], bicchiere: 250, note: "Rivisitazione Americano con finale tendenzialmente più dolce - Leon Bar, Bassano del Grappa. Servito con ghiaccio"},
-            {nome: "Spritz Aperol", categoria: "Aperitivo", ingredienti: [{nome: "Aperol", volume: 60, gradazione: 11}, {nome: "Prosecco", volume: 90, gradazione: 11}, {nome: "Soda Water", volume: 30, gradazione: 0}], bicchiere: 250, note: "Servito con fetta d'arancia"},
+            {nome: "Leone", categoria: "Aperitivo", ingredienti: [{nome: "Aperitivo Leone", volume: 90, gradazione: 22}, {nome: "Soda Water", volume: 90, gradazione: 0}], bicchiere: 250, note: "Rivisitazione Americano con finale tendenzialmente più dolce - Leon Bar, Bassano del Grappa. Servito con ghiaccio"},
+            {nome: "Mezzo e Mezzo", categoria: "Aperitivo", ingredienti: [{nome: "Mezzo e Mezzo", volume: 7.5, gradazione: 22}, {nome: "Soda Water", volume: 7.5, gradazione: 0}], bicchiere: 10, note: "Aperitivo tradizionale della distilleria Nardini, Bassano del Grappa. Preparato miscelando una parte di Mezzoemezzo con una parte di seltz"},
+            {nome: "Spritz Aperol", categoria: "Aperitivo", ingredienti: [{nome: "Aperol", volume: 60, gradazione: 11}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 250, note: "Servito con fetta d'arancia"},
             {nome: "Spritz Aperol Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Aperol", volume: 90, gradazione: 11}, {nome: "Prosecco", volume: 90, gradazione: 11}], bicchiere: 250, note: "Spritz Aperol senza soda water"},
             {nome: "Spritz Campari", categoria: "Aperitivo", ingredienti: [{nome: "Campari", volume: 60, gradazione: 25}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 250, note: "Spritz classico con Campari"},
             {nome: "Spritz Campari Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Campari", volume: 90, gradazione: 25}, {nome: "Prosecco", volume: 90, gradazione: 11}], bicchiere: 250, note: "Spritz Campari senza soda water"},
+            {nome: "Spritz Cynar", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 60, gradazione: 16.5}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 250, note: "Spritz classico con Cynar"},
+            {nome: "Spritz Cynar Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 90, gradazione: 16.5}, {nome: "Prosecco", volume: 90, gradazione: 11}], bicchiere: 250, note: "Spritz Cynar senza soda water"},
+            {nome: "Spritz Cynar 70 Proof", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 60, gradazione: 35}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 250, note: "Spritz classico con Cynar"},
+            {nome: "Spritz Cynar 70 Proof Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 90, gradazione: 35}, {nome: "Prosecco", volume: 90, gradazione: 11}], bicchiere: 250, note: "Spritz Cynar senza soda water"},
+            {nome: "Spritz Liscio", categoria: "Aperitivo", ingredienti: [{nome: "Prosecco", volume: 90, gradazione: 11}, {nome: "Soda Water", volume: 90, gradazione: 0}], bicchiere: 250, note: "Denominato anche Spritz Bianco, è una variante senza bitter dello Spritz classico"},
             {nome: "Spritz Select", categoria: "Aperitivo", ingredienti: [{nome: "Select", volume: 60, gradazione: 17.5}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 250, note: "Spritz classico con Select"},
             {nome: "Spritz Select Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Select", volume: 90, gradazione: 17.5}, {nome: "Prosecco", volume: 90, gradazione: 11}], bicchiere: 250, note: "Spritz Select senza soda water"},
             {nome: "Te+", categoria: "Aperitivo", ingredienti: [{nome: "Te+ (Origin Bassano)", volume: 170, gradazione: 9.5}], bicchiere: 250, note: "Estratto alcolico al tè pesca - Origin Bar, Bassano del Grappa"},
@@ -616,7 +717,7 @@
             {nome: "Prosecco", categoria: "Vino", ingredienti: [{nome: "Prosecco", volume: 100, gradazione: 11.0}], bicchiere: 180, note: "Flute standard prosecco tipo Valdobbiadene, Conegliano, Cartizze (ABV medio 10.5-12%)"},
             {nome: "Champagne", categoria: "Vino", ingredienti: [{nome: "Champagne", volume: 110, gradazione: 12.5}], bicchiere: 180, note: "Flute standard champagne tipo Moët, Dom Pérignon, Veuve Clicquot (ABV medio 12-13%)"},
             {nome: "Vino Dolce", categoria: "Vino", ingredienti: [{nome: "Vino Dolce", volume: 90, gradazione: 7.0}], bicchiere: 200, note: "Vino dolce tipo Moscato (ABV medio 5-9%)"},
-            {nome: "Passito", categoria: "Vino", ingredienti: [{nome: "Passito", volume: 70, gradazione: 16.0}], bicchiere: 200, note: "Calice standard passito tipo Pantelleria, Sauternes, Malvasia (ABV medio 14-18%)"}
+            {nome: "Passito", categoria: "Vino", ingredienti: [{nome: "Passito", volume: 70, gradazione: 16.0}], bicchiere: 200, note: "Passito standard tipo Pantelleria, Sauternes, Malvasia (ABV medio 14-18%)"}
         ];
 
         let addedDrinks = [];
@@ -624,28 +725,32 @@
         // Calcolare il fattore fitness
         function calcolaFattoreFitness(fitnessLevel) {
             // Basato sulle evidenze scientifiche trovate:
-            // - L'esercizio aumenta l'eliminazione dell'alcol del 20-43%
+            // - Un fisico sano aumenta l'eliminazione dell'alcol
             // - Maggiore massa magra = eliminazione più veloce
             // - Le persone allenate hanno migliore composizione corporea
             
             switch(fitnessLevel) {
                 case 'atleta':
-                    return 1.20; // +20% di efficienza (conservativo rispetto al 43% dichiarato negli studi)
-                case 'attivo':
                     return 1.10; // +10% di efficienza
+                case 'attivo':
+                    return 1.05; // +5% di efficienza
                 case 'sedentario':
                 default:
-                    return 1.0;  // Baseline (nessun bonus)
+                    return 1.0;  // Baseline
             }
         }
 
         // Calcolare adjust TBW per atleti
+        // L'alcol si distribuisce principalmente nell'acqua corporea. Le persone allenate hanno:
+        // - Più massa muscolare (che contiene ~75% di acqua)
+        // - Meno tessuto adiposo (che contiene solo ~10% di acqua)
+        // - Quindi a parità di peso, hanno più acqua corporea totale
         function calcolaFattoreTBWAdjust(fitnessLevel) {
             switch(fitnessLevel) {
                 case 'atleta':
-                    return 1.05;  // +5% TBW (massa magra alta)
+                    return 1.025;  // +2.5% TBW (massa magra alta)
                 case 'attivo':
-                    return 1.025;  // +2.5% TBW
+                    return 1.0125;  // +1.25% TBW
                 case 'sedentario':
                 default:
                     return 1.0;   // Baseline
@@ -653,16 +758,18 @@
         }
 
         // Calcolare idratazione (acqua)
-        function calcolaFattoreIdratazione(idratazione) {
+        function calcolaFattoreTBWIdratazione(idratazione) {
             switch(idratazione) {
                 case 'alta':
-                    return 1.10;  // +10% eliminazione (diluisce)
+                    return 1.025;  // +2.5%  (TBW base più alto, dunque BAC iniziale inferiore)
                 case 'media':
-                    return 1.0;   // Baseline
+                    return 1.0125;   // +1.25%  (TBW base più alto, dunque BAC iniziale inferiore)
                 case 'bassa':
-                    return 0.90;  // -10% (dehyd aumenta BAC)
+                    return 1.0;  // Baseline (si presuppone che un minimo d'acqua sia stato bevuto) 
+                case 'assente':
+                    return 0.99;  // -1.0% (dehyd causa BAC iniziale più alto)
                 default:
-                    return 1.0;   // Default caso
+                    return 1.0;  // Baseline
             }
         }
 
@@ -673,19 +780,20 @@
         // const MAX_SIM_MIN = 360; // Fino a 6h
 
         // Funzioni di calcolo
-        function calcolaTBW(peso, altezza, eta, genere, fitnessLevel) {
+        function calcolaTBW(genere, peso, altezza, eta, fitnessLevel, idratazione) {
             let tbwBase;
             if (genere.toLowerCase() === 'uomo') {
                 tbwBase = 2.447 - (0.09516 * eta) + (0.1074 * altezza) + (0.3362 * peso);
             } else {
                 tbwBase = -2.097 + (0.1069 * altezza) + (0.2466 * peso);
             }
-            const tbwAdjust = calcolaFattoreTBWAdjust(fitnessLevel);
-            return Math.max(tbwBase * tbwAdjust, 1.0);
+            const tbwFitnessAdjust = calcolaFattoreTBWAdjust(fitnessLevel);
+            const tbwIdratazioneAdjust = calcolaFattoreTBWIdratazione(idratazione);
+            return Math.max(tbwBase * tbwFitnessAdjust * tbwIdratazioneAdjust, 1.0); // TBW minimo 1L
         }
 
-        function calcolaFattoreWidmark(genere, peso, altezza, eta, fitnessLevel) {
-            const tbw = calcolaTBW(peso, altezza, eta, genere, fitnessLevel);
+        function calcolaFattoreWidmark(genere, peso, altezza, eta, fitnessLevel, idratazione) {
+            const tbw = calcolaTBW(genere, peso, altezza, eta, fitnessLevel, idratazione);
             return tbw / peso;
         }
 
@@ -725,17 +833,15 @@
         }
 
         // FUNZIONE PRINCIPALE (con curva assorbimento)
-        function calcolaAlcolemiaMultipla(totalGrammiAlcol, genere, peso, altezza, eta, stomacoPieno = false, durataMinuti, minutiPrimo, fitnessLevel = 'sedentario', esercizioSameDay = false, idratazione = 'media') {
-            const fattoreWidmark = calcolaFattoreWidmark(genere, peso, altezza, eta, fitnessLevel);
+        function calcolaAlcolemiaMultipla(totalGrammiAlcol, genere, peso, altezza, eta, stomacoPieno = false, durataMinuti, minutiPrimo, fitnessLevel = 'sedentario', esercizioSameDay = false, idratazione = 'bassa') {
+            const fattoreWidmark = calcolaFattoreWidmark(genere, peso, altezza, eta, fitnessLevel, idratazione);
             // Applicazione del fattore fitness al tasso di eliminazione
             const fattoreFitness = calcolaFattoreFitness(fitnessLevel);
             const betaPerOraBase = 0.16;  // Media unisex 2025
-            // Applica idratazione
-            const idratazioneFactor = calcolaFattoreIdratazione(idratazione);
             // Esercizio lo stesso giorno
-            const esercizioFactor = esercizioSameDay ? 0.90 : 1.0;  // -10% se yes
+            const esercizioFactor = esercizioSameDay ? 0.99 : 1.0;  // -1.0% if yes
             // Calcola beta per ora
-            const betaPerOra = betaPerOraBase * fattoreFitness * idratazioneFactor * esercizioFactor;
+            const betaPerOra = betaPerOraBase * fattoreFitness * esercizioFactor;
             const betaPerMinuto = betaPerOra / 60;
 
             // Rate assorbimento (esponenziale, k in 1/min)
@@ -801,7 +907,7 @@
                 alcolemiaAttuale: Math.round(alcolemiaAttuale * 1000) / 1000,
                 grammiEffettivi: Math.round(totalGrammiAlcol * (stomacoPieno ? 0.7 : 1.0) * 10) / 10,
                 fattoreWidmark: Math.round(fattoreWidmark * 1000) / 1000,
-                tbw: Math.round(calcolaTBW(peso, altezza, eta, genere, fitnessLevel) * 10) / 10,
+                tbw: Math.round(calcolaTBW(genere, peso, altezza, eta, fitnessLevel, idratazione) * 10) / 10,
                 oreAzzeramento: Math.round(minutiAzzeramentoCurrent / 60 * 10) / 10,
                 orePerGuidare: Math.round(minutiPerGuidareCurrent / 60 * 10) / 10,
                 betaPerOra: Math.round(betaPerOra * 1000) / 1000,
@@ -835,35 +941,112 @@
             }
         }
 
+
+        // Funzione di ricerca avanzata
+        // Inizzializziamo i filtri attivi
+        let activeFilters = ['nome']; // Array che mantiene di default il filtro "nome" attivo
+
+        function highlightText(text, query) {
+            if (!query) return text;
+            // RegExp con flag 'gi': g=global (tutte le occorrenze), i=case insensitive
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<span class="ingredient-highlight">$1</span>');
+        }
+
+        function searchInIngredients(cocktail, query) {
+            // some() restituisce true se ALMENO UN ingrediente contiene la query
+            return cocktail.ingredienti.some(ingrediente => 
+                ingrediente.nome.toLowerCase().includes(query.toLowerCase())
+            );
+        }
+
+        function getMatchingIngredients(cocktail, query) {
+            // filter() restituisce TUTTI gli ingredienti che matchano
+            return cocktail.ingredienti.filter(ingrediente => 
+                ingrediente.nome.toLowerCase().includes(query.toLowerCase())
+            );
+        }
+
+        // Vera funzione di ricerca
         function searchCocktail() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
             const results = document.getElementById('searchResults');
-            
+            const stats = document.getElementById('searchStats');
+    
             if (query.length < 2) {
                 results.innerHTML = '';
+                stats.innerHTML = '';
                 return;
             }
 
-            const matches = cocktailDatabase.filter(c => 
-                c.nome.toLowerCase().includes(query) || 
-                c.categoria.toLowerCase().includes(query)
-            );
+            let matches = [];
+
+            // forEach vs for loop: forEach è più "funzionale", for è più "imperativo"
+            cocktailDatabase.forEach(cocktail => {
+                let found = false;
+                let matchType = '';
+                let matchDetails = '';
+
+                // Cerca nel nome se il filtro è attivo
+                if (activeFilters.includes('nome') && cocktail.nome.toLowerCase().includes(query)) {
+                    found = true;
+                    matchType = 'Nome';
+                }
+
+                // Cerca nella categoria se il filtro è attivo
+                if (activeFilters.includes('categoria') && cocktail.categoria.toLowerCase().includes(query)) {
+                    found = true;
+                    // Operatore ternario: condizione ? valore_se_vero : valore_se_falso
+                    matchType = matchType ? matchType + ', Categoria' : 'Categoria';
+                }
+
+                // Cerca negli ingredienti se il filtro è attivo
+                if (activeFilters.includes('ingredienti') && searchInIngredients(cocktail, query)) {
+                    found = true;
+                    const matchingIngredients = getMatchingIngredients(cocktail, query);
+                    matchType = matchType ? matchType + ', Ingredienti' : 'Ingredienti';
+                    // map() trasforma ogni ingrediente nel suo nome, join() li unisce con virgole
+                    matchDetails = matchingIngredients.map(ing => ing.nome).join(', ');
+                }
+
+                if (found) {
+                    // push() aggiunge un elemento alla fine dell'array
+                    matches.push({
+                        cocktail: cocktail,
+                        matchType: matchType,
+                        matchDetails: matchDetails
+                    });
+                }
+            });
+
+            // Template literal (backticks) per interpolazione di stringhe
+            stats.innerHTML = `Trovati ${matches.length} cocktail${matches.length !== 1 ? 's' : ''} per "${query}"`;
 
             if (matches.length === 0) {
                 results.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Nessun cocktail trovato</p>';
                 return;
             }
 
-            results.innerHTML = matches.map(cocktail => {
+            // map() trasforma ogni match in HTML, join('') unisce tutto senza separatori
+            results.innerHTML = matches.map(match => {
+                const cocktail = match.cocktail;
                 const gradazione = calcolaGradazione(cocktail.ingredienti);
                 const alcolPuro = calcolaGrammiAlcol(cocktail.ingredienti);
-                
+        
                 return `
                     <div class="results">
-                        <h3 style="color: #333; margin-bottom: 10px;">${cocktail.nome}</h3>
+                        <h3 style="color: #333; margin-bottom: 10px;">
+                            ${cocktail.nome}
+                        </h3>
+                        <div style="font-size: 12px; color: #667eea; margin-bottom: 10px;">
+                            <i class="fas fa-search"></i> Trovato in: ${match.matchType}
+                            ${match.matchDetails ? ` (${match.matchDetails})` : ''}
+                        </div>
                         <div class="result-item">
                             <span class="result-label">Categoria:</span>
-                            <span class="result-value">${cocktail.categoria}</span>
+                            <span class="result-value">
+                                ${cocktail.categoria}
+                            </span>
                         </div>
                         <div class="result-item">
                             <span class="result-label">Gradazione:</span>
@@ -873,18 +1056,29 @@
                             <span class="result-label">Alcol puro:</span>
                             <span class="result-value">${alcolPuro.toFixed(1)} g</span>
                         </div>
+                        <div class="result-item">
+                            <span class="result-label">Bicchiere:</span>
+                            <span class="result-value">${cocktail.bicchiere} ml</span>
+                        </div>
                         <div style="margin-top: 10px;">
                             <strong>Ingredienti:</strong><br>
-                            ${cocktail.ingredienti.map(ing => 
-                                `• ${ing.nome}: ${ing.volume} ml${ing.gradazione > 0 ? ` (${ing.gradazione}% vol)` : ' (analcolico)'}`
-                            ).join('<br>')}
+                            ${cocktail.ingredienti.map(ing => {
+                                // Evidenzia se il filtro ingredienti è attivo E questo ingrediente contiene la query, anche se sono attivi altri filtri
+                                const shouldHighlight = activeFilters.includes('ingredienti') &&
+                                                        ing.nome.toLowerCase().includes(query.toLowerCase());
+                                const highlighted = shouldHighlight ? highlightText(ing.nome, query) : ing.nome;
+                                return `• ${highlighted}: ${ing.volume} ml${ing.gradazione > 0 ? ` (${ing.gradazione}% vol)` : ' (analcolico)'}`;
+                            }).join('<br>')}
                         </div>
-                        ${cocktail.note !== 'N/A' ? `<div style="margin-top: 10px; font-style: italic; color: #666;">${cocktail.note}</div>` : ''}
+                        <div style="margin-top: 10px; font-size: 15px; color: #555;">
+                            <em>${cocktail.note}</em>
+                        </div>
                     </div>
                 `;
             }).join('');
         }
 
+        // Stampa risultato finale
         function updateCocktailInfo() {
             const input = document.getElementById('cocktailName');
             const info = document.getElementById('cocktailInfo');
@@ -1114,6 +1308,34 @@
                 const group = document.getElementById('esercizioSameDayGroup');
                 const level = this.value;
                 group.style.display = (level === 'attivo' || level === 'atleta') ? 'block' : 'none';
+            });
+
+            // Gestione filtri di ricerca
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.addEventListener('click', function() {
+                    // getAttribute legge il valore dell'attributo HTML
+                    const filter = this.getAttribute('data-filter');
+        
+                    if (this.classList.contains('active')) {
+                        // Se è l'ultimo filtro attivo, non permettere di rimuoverlo
+                        if (activeFilters.length === 1) return;
+            
+                        // classList.remove() rimuove una classe CSS
+                        this.classList.remove('active');
+                        // filter() crea un nuovo array escludendo gli elementi che matchano la condizione
+                        activeFilters = activeFilters.filter(f => f !== filter);
+                    } else {
+                        // classList.add() aggiunge una classe CSS
+                        this.classList.add('active');
+                        // push() aggiunge un elemento alla fine dell'array
+                        activeFilters.push(filter);
+                    }
+
+                    // Aggiorna la ricerca solo se c'è testo sufficiente
+                    if (document.getElementById('searchInput').value.length >= 2) {
+                        searchCocktail();
+                    }
+                });
             });
             
             // Tab navigation
