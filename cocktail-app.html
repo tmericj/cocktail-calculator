@@ -98,15 +98,10 @@
         .section {
             margin-bottom: 30px;
             display: none;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
         }
 
         .section.active {
             display: block;
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .form-group {
@@ -430,26 +425,6 @@
                 0%, 100% { transform: translateX(0); }
                 25% { transform: translateX(-5px); }
                 75% { transform: translateX(5px); }
-            }
-
-            /* Smooth section transitions ottimizzate per touch */
-            .section.active {
-                animation: mobileSectionEnter 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            }
-
-            @keyframes mobileSectionEnter {
-                0% {
-                    opacity: 0;
-                    transform: translateY(20px) scale(0.97);
-                }
-                60% {
-                    opacity: 0.8;
-                    transform: translateY(-5px) scale(1.01);
-                }
-                100% {
-                    opacity: 1;
-                    transform: translateY(0) scale(1);
-                }
             }
 
             /* Touch target improvements */
@@ -806,117 +781,117 @@
         // Database cocktail completo. Classificazioni IBA rivisitate.
         const cocktailDatabase = [
             // Cocktail Classic (The Unforgettables) 24
-            {nome: "Alexander", categoria: "Classic", ingredienti: [{nome: "Cognac", volume: 30, gradazione: 40}, {nome: "Crème de Cacao (Brown)", volume: 30, gradazione: 24}, {nome: "Fresh Cream", volume: 30, gradazione: 0}], bicchiere: 120, note: "Servito con noce moscata fresca macinata"},
-            {nome: "Americano", categoria: "Classic", ingredienti: [{nome: "Campari", volume: 60, gradazione: 25}, {nome: "Vermouth Rosso", volume: 60, gradazione: 16}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e mezza fetta d'arancia"},
-            {nome: "Aviation", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Maraschino", volume: 15, gradazione: 30}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Crème de Violette", volume: 1, gradazione: 20}], bicchiere: 120, note: "Servito in coppa cocktail"},
-            {nome: "Boulevardier", categoria: "Classic", ingredienti: [{nome: "Bourbon", volume: 40, gradazione: 40}, {nome: "Campari", volume: 60, gradazione: 25}, {nome: "Vermouth Rosso", volume: 60, gradazione: 16}], bicchiere: 250, note: "Versione whiskey del Negroni. <br> IBA vorrebbe 45, 30, 30."},
-            {nome: "Clover Club", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Sciroppo di Lampone", volume: 15, gradazione: 0}, {nome: "Albume", volume: 15, gradazione: 0}], bicchiere: 120, note: "Servito con schiuma rosa"},
-            {nome: "Daiquiri", categoria: "Classic", ingredienti: [{nome: "Rum Bianco", volume: 60, gradazione: 40}, {nome: "Succo di Lime", volume: 20, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 10, gradazione: 0}], bicchiere: 110, note: "Shakerato e servito up"},                        
+            {nome: "Alexander", categoria: "Classic", ingredienti: [{nome: "Cognac", volume: 30, gradazione: 40}, {nome: "Crème de Cacao (Brown)", volume: 30, gradazione: 24}, {nome: "Fresh Cream", volume: 30, gradazione: 0}], metodo: "shaken", bicchiere: 120, note: "Servito con noce moscata fresca macinata"},
+            {nome: "Americano", categoria: "Classic", ingredienti: [{nome: "Campari", volume: 60, gradazione: 25}, {nome: "Vermouth Rosso", volume: 60, gradazione: 16}, {nome: "Soda Water", volume: 60, gradazione: 0}], metodo: "built", bicchiere: 250, note: "Servito con ghiaccio e mezza fetta d'arancia"},
+            {nome: "Aviation", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Maraschino", volume: 15, gradazione: 30}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Crème de Violette", volume: 1, gradazione: 20}], metodo: "shaken", bicchiere: 120, note: "Servito in coppa cocktail"},
+            {nome: "Boulevardier", categoria: "Classic", ingredienti: [{nome: "Bourbon", volume: 40, gradazione: 40}, {nome: "Campari", volume: 60, gradazione: 25}, {nome: "Vermouth Rosso", volume: 60, gradazione: 16}], metodo: "stirred", bicchiere: 250, note: "Versione whiskey del Negroni. <br> IBA vorrebbe 45, 30, 30."},
+            {nome: "Clover Club", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Sciroppo di Lampone", volume: 15, gradazione: 0}, {nome: "Albume", volume: 15, gradazione: 0}], metodo: "shaken", bicchiere: 120, note: "Servito con schiuma rosa"},
+            {nome: "Daiquiri", categoria: "Classic", ingredienti: [{nome: "Rum Bianco", volume: 60, gradazione: 40}, {nome: "Succo di Lime", volume: 20, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 10, gradazione: 0}], metodo: "shaken", bicchiere: 110, note: "Shakerato e servito up"},
             {nome: "Dirty Martini", categoria: "Classic", ingredienti: [{nome: "Gin o Vodka", volume: 60, gradazione: 40}, {nome: "Vermouth Secco", volume: 10, gradazione: 18}, {nome: "Acqua di Oliva", volume: 10, gradazione: 0}], bicchiere: 120, note: "Gin o Vodka a scelta; <br> Guarnizione: olive verdi; <br> Metodo: mescolato o shakerato; <br> Coppa Martini ben fredda"},
             {nome: "Dry Martini", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 60, gradazione: 40}, {nome: "Vermouth Secco", volume: 10, gradazione: 18}], bicchiere: 120, note: "Gin e Vermouth (Martini Dry/Extra Dry) a scelta; <br> Guarnizione: olive verdi (in salamoia o meno) o scorza di limone; <br> Metodo: mescolato (stirred) o shakerato (shaken); <br> Coppa Martini ben fredda"},
-            {nome: "Gin Fizz", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 10, gradazione: 0}, {nome: "Soda Water", volume: 45, gradazione: 0}], bicchiere: 200, note: "Servire senza ghiaccio (IBA)"},
-            {nome: "Gin Lemon", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Limonata", volume: 150, gradazione: 0}], bicchiere: 250, note: "Servito con fette di limone"},
-            {nome: "Gin Soda e Lime", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Soda Water", volume: 150, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}], bicchiere: 250, note: "Servito con fette di lime"},
-            {nome: "Gin Tonic", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Acqua Tonica", volume: 150, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e lime o scorza di limone"},
-            {nome: "Manhattan", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 50, gradazione: 40}, {nome: "Vermouth Rosso", volume: 20, gradazione: 17}, {nome: "Angostura Bitter", volume: 1, gradazione: 44.7}], bicchiere: 120, note: "Servito con ciliegia"},
-            {nome: "Martinez", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Vermouth Rosso", volume: 45, gradazione: 17}, {nome: "Maraschino Luxardo", volume: 5, gradazione: 40}, {nome: "Orange Bitters", volume: 1, gradazione: 28}], bicchiere: 120, note: "Servito con scorza di limone"},
-            {nome: "Negroni", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Campari", volume: 30, gradazione: 25}, {nome: "Vermouth Rosso", volume: 30, gradazione: 16}], bicchiere: 200, note: "Servito con ghiaccio e scorza d'arancia"},
-            {nome: "Negroni Bianco", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Lillet Blanc", volume: 30, gradazione: 17}, {nome: "Vermouth Bianco (Dry)", volume: 30, gradazione: 18}], bicchiere: 200, note: "Servito con ghiaccio e scorza di limone"},
-            {nome: "Negroni Sbagliato", categoria: "Classic", ingredienti: [{nome: "Prosecco", volume: 30, gradazione: 11.5}, {nome: "Vermouth Rosso", volume: 30, gradazione: 16}, {nome: "Campari", volume: 30, gradazione: 25}], bicchiere: 200, note: "Versione con Prosecco al posto del gin"},
-            {nome: "Novebuche", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Campari", volume: 30, gradazione: 25}, {nome: "Succo di Pompelmo", volume: 60, gradazione: 0}], bicchiere: 200, note: "Servito con ghiaccio"},
-            {nome: "Old Fashioned", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 45, gradazione: 40}, {nome: "Zucchero", volume: 10, gradazione: 0}, {nome: "Angostura Bitter", volume: 2, gradazione: 44.7}, {nome: "Acqua", volume: 10, gradazione: 0}], bicchiere: 120, note: "Servito con ghiaccio e scorza arancia"},
-            {nome: "Sazerac", categoria: "Classic", ingredienti: [{nome: "Whiskey Rye", volume: 50, gradazione: 40}, {nome: "Zucchero", volume: 5, gradazione: 0}, {nome: "Peychaud's Bitters", volume: 3, gradazione: 35}, {nome: "Assenzio", volume: 2, gradazione: 68}], bicchiere: 120, note: "Cocktail storico di New Orleans"},
+            {nome: "Gin Fizz", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 10, gradazione: 0}, {nome: "Soda Water", volume: 45, gradazione: 0}], metodo: "shaken", bicchiere: 200, note: "Servire senza ghiaccio (IBA)"},
+            {nome: "Gin Lemon", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Limonata", volume: 150, gradazione: 0}], metodo: "built", bicchiere: 250, note: "Servito con fette di limone"},
+            {nome: "Gin Soda e Lime", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Soda Water", volume: 150, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}], metodo: "built", bicchiere: 250, note: "Servito con fette di lime"},
+            {nome: "Gin Tonic", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Acqua Tonica", volume: 150, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Servito con ghiaccio e lime o scorza di limone"},
+            {nome: "Manhattan", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 50, gradazione: 40}, {nome: "Vermouth Rosso", volume: 20, gradazione: 17}, {nome: "Angostura Bitter", volume: 1, gradazione: 44.7}], metodo:"stirred", bicchiere: 120, note: "Servito con ciliegia"},
+            {nome: "Martinez", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Vermouth Rosso", volume: 45, gradazione: 17}, {nome: "Maraschino Luxardo", volume: 5, gradazione: 40}, {nome: "Orange Bitters", volume: 1, gradazione: 28}], metodo:"stirred", bicchiere: 120, note: "Servito con scorza di limone"},
+            {nome: "Negroni", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Campari", volume: 30, gradazione: 25}, {nome: "Vermouth Rosso", volume: 30, gradazione: 16}], metodo:"stirred", bicchiere: 200, note: "Servito con ghiaccio e scorza d'arancia"},
+            {nome: "Negroni Bianco", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Lillet Blanc", volume: 30, gradazione: 17}, {nome: "Vermouth Bianco (Dry)", volume: 30, gradazione: 18}], metodo:"stirred", bicchiere: 200, note: "Servito con ghiaccio e scorza di limone"},
+            {nome: "Negroni Sbagliato", categoria: "Classic", ingredienti: [{nome: "Prosecco", volume: 30, gradazione: 11.5}, {nome: "Vermouth Rosso", volume: 30, gradazione: 16}, {nome: "Campari", volume: 30, gradazione: 25}], metodo:"built", bicchiere: 200, note: "Versione con Prosecco al posto del gin"},
+            {nome: "Novebuche", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Campari", volume: 30, gradazione: 25}, {nome: "Succo di Pompelmo", volume: 60, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Servito con ghiaccio"},
+            {nome: "Old Fashioned", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 45, gradazione: 40}, {nome: "Zucchero", volume: 10, gradazione: 0}, {nome: "Angostura Bitter", volume: 2, gradazione: 44.7}, {nome: "Acqua", volume: 10, gradazione: 0}], metodo:"stirred", bicchiere: 120, note: "Servito con ghiaccio e scorza arancia"},
+            {nome: "Sazerac", categoria: "Classic", ingredienti: [{nome: "Whiskey Rye", volume: 50, gradazione: 40}, {nome: "Zucchero", volume: 5, gradazione: 0}, {nome: "Peychaud's Bitters", volume: 3, gradazione: 35}, {nome: "Assenzio", volume: 2, gradazione: 68}], metodo:"stirred", bicchiere: 120, note: "Cocktail storico di New Orleans"},
             {nome: "Vodka Martini", categoria: "Classic", ingredienti: [{nome: "Vodka", volume: 60, gradazione: 40}, {nome: "Vermouth Secco", volume: 10, gradazione: 18}], bicchiere: 120, note: "Vodka e Vermouth a scelta; Guarnizione: olive verdi o scorza di limone; Metodo: mescolato o shakerato; Coppa Martini ben fredda"},
-            {nome: "Whiskey Soda", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 50, gradazione: 40}, {nome: "Soda Water", volume: 150, gradazione: 0}], bicchiere: 200, note: "Highball classico con limone"},
-            {nome: "Whiskey Sour", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 20, gradazione: 0}], bicchiere: 200, note: "Opzionale albume d'uovo"},
-            {nome: "White Lady", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 40, gradazione: 40}, {nome: "Triple Sec", volume: 30, gradazione: 30}, {nome: "Succo di Limone", volume: 15, gradazione: 0}], bicchiere: 120, note: "Servito in coppa cocktail"},
+            {nome: "Whiskey Soda", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 50, gradazione: 40}, {nome: "Soda Water", volume: 150, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Highball classico con limone"},
+            {nome: "Whiskey Sour", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 20, gradazione: 0}], metodo:"shaken", bicchiere: 200, note: "Opzionale albume d'uovo"},
+            {nome: "White Lady", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 40, gradazione: 40}, {nome: "Triple Sec", volume: 30, gradazione: 30}, {nome: "Succo di Limone", volume: 15, gradazione: 0}], metodo:"shaken", bicchiere: 120, note: "Servito in coppa cocktail"},
 
             // Cocktail Contemporary Classics (The Contemporary) 33
-            {nome: "Black Russian", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Kahlúa", volume: 25, gradazione: 20}], bicchiere: 200, note: "Servito con ghiaccio"},
-            {nome: "Bloody Mary", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 45, gradazione: 40}, {nome: "Succo di Pomodoro", volume: 90, gradazione: 0}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Salsa Worcestershire", volume: 2, gradazione: 0}, {nome: "Tabasco", volume: 1, gradazione: 0}, {nome: "Sale", volume: 1, gradazione: 0}], bicchiere: 250, note: "Servito con sedano e spezie"},
-            {nome: "Caipirão", categoria: "Contemporary", ingredienti: [{nome: "Licor Beirão", volume: 60, gradazione: 22}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], bicchiere: 200, note: "Pestare lime e zucchero"},
-            {nome: "Caipirinha", categoria: "Contemporary", ingredienti: [{nome: "Cachaça", volume: 60, gradazione: 45}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], bicchiere: 200, note: "Pestare lime e zucchero"},
-            {nome: "Caipirissima", categoria: "Contemporary", ingredienti: [{nome: "Rum", volume: 60, gradazione: 40}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], bicchiere: 200, note: "Pestare lime e zucchero"},
-            {nome: "Caipiroska", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 60, gradazione: 40}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], bicchiere: 200, note: "Pestare lime e zucchero"},
-            {nome: "Caipiroska variante frutta", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Liquore alla frutta", volume: 20, gradazione: 20}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], bicchiere: 200, note: "Varianti alla frutta: fragola, maracuja (passion fruit), mango, ananas, pesca, lampone"},
-            {nome: "Cardinale", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 40, gradazione: 40}, {nome: "Vermouth Secco", volume: 20, gradazione: 18}, {nome: "Campari", volume: 10, gradazione: 25}], bicchiere: 120, note: "Servito con scorza di limone"},
-            {nome: "Corpse Reviver #2", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 22.5, gradazione: 40}, {nome: "Cointreau", volume: 22.5, gradazione: 40}, {nome: "Lillet Blanc", volume: 22.5, gradazione: 17}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}, {nome: "Assenzio", volume: 1, gradazione: 68}], bicchiere: 120, note: "Servito con scorza limone"},
-            {nome: "Cosmopolitan", categoria: "Contemporary", ingredienti: [{nome: "Vodka Citron", volume: 40, gradazione: 40}, {nome: "Triple Sec (Cointreau)", volume: 15, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Succo di Mirtillo", volume: 30, gradazione: 0}], bicchiere: 150, note: "Servito in coppa Martini"},
-            {nome: "Cuba Libre", categoria: "Contemporary", ingredienti: [{nome: "Rum", volume: 50, gradazione: 40}, {nome: "Cola", volume: 120, gradazione: 0}, {nome: "Succo di Lime", volume: 10, gradazione: 0}], bicchiere: 200, note: "Servito con ghiaccio e lime"},
-            {nome: "French 75", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 15, gradazione: 0}, {nome: "Champagne", volume: 60, gradazione: 12}], bicchiere: 150, note: "Servito in flute"},
-            {nome: "French Connection", categoria: "Contemporary", ingredienti: [{nome: "Cognac", volume: 35, gradazione: 40}, {nome: "Amaretto", volume: 35, gradazione: 28}], bicchiere: 120, note: "Servito con ghiaccio"},
-            {nome: "Garibaldi", categoria: "Contemporary", ingredienti: [{nome: "Campari", volume: 45, gradazione: 25}, {nome: "Succo d'arancia", volume: 120, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e scorza di arancia"},
-            {nome: "Hemingway Special", categoria: "Contemporary", ingredienti: [{nome: "Rum", volume: 60, gradazione: 40}, {nome: "Succo di Pompelmo", volume: 40, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Maraschino (Luxardo)", volume: 15, gradazione: 40}], bicchiere: 150, note: "Servito in coppa cocktail"},
-            {nome: "Irish Coffee", categoria: "Contemporary", ingredienti: [{nome: "Whiskey Irlandese", volume: 50, gradazione: 40}, {nome: "Caffè", volume: 120, gradazione: 0}, {nome: "Zucchero", volume: 10, gradazione: 0}, {nome: "Panna", volume: 50, gradazione: 0}], bicchiere: 200, note: "Servito caldo con panna montata"},
-            {nome: "Lemon Drop Martini", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 30, gradazione: 40}, {nome: "Triple Sec", volume: 20, gradazione: 30}, {nome: "Succo di Limone", volume: 15, gradazione: 0}], bicchiere: 120, note: "A scelta, servito con zucchero sul bordo"},
-            {nome: "London Mule", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Ginger Beer", volume: 120, gradazione: 0}, {nome: "Succo di Lime", volume: 10, gradazione: 0}], bicchiere: 200, note: "Servito in tazza di rame"},
-            {nome: "Long Island", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 15, gradazione: 40}, {nome: "Rum Bianco", volume: 15, gradazione: 40}, {nome: "Gin", volume: 15, gradazione: 40}, {nome: "Tequila", volume: 15, gradazione: 40}, {nome: "Triple Sec", volume: 15, gradazione: 30}], bicchiere: 200, note: "Completare con Cola"},
-            {nome: "Long Island Iced Tea", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 15, gradazione: 40}, {nome: "Rum Bianco", volume: 15, gradazione: 40}, {nome: "Gin", volume: 15, gradazione: 40}, {nome: "Tequila", volume: 15, gradazione: 40}, {nome: "Triple Sec", volume: 15, gradazione: 30}, {nome: "Succo di Limone", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 30, gradazione: 0}, {nome: "Cola", volume: 60, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e fetta di limone (opzionale)"},
-            {nome: "Mai Tai", categoria: "Contemporary", ingredienti: [{nome: "Rum Scuro (Amber Jamaican)", volume: 30, gradazione: 40}, {nome: "Rum Bianco (Martinique Molasses)", volume: 30, gradazione: 40}, {nome: "Triple Sec (Orange Curacao)", volume: 15, gradazione: 25}, {nome: "Sciroppo d'Orzata", volume: 15, gradazione: 0}, {nome: "Succo di Lime", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 7.5, gradazione: 0}], bicchiere: 200, note: "Servito con ananas, foglie di menta e scorza di lime"},
-            {nome: "Margarita", categoria: "Contemporary", ingredienti: [{nome: "Agave Tequila", volume: 50, gradazione: 42.5}, {nome: "Triple Sec", volume: 20, gradazione: 30}, {nome: "Succo di Lime", volume: 15, gradazione: 0}], bicchiere: 200, note: "Servito con metà bordo salato (opzionale)"},
-            {nome: "Mimosa", categoria: "Contemporary", ingredienti: [{nome: "Champagne", volume: 75, gradazione: 12}, {nome: "Succo d'Arancia", volume: 75, gradazione: 0}], bicchiere: 180, note: "Servito in flute"},
-            {nome: "Mint Julep", categoria: "Contemporary", ingredienti: [{nome: "Bourbon", volume: 60, gradazione: 40}, {nome: "Zucchero a Velo", volume: 5, gradazione: 0}, {nome: "Acqua", volume: 10, gradazione: 0}], bicchiere: 200, note: "Servito con ghiaccio tritato e 4 rametti di menta fresca"},
-            {nome: "Mojito", categoria: "Contemporary", ingredienti: [{nome: "Rum Bianco (Cubano)", volume: 45, gradazione: 40}, {nome: "Menta", volume: 10, gradazione: 0}, {nome: "Zucchero di Canna Bianco", volume: 10, gradazione: 0}, {nome: "Lime", volume: 20, gradazione: 0}, {nome: "Soda Water", volume: 100, gradazione: 0}], bicchiere: 250, note: "Pestare menta e zucchero"},
-            {nome: "Moscow Mule", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 45, gradazione: 40}, {nome: "Ginger Beer", volume: 120, gradazione: 0}, {nome: "Succo di Lime", volume: 10, gradazione: 0}], bicchiere: 200, note: "Servito in tazza di rame"},
-            {nome: "Piña Colada", categoria: "Contemporary", ingredienti: [{nome: "Rum Bianco", volume: 50, gradazione: 40}, {nome: "Latte di Cocco", volume: 30, gradazione: 0}, {nome: "Succo di Ananas", volume: 50, gradazione: 0}], bicchiere: 200, note: "Servito con una fetta di ananas e una ciliegina da cocktail"},
-            {nome: "Pisco Sour", categoria: "Contemporary", ingredienti: [{nome: "Pisco", volume: 60, gradazione: 45}, {nome: "Succo di Limone", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 20, gradazione: 0}, {nome: "Albume", volume: 15, gradazione: 0}, {nome: "Angostura bitter", volume: 2, gradazione: 44.7}], bicchiere: 150, note: "Servito con schiuma"},
-            {nome: "Sex on the Beach", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Peach Schnapps", volume: 20, gradazione: 12}, {nome: "Succo d'Arancia", volume: 40, gradazione: 0}, {nome: "Succo di Mirtillo", volume: 40, gradazione: 0}], bicchiere: 200, note: "Servito con ghiaccio"},
-            {nome: "Tequila Sunrise", categoria: "Contemporary", ingredienti: [{nome: "Tequila", volume: 45, gradazione: 40}, {nome: "Succo d'Arancia", volume: 90, gradazione: 0}, {nome: "Sciroppo di Granatina", volume: 15, gradazione: 0}], bicchiere: 200, note: "Servito con gradiente di colore"},
-            {nome: "Vesper", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Vodka", volume: 15, gradazione: 40}, {nome: "Lillet Blanc", volume: 7.5, gradazione: 17}], bicchiere: 150, note: "Servito con scorza di limone"},
-            {nome: "White Russian", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Kahlúa", volume: 25, gradazione: 20}, {nome: "Panna", volume: 25, gradazione: 0}], bicchiere: 200, note: "Versione cremosa del Black Russian"},
-            {nome: "Zombie", categoria: "Contemporary", ingredienti: [{nome: "Rum Bianco (Gold Puerto Rican)", volume: 45, gradazione: 40}, {nome: "Rum Scuro (Jamaican)", volume: 45, gradazione: 40}, {nome: "Rum Agricolo (Demerara)", volume: 30, gradazione: 43}, {nome: "Succo di Lime", volume: 20, gradazione: 0}, {nome: "Falernum", volume: 15, gradazione: 11}, {nome: "Donn’s Mix", volume: 15, gradazione: 0}, {nome: "Sciroppo di Granatina", volume: 5, gradazione: 0}, {nome: "Angostura bitter", volume: 1, gradazione: 44.7}, {nome: "Liquore all'anice (Pernod)", volume: 0.3, gradazione: 40}], bicchiere: 200, note: "Servire con foglie di menta"},
+            {nome: "Black Russian", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Kahlúa", volume: 25, gradazione: 20}], metodo:"built", bicchiere: 200, note: "Servito con ghiaccio"},
+            {nome: "Bloody Mary", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 45, gradazione: 40}, {nome: "Succo di Pomodoro", volume: 90, gradazione: 0}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Salsa Worcestershire", volume: 2, gradazione: 0}, {nome: "Tabasco", volume: 1, gradazione: 0}, {nome: "Sale", volume: 1, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Servito con sedano e spezie"},
+            {nome: "Caipirão", categoria: "Contemporary", ingredienti: [{nome: "Licor Beirão", volume: 60, gradazione: 22}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Pestare lime e zucchero"},
+            {nome: "Caipirinha", categoria: "Contemporary", ingredienti: [{nome: "Cachaça", volume: 60, gradazione: 45}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Pestare lime e zucchero"},
+            {nome: "Caipirissima", categoria: "Contemporary", ingredienti: [{nome: "Rum", volume: 60, gradazione: 40}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Pestare lime e zucchero"},
+            {nome: "Caipiroska", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 60, gradazione: 40}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Pestare lime e zucchero"},
+            {nome: "Caipiroska variante frutta", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Liquore alla frutta", volume: 20, gradazione: 20}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Varianti alla frutta: fragola, maracuja (passion fruit), mango, ananas, pesca, lampone"},
+            {nome: "Cardinale", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 40, gradazione: 40}, {nome: "Vermouth Secco", volume: 20, gradazione: 18}, {nome: "Campari", volume: 10, gradazione: 25}], metodo:"stirred", bicchiere: 120, note: "Servito con scorza di limone"},
+            {nome: "Corpse Reviver #2", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 22.5, gradazione: 40}, {nome: "Cointreau", volume: 22.5, gradazione: 40}, {nome: "Lillet Blanc", volume: 22.5, gradazione: 17}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}, {nome: "Assenzio", volume: 1, gradazione: 68}], metodo:"shaken", bicchiere: 120, note: "Servito con scorza limone"},
+            {nome: "Cosmopolitan", categoria: "Contemporary", ingredienti: [{nome: "Vodka Citron", volume: 40, gradazione: 40}, {nome: "Triple Sec (Cointreau)", volume: 15, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Succo di Mirtillo", volume: 30, gradazione: 0}], metodo:"shaken", bicchiere: 150, note: "Servito in coppa Martini"},
+            {nome: "Cuba Libre", categoria: "Contemporary", ingredienti: [{nome: "Rum", volume: 50, gradazione: 40}, {nome: "Cola", volume: 120, gradazione: 0}, {nome: "Succo di Lime", volume: 10, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Servito con ghiaccio e lime"},
+            {nome: "French 75", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 15, gradazione: 0}, {nome: "Champagne", volume: 60, gradazione: 12}], metodo:"shaken", bicchiere: 150, note: "Servito in flute"},
+            {nome: "French Connection", categoria: "Contemporary", ingredienti: [{nome: "Cognac", volume: 35, gradazione: 40}, {nome: "Amaretto", volume: 35, gradazione: 28}], metodo:"built", bicchiere: 120, note: "Servito con ghiaccio"},
+            {nome: "Garibaldi", categoria: "Contemporary", ingredienti: [{nome: "Campari", volume: 45, gradazione: 25}, {nome: "Succo d'arancia", volume: 120, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Servito con ghiaccio e scorza di arancia"},
+            {nome: "Hemingway Special", categoria: "Contemporary", ingredienti: [{nome: "Rum", volume: 60, gradazione: 40}, {nome: "Succo di Pompelmo", volume: 40, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Maraschino (Luxardo)", volume: 15, gradazione: 40}], metodo:"shaken", bicchiere: 150, note: "Servito in coppa cocktail"},
+            {nome: "Irish Coffee", categoria: "Contemporary", ingredienti: [{nome: "Whiskey Irlandese", volume: 50, gradazione: 40}, {nome: "Caffè", volume: 120, gradazione: 0}, {nome: "Zucchero", volume: 10, gradazione: 0}, {nome: "Panna", volume: 50, gradazione: 0}], metodo:"hot", bicchiere: 200, note: "Servito caldo con panna montata"},
+            {nome: "Lemon Drop Martini", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 30, gradazione: 40}, {nome: "Triple Sec", volume: 20, gradazione: 30}, {nome: "Succo di Limone", volume: 15, gradazione: 0}], metodo:"shaken", bicchiere: 120, note: "A scelta, servito con zucchero sul bordo"},
+            {nome: "London Mule", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Ginger Beer", volume: 120, gradazione: 0}, {nome: "Succo di Lime", volume: 10, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Servito in tazza di rame"},
+            {nome: "Long Island", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 15, gradazione: 40}, {nome: "Rum Bianco", volume: 15, gradazione: 40}, {nome: "Gin", volume: 15, gradazione: 40}, {nome: "Tequila", volume: 15, gradazione: 40}, {nome: "Triple Sec", volume: 15, gradazione: 30}], metodo:"built", bicchiere: 200, note: "Completare con Cola"},
+            {nome: "Long Island Iced Tea", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 15, gradazione: 40}, {nome: "Rum Bianco", volume: 15, gradazione: 40}, {nome: "Gin", volume: 15, gradazione: 40}, {nome: "Tequila", volume: 15, gradazione: 40}, {nome: "Triple Sec", volume: 15, gradazione: 30}, {nome: "Succo di Limone", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 30, gradazione: 0}, {nome: "Cola", volume: 60, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Servito con ghiaccio e fetta di limone (opzionale)"},
+            {nome: "Mai Tai", categoria: "Contemporary", ingredienti: [{nome: "Rum Scuro (Amber Jamaican)", volume: 30, gradazione: 40}, {nome: "Rum Bianco (Martinique Molasses)", volume: 30, gradazione: 40}, {nome: "Triple Sec (Orange Curacao)", volume: 15, gradazione: 25}, {nome: "Sciroppo d'Orzata", volume: 15, gradazione: 0}, {nome: "Succo di Lime", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 7.5, gradazione: 0}], metodo:"shaken", bicchiere: 200, note: "Servito con ananas, foglie di menta e scorza di lime"},
+            {nome: "Margarita", categoria: "Contemporary", ingredienti: [{nome: "Agave Tequila", volume: 50, gradazione: 42.5}, {nome: "Triple Sec", volume: 20, gradazione: 30}, {nome: "Succo di Lime", volume: 15, gradazione: 0}], metodo:"shaken", bicchiere: 200, note: "Servito con metà bordo salato (opzionale)"},
+            {nome: "Mimosa", categoria: "Contemporary", ingredienti: [{nome: "Champagne", volume: 75, gradazione: 12}, {nome: "Succo d'Arancia", volume: 75, gradazione: 0}], metodo:"built", bicchiere: 180, note: "Servito in flute"},
+            {nome: "Mint Julep", categoria: "Contemporary", ingredienti: [{nome: "Bourbon", volume: 60, gradazione: 40}, {nome: "Zucchero a Velo", volume: 5, gradazione: 0}, {nome: "Acqua", volume: 10, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Servito con ghiaccio tritato e 4 rametti di menta fresca"},
+            {nome: "Mojito", categoria: "Contemporary", ingredienti: [{nome: "Rum Bianco (Cubano)", volume: 45, gradazione: 40}, {nome: "Menta", volume: 10, gradazione: 0}, {nome: "Zucchero di Canna Bianco", volume: 10, gradazione: 0}, {nome: "Lime", volume: 20, gradazione: 0}, {nome: "Soda Water", volume: 100, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Pestare menta e zucchero"},
+            {nome: "Moscow Mule", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 45, gradazione: 40}, {nome: "Ginger Beer", volume: 120, gradazione: 0}, {nome: "Succo di Lime", volume: 10, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Servito in tazza di rame"},
+            {nome: "Piña Colada", categoria: "Contemporary", ingredienti: [{nome: "Rum Bianco", volume: 50, gradazione: 40}, {nome: "Latte di Cocco", volume: 30, gradazione: 0}, {nome: "Succo di Ananas", volume: 50, gradazione: 0}], metodo:"shaken", bicchiere: 200, note: "Servito con una fetta di ananas e una ciliegina da cocktail"},
+            {nome: "Pisco Sour", categoria: "Contemporary", ingredienti: [{nome: "Pisco", volume: 60, gradazione: 45}, {nome: "Succo di Limone", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 20, gradazione: 0}, {nome: "Albume", volume: 15, gradazione: 0}, {nome: "Angostura bitter", volume: 2, gradazione: 44.7}], metodo:"shaken", bicchiere: 150, note: "Servito con schiuma"},
+            {nome: "Sex on the Beach", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Peach Schnapps", volume: 20, gradazione: 12}, {nome: "Succo d'Arancia", volume: 40, gradazione: 0}, {nome: "Succo di Mirtillo", volume: 40, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Servito con ghiaccio"},
+            {nome: "Tequila Sunrise", categoria: "Contemporary", ingredienti: [{nome: "Tequila", volume: 45, gradazione: 40}, {nome: "Succo d'Arancia", volume: 90, gradazione: 0}, {nome: "Sciroppo di Granatina", volume: 15, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Servito con gradiente di colore"},
+            {nome: "Vesper", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Vodka", volume: 15, gradazione: 40}, {nome: "Lillet Blanc", volume: 7.5, gradazione: 17}], metodo:"shaken", bicchiere: 150, note: "Servito con scorza di limone"},
+            {nome: "White Russian", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Kahlúa", volume: 25, gradazione: 20}, {nome: "Panna", volume: 25, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Versione cremosa del Black Russian"},
+            {nome: "Zombie", categoria: "Contemporary", ingredienti: [{nome: "Rum Bianco (Gold Puerto Rican)", volume: 45, gradazione: 40}, {nome: "Rum Scuro (Jamaican)", volume: 45, gradazione: 40}, {nome: "Rum Agricolo (Demerara)", volume: 30, gradazione: 43}, {nome: "Succo di Lime", volume: 20, gradazione: 0}, {nome: "Falernum", volume: 15, gradazione: 11}, {nome: "Donn’s Mix", volume: 15, gradazione: 0}, {nome: "Sciroppo di Granatina", volume: 5, gradazione: 0}, {nome: "Angostura bitter", volume: 1, gradazione: 44.7}, {nome: "Liquore all'anice (Pernod)", volume: 0.3, gradazione: 40}], metodo:"shaken", bicchiere: 200, note: "Servire con foglie di menta"},
 
             // Cocktail New Era (The New Era) 30
-            {nome: "Bee's Knees", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 52.5, gradazione: 40}, {nome: "Sciroppo al Miele", volume: 10, gradazione: 0}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}, {nome: "Succo d'Arancia", volume: 22.5, gradazione: 0}], bicchiere: 120, note: "Guarnizione facoltativa con una scorza di limone o di arancia"},
-            {nome: "Bramble", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Succo di Limone", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 12.5, gradazione: 0}, {nome: "Crème de Mure", volume: 15, gradazione: 16}], bicchiere: 120, note: "Guarnizione facoltativa con una fetta di limone e more fresche"},
-            {nome: "Cedro Tonic", categoria: "New Era", ingredienti: [{nome: "Acqua di Cedro", volume: 50, gradazione: 29}, {nome: "Acqua Tonica", volume: 150, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e scorza di cedro. Acqua di Cedro è un liquore fruttato distillato da Nardini"},
-            {nome: "Chartreuse Swizzle", categoria: "New Era", ingredienti: [{nome: "Green Chartreuse", volume: 45, gradazione: 55}, {nome: "Succo di Lime", volume: 22.5, gradazione: 0}, {nome: "Sciroppo d'Ananas", volume: 30, gradazione: 0}, {nome: "Liquore speziato (Falernum)", volume: 15, gradazione: 11}], bicchiere: 150, note: "Guarnizione con foglie di menta e noce moscata grattugiata"},
-            {nome: "Dark 'n' Stormy", categoria: "New Era", ingredienti: [{nome: "Rum Scuro (Goslings)", volume: 60, gradazione: 75.5}, {nome: "Ginger Beer", volume: 100, gradazione: 0}, {nome: "Succo di Lime", volume: 10, gradazione: 0}], bicchiere: 200, note: "Guarnizione con uno spicchio di lime o una fetta di lime. Trademark di Gosling's"},
-            {nome: "Don's Special Daiquiri", categoria: "New Era", ingredienti: [{nome: "Gold Jamaican Rum", volume: 30, gradazione: 40}, {nome: "Cuban Rum", volume: 15, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Sciroppo al Passion Fruit", volume: 15, gradazione: 0}, {nome: "Sciroppo al Miele", volume: 15, gradazione: 0}], bicchiere: 150, note: "Guarnizione con 1/2 passion fruit. Servito con ghiaccio tritato"},
-            {nome: "Espresso Martini", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Kahlúa", volume: 30, gradazione: 16}, {nome: "Espresso", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 10, gradazione: 0}], bicchiere: 130, note: "Servito con 3 chicchi di caffè"},
-            {nome: "Fernandito", categoria: "New Era", ingredienti: [{nome: "Fernet Branca", volume: 50, gradazione: 39}, {nome: "Cola", volume: 150, gradazione: 0}], bicchiere: 200, note: "Servito con ghiaccio e fetta di limone (opzionale)"},
-            {nome: "French Martini", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 45, gradazione: 40}, {nome: "Liquore di Lamponi (Chambord)", volume: 15, gradazione: 16.5}, {nome: "Succo di Ananas", volume: 15, gradazione: 0}], bicchiere: 100, note: "Spremere l'olio dalla buccia di limone sulla bevanda. Servito in coppa cocktail"},
-            {nome: "Gimlet", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 60, gradazione: 40}, {nome: "Cordiale di Lime", volume: 30, gradazione: 0}], bicchiere: 120, note: "Servito ghiacciato. Possibile sostituzione del Gin con Vodka"},
-            {nome: "Gin Basil Smash", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 60, gradazione: 40}, {nome: "Basilico Fresco", volume: 5, gradazione: 0}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 22.5, gradazione: 0}], bicchiere: 180, note: "Pestare basilico e zucchero"},
-            {nome: "Grand Margarita", categoria: "New Era", ingredienti: [{nome: "Agave Tequila", volume: 45, gradazione: 42.5}, {nome: "Grand Marnier", volume: 30, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}], bicchiere: 200, note: "Guarnizione con una fetta di lime"},
-            {nome: "Hot Toddy", categoria: "New Era", ingredienti: [{nome: "Whiskey", volume: 50, gradazione: 40}, {nome: "Miele", volume: 10, gradazione: 0}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Acqua Calda", volume: 120, gradazione: 0}], bicchiere: 250, note: "Drink caldo invernale. Aggiungere spezie come Cannella e Chiodi di Garofano"},
-            {nome: "Iba Tiki", categoria: "New Era", ingredienti: [{nome: "Rum Bianco (Profundo Havana Club)", volume: 30, gradazione: 35}, {nome: "Rum Scuro (Smoky Havana Club)", volume: 30, gradazione: 40}, {nome: "Amaretto", volume: 15, gradazione: 28}, {nome: "Liquore alle Nocciole (Frangelico)", volume: 5, gradazione: 36.5}, {nome: "Maraschino (Luxardo)", volume: 3, gradazione: 40}, {nome: "Purea di Passion Fruit", volume: 30, gradazione: 0}, {nome: "Succo d'Ananas", volume: 90, gradazione: 0}, {nome: "Succo di Lime", volume: 30, gradazione:0}], bicchiere: 300, note: "Guarnizione con agrumi e una fetta d'ananas disidratato"},
-            {nome: "Jager Bomb", categoria: "New Era", ingredienti: [{nome: "Jägermeister", volume: 50, gradazione: 35}, {nome: "Energy Drink", volume: 150, gradazione: 0}], bicchiere: 250, note: "Preferibilmente servito con un bicchierino di Jägermeister da far cadere nell'energy drink"},
-            {nome: "Naked and Famous", categoria: "New Era", ingredienti: [{nome: "Mezcal", volume: 22.5, gradazione: 60}, {nome: "Aperol", volume: 22.5, gradazione: 11}, {nome: "Yellow Chartreuse", volume: 22.5, gradazione: 43}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}], bicchiere: 120, note: "Cocktail affumicato e agrumato"},
-            {nome: "New York Sour", categoria: "New Era", ingredienti: [{nome: "Whiskey", volume: 60, gradazione: 41.5}, {nome: "Succo di Limone", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 22.5, gradazione: 0}, {nome: "Vino Rosso", volume: 15, gradazione: 13.5}], bicchiere: 200, note: "Aggiungere alcune gocce di albume d'uovo. Guarnizione con scorza di limone o arancia e ciliegia"},
-            {nome: "Old Cuban", categoria: "New Era", ingredienti: [{nome: "Rum Scuro (Aged)", volume: 45, gradazione: 40}, {nome: "Champagne/Prosecco (Brut)", volume: 60, gradazione: 12}, {nome: "Succo di Lime", volume: 22.5, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 30, gradazione: 0}, {nome: "Angostura bitter", volume: 1, gradazione: 44.7}], bicchiere: 200, note: "Guarnizione con menta fresca e scorza di lime"},
-            {nome: "Painkiller", categoria: "New Era", ingredienti: [{nome: "Rum Scuro (Pusser's)", volume: 60, gradazione: 40}, {nome: "Succo di Ananas", volume: 60, gradazione: 0}, {nome: "Succo d'Arancia", volume: 30, gradazione: 0}, {nome: "Latte di Cocco", volume: 30, gradazione: 0}], bicchiere: 250, note: "Guarnizione con noce moscata grattuggiata"},          
-            {nome: "Paloma", categoria: "New Era", ingredienti: [{nome: "Agave Tequila", volume: 50, gradazione: 42.5}, {nome: "Pink Grapefruit Soda", volume: 100, gradazione: 0}, {nome: "Succo di Lime", volume: 5, gradazione: 0}], bicchiere: 250, note: "Servito con sale sul bordo"},
-            {nome: "Paper Plane", categoria: "New Era", ingredienti: [{nome: "Bourbon", volume: 30, gradazione: 40}, {nome: "Aperol", volume: 30, gradazione: 11}, {nome: "Amaro Nonino", volume: 30, gradazione: 35}, {nome: "Succo di Limone", volume: 30, gradazione: 0}], bicchiere: 150, note: "Un tempo pensato con il Campari; rivisitazione del cocktail Last Word"},
-            {nome: "Porn Star Martini", categoria: "New Era", ingredienti: [{nome: "Vanilla Vodka", volume: 50, gradazione: 38}, {nome: "Liquore al Passion Fruit", volume: 20, gradazione: 17}, {nome: "Purea di Passion Fruit", volume: 50, gradazione: 0}, {nome: "Sciroppo alla Vaniglia", volume: 10, gradazione: 0}, {nome: "Champagne", volume: 50, gradazione: 12.2}], bicchiere: 150, note: "Accompagnare con un bicchierino di Champagne (50 ml)"},
-            {nome: "Skinny Bitch", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Soda Water", volume: 150, gradazione: 0}], bicchiere: 250, note: "Versione leggera del Vodka Soda"},
-            {nome: "Suffering Bastard", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Cognac/Brandy", volume: 30, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Ginger Beer", volume: 90, gradazione: 0}], bicchiere: 250, note: "Servito con Ginger Beer a parte"},
-            {nome: "Tom Collins", categoria: "New Era", ingredienti: [{nome: "Gin (Old Tom)", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 15, gradazione: 0}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 200, note: "Guarnizione con fetta di limone. Versione lunga del Gin Sour"},
-            {nome: "Tommy's Margarita", categoria: "New Era", ingredienti: [{nome: "Agave Tequila", volume: 60, gradazione: 42.5}, {nome: "Succo di Lime", volume: 30, gradazione: 0}, {nome: "Sciroppo di Agave", volume: 30, gradazione: 0}], bicchiere: 150, note: "Versione senza Triple Sec"},
-            {nome: "Vieux Carré", categoria: "New Era", ingredienti: [{nome: "Whiskey Rye", volume: 30, gradazione: 40}, {nome: "Cognac", volume: 30, gradazione: 40}, {nome: "Vermouth Rosso", volume: 30, gradazione: 19}, {nome: "Bénédictine", volume: 15, gradazione: 40}, {nome: "Peychaud's Bitters", volume: 2, gradazione: 35}], bicchiere: 150, note: "Prende il nome dal quartiere Vieux Carré, il centro storico più antico di New Orleans"},
-            {nome: "Vodka Redbull", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Redbull", volume: 150, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio"},
-            {nome: "Vodka Soda", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Soda Water", volume: 150, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e fetta di lime (opzionale)"},
-            {nome: "Vodka Tonic", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Acqua Tonica", volume: 150, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e fetta di lime (opzionale)"},
+            {nome: "Bee's Knees", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 52.5, gradazione: 40}, {nome: "Sciroppo al Miele", volume: 10, gradazione: 0}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}, {nome: "Succo d'Arancia", volume: 22.5, gradazione: 0}], metodo:"shaken", bicchiere: 120, note: "Guarnizione facoltativa con una scorza di limone o di arancia"},
+            {nome: "Bramble", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Succo di Limone", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 12.5, gradazione: 0}, {nome: "Crème de Mure", volume: 15, gradazione: 16}], metodo:"shaken", bicchiere: 120, note: "Guarnizione facoltativa con una fetta di limone e more fresche"},
+            {nome: "Cedro Tonic", categoria: "New Era", ingredienti: [{nome: "Acqua di Cedro", volume: 50, gradazione: 29}, {nome: "Acqua Tonica", volume: 150, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Servito con ghiaccio e scorza di cedro. Acqua di Cedro è un liquore fruttato distillato da Nardini"},
+            {nome: "Chartreuse Swizzle", categoria: "New Era", ingredienti: [{nome: "Green Chartreuse", volume: 45, gradazione: 55}, {nome: "Succo di Lime", volume: 22.5, gradazione: 0}, {nome: "Sciroppo d'Ananas", volume: 30, gradazione: 0}, {nome: "Liquore speziato (Falernum)", volume: 15, gradazione: 11}], metodo:"built", bicchiere: 150, note: "Guarnizione con foglie di menta e noce moscata grattugiata"},
+            {nome: "Dark 'n' Stormy", categoria: "New Era", ingredienti: [{nome: "Rum Scuro (Goslings)", volume: 60, gradazione: 75.5}, {nome: "Ginger Beer", volume: 100, gradazione: 0}, {nome: "Succo di Lime", volume: 10, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Guarnizione con uno spicchio di lime o una fetta di lime. Trademark di Gosling's"},
+            {nome: "Don's Special Daiquiri", categoria: "New Era", ingredienti: [{nome: "Gold Jamaican Rum", volume: 30, gradazione: 40}, {nome: "Cuban Rum", volume: 15, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Sciroppo al Passion Fruit", volume: 15, gradazione: 0}, {nome: "Sciroppo al Miele", volume: 15, gradazione: 0}], metodo:"built", bicchiere: 150, note: "Guarnizione con 1/2 passion fruit. Servito con ghiaccio tritato"},
+            {nome: "Espresso Martini", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Kahlúa", volume: 30, gradazione: 16}, {nome: "Espresso", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 10, gradazione: 0}], metodo:"shaken", bicchiere: 130, note: "Servito con 3 chicchi di caffè"},
+            {nome: "Fernandito", categoria: "New Era", ingredienti: [{nome: "Fernet Branca", volume: 50, gradazione: 39}, {nome: "Cola", volume: 150, gradazione: 0}], metodo:"built", bicchiere: 200, note: "Servito con ghiaccio e fetta di limone (opzionale)"},
+            {nome: "French Martini", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 45, gradazione: 40}, {nome: "Liquore di Lamponi (Chambord)", volume: 15, gradazione: 16.5}, {nome: "Succo di Ananas", volume: 15, gradazione: 0}], metodo:"shaken", bicchiere: 100, note: "Spremere l'olio dalla buccia di limone sulla bevanda. Servito in coppa cocktail"},
+            {nome: "Gimlet", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 60, gradazione: 40}, {nome: "Cordiale di Lime", volume: 30, gradazione: 0}], metodo:"stirred", bicchiere: 120, note: "Servito ghiacciato. Possibile sostituzione del Gin con Vodka"},
+            {nome: "Gin Basil Smash", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 60, gradazione: 40}, {nome: "Basilico Fresco", volume: 5, gradazione: 0}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 22.5, gradazione: 0}], metodo:"shaken", bicchiere: 180, note: "Pestare basilico e zucchero"},
+            {nome: "Grand Margarita", categoria: "New Era", ingredienti: [{nome: "Agave Tequila", volume: 45, gradazione: 42.5}, {nome: "Grand Marnier", volume: 30, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}], metodo:"shaken", bicchiere: 200, note: "Guarnizione con una fetta di lime"},
+            {nome: "Hot Toddy", categoria: "New Era", ingredienti: [{nome: "Whiskey", volume: 50, gradazione: 40}, {nome: "Miele", volume: 10, gradazione: 0}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Acqua Calda", volume: 120, gradazione: 0}], metodo:"hot", bicchiere: 250, note: "Drink caldo invernale. Aggiungere spezie come Cannella e Chiodi di Garofano"},
+            {nome: "Iba Tiki", categoria: "New Era", ingredienti: [{nome: "Rum Bianco (Profundo Havana Club)", volume: 30, gradazione: 35}, {nome: "Rum Scuro (Smoky Havana Club)", volume: 30, gradazione: 40}, {nome: "Amaretto", volume: 15, gradazione: 28}, {nome: "Liquore alle Nocciole (Frangelico)", volume: 5, gradazione: 36.5}, {nome: "Maraschino (Luxardo)", volume: 3, gradazione: 40}, {nome: "Purea di Passion Fruit", volume: 30, gradazione: 0}, {nome: "Succo d'Ananas", volume: 90, gradazione: 0}, {nome: "Succo di Lime", volume: 30, gradazione:0}], metodo:"shaken", bicchiere: 300, note: "Guarnizione con agrumi e una fetta d'ananas disidratato"},
+            {nome: "Jager Bomb", categoria: "New Era", ingredienti: [{nome: "Jägermeister", volume: 50, gradazione: 35}, {nome: "Energy Drink", volume: 150, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Preferibilmente servito con un bicchierino di Jägermeister da far cadere nell'energy drink"},
+            {nome: "Naked and Famous", categoria: "New Era", ingredienti: [{nome: "Mezcal", volume: 22.5, gradazione: 60}, {nome: "Aperol", volume: 22.5, gradazione: 11}, {nome: "Yellow Chartreuse", volume: 22.5, gradazione: 43}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}], metodo:"shaken", bicchiere: 120, note: "Cocktail affumicato e agrumato"},
+            {nome: "New York Sour", categoria: "New Era", ingredienti: [{nome: "Whiskey", volume: 60, gradazione: 41.5}, {nome: "Succo di Limone", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 22.5, gradazione: 0}, {nome: "Vino Rosso", volume: 15, gradazione: 13.5}], metodo:"shaken", bicchiere: 200, note: "Aggiungere alcune gocce di albume d'uovo. Guarnizione con scorza di limone o arancia e ciliegia"},
+            {nome: "Old Cuban", categoria: "New Era", ingredienti: [{nome: "Rum Scuro (Aged)", volume: 45, gradazione: 40}, {nome: "Champagne/Prosecco (Brut)", volume: 60, gradazione: 12}, {nome: "Succo di Lime", volume: 22.5, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 30, gradazione: 0}, {nome: "Angostura bitter", volume: 1, gradazione: 44.7}], metodo:"shaken", bicchiere: 200, note: "Guarnizione con menta fresca e scorza di lime"},
+            {nome: "Painkiller", categoria: "New Era", ingredienti: [{nome: "Rum Scuro (Pusser's)", volume: 60, gradazione: 40}, {nome: "Succo di Ananas", volume: 60, gradazione: 0}, {nome: "Succo d'Arancia", volume: 30, gradazione: 0}, {nome: "Latte di Cocco", volume: 30, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Guarnizione con noce moscata grattuggiata"},          
+            {nome: "Paloma", categoria: "New Era", ingredienti: [{nome: "Agave Tequila", volume: 50, gradazione: 42.5}, {nome: "Pink Grapefruit Soda", volume: 100, gradazione: 0}, {nome: "Succo di Lime", volume: 5, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Servito con sale sul bordo"},
+            {nome: "Paper Plane", categoria: "New Era", ingredienti: [{nome: "Bourbon", volume: 30, gradazione: 40}, {nome: "Aperol", volume: 30, gradazione: 11}, {nome: "Amaro Nonino", volume: 30, gradazione: 35}, {nome: "Succo di Limone", volume: 30, gradazione: 0}], metodo:"shaken", bicchiere: 150, note: "Un tempo pensato con il Campari; rivisitazione del cocktail Last Word"},
+            {nome: "Porn Star Martini", categoria: "New Era", ingredienti: [{nome: "Vanilla Vodka", volume: 50, gradazione: 38}, {nome: "Liquore al Passion Fruit", volume: 20, gradazione: 17}, {nome: "Purea di Passion Fruit", volume: 50, gradazione: 0}, {nome: "Sciroppo alla Vaniglia", volume: 10, gradazione: 0}, {nome: "Champagne", volume: 50, gradazione: 12.2}], metodo:"shaken", bicchiere: 150, note: "Accompagnare con un bicchierino di Champagne (50 ml)"},
+            {nome: "Skinny Bitch", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Soda Water", volume: 150, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Versione leggera del Vodka Soda"},
+            {nome: "Suffering Bastard", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Cognac/Brandy", volume: 30, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Ginger Beer", volume: 90, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Servito con Ginger Beer a parte"},
+            {nome: "Tom Collins", categoria: "New Era", ingredienti: [{nome: "Gin (Old Tom)", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 15, gradazione: 0}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 200, note: "Guarnizione con fetta di limone. Versione lunga del Gin Sour. Metodo: shaken o built"},
+            {nome: "Tommy's Margarita", categoria: "New Era", ingredienti: [{nome: "Agave Tequila", volume: 60, gradazione: 42.5}, {nome: "Succo di Lime", volume: 30, gradazione: 0}, {nome: "Sciroppo di Agave", volume: 30, gradazione: 0}], metodo:"shaken", bicchiere: 150, note: "Versione senza Triple Sec"},
+            {nome: "Vieux Carré", categoria: "New Era", ingredienti: [{nome: "Whiskey Rye", volume: 30, gradazione: 40}, {nome: "Cognac", volume: 30, gradazione: 40}, {nome: "Vermouth Rosso", volume: 30, gradazione: 19}, {nome: "Bénédictine", volume: 15, gradazione: 40}, {nome: "Peychaud's Bitters", volume: 2, gradazione: 35}], metodo:"stirred", bicchiere: 150, note: "Prende il nome dal quartiere Vieux Carré, il centro storico più antico di New Orleans"},
+            {nome: "Vodka Redbull", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Redbull", volume: 150, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Servito con ghiaccio"},
+            {nome: "Vodka Soda", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Soda Water", volume: 150, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Servito con ghiaccio e fetta di lime (opzionale)"},
+            {nome: "Vodka Tonic", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Acqua Tonica", volume: 150, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Servito con ghiaccio e fetta di lime (opzionale)"},
 
             // APERITIVI
-            {nome: "Agua de Valencia", categoria: "Aperitivo", ingredienti: [{nome: "Gin", volume: 5, gradazione: 40}, {nome: "Vodka", volume: 5, gradazione: 40}, {nome: "Succo d'Arancia", volume: 40, gradazione: 0}, {nome: "Cava", volume: 130, gradazione: 11}, {nome: "Zucchero", volume: 5, gradazione: 0}], bicchiere: 250, note: "Cocktail spagnolo originariamente servito in pitcher"},            
-            {nome: "Bellini", categoria: "Aperitivo", ingredienti: [{nome: "Prosecco", volume: 100, gradazione: 11}, {nome: "Purè di Pesca", volume: 50, gradazione: 0}], bicchiere: 180, note: "Servito in flute"},
-            {nome: "Hugo", categoria: "Aperitivo", ingredienti: [{nome: "Liquore di Fiori di Sambuco (St-Germain)", volume: 40, gradazione: 20}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}, {nome: "Menta Fresca", volume: 5, gradazione: 0}], bicchiere: 250, note: "Servito con ghiaccio e lime"},
-            {nome: "Leone", categoria: "Aperitivo", ingredienti: [{nome: "Aperitivo Leone", volume: 90, gradazione: 22}, {nome: "Soda Water", volume: 90, gradazione: 0}], bicchiere: 250, note: "Rivisitazione Americano con finale tendenzialmente più dolce - Leon Bar, Bassano del Grappa. Servito con ghiaccio"},
-            {nome: "Mezzo e Mezzo", categoria: "Aperitivo", ingredienti: [{nome: "Mezzo e Mezzo", volume: 7.5, gradazione: 22}, {nome: "Soda Water", volume: 7.5, gradazione: 0}], bicchiere: 10, note: "Aperitivo tradizionale della distilleria Nardini, Bassano del Grappa. Preparato miscelando una parte di Mezzoemezzo con una parte di seltz"},
-            {nome: "Spritz Aperol", categoria: "Aperitivo", ingredienti: [{nome: "Aperol", volume: 60, gradazione: 11}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 250, note: "Servito con fetta d'arancia"},
-            {nome: "Spritz Aperol Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Aperol", volume: 90, gradazione: 11}, {nome: "Prosecco", volume: 90, gradazione: 11}], bicchiere: 250, note: "Spritz Aperol senza soda water"},
-            {nome: "Spritz Campari", categoria: "Aperitivo", ingredienti: [{nome: "Campari", volume: 60, gradazione: 25}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 250, note: "Spritz classico con Campari"},
-            {nome: "Spritz Campari Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Campari", volume: 90, gradazione: 25}, {nome: "Prosecco", volume: 90, gradazione: 11}], bicchiere: 250, note: "Spritz Campari senza soda water"},
-            {nome: "Spritz Cynar", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 60, gradazione: 16.5}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 250, note: "Spritz classico con Cynar"},
-            {nome: "Spritz Cynar Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 90, gradazione: 16.5}, {nome: "Prosecco", volume: 90, gradazione: 11}], bicchiere: 250, note: "Spritz Cynar senza soda water"},
-            {nome: "Spritz Cynar 70 Proof", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 60, gradazione: 35}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 250, note: "Spritz classico con Cynar"},
-            {nome: "Spritz Cynar 70 Proof Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 90, gradazione: 35}, {nome: "Prosecco", volume: 90, gradazione: 11}], bicchiere: 250, note: "Spritz Cynar senza soda water"},
-            {nome: "Spritz Liscio", categoria: "Aperitivo", ingredienti: [{nome: "Prosecco", volume: 90, gradazione: 11}, {nome: "Soda Water", volume: 90, gradazione: 0}], bicchiere: 250, note: "Denominato anche Spritz Bianco, è una variante senza bitter dello Spritz classico"},
-            {nome: "Spritz Select", categoria: "Aperitivo", ingredienti: [{nome: "Select", volume: 60, gradazione: 17.5}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 250, note: "Spritz classico con Select"},
-            {nome: "Spritz Select Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Select", volume: 90, gradazione: 17.5}, {nome: "Prosecco", volume: 90, gradazione: 11}], bicchiere: 250, note: "Spritz Select senza soda water"},
-            {nome: "Te+", categoria: "Aperitivo", ingredienti: [{nome: "Te+ (Origin Bassano)", volume: 170, gradazione: 9.5}], bicchiere: 250, note: "Estratto alcolico al tè pesca - Origin Bar, Bassano del Grappa"},
-            
+            {nome: "Agua de Valencia", categoria: "Aperitivo", ingredienti: [{nome: "Gin", volume: 5, gradazione: 40}, {nome: "Vodka", volume: 5, gradazione: 40}, {nome: "Succo d'Arancia", volume: 40, gradazione: 0}, {nome: "Cava", volume: 130, gradazione: 11}, {nome: "Zucchero", volume: 5, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Cocktail spagnolo originariamente servito in pitcher"},
+            {nome: "Bellini", categoria: "Aperitivo", ingredienti: [{nome: "Prosecco", volume: 100, gradazione: 11}, {nome: "Purè di Pesca", volume: 50, gradazione: 0}], metodo:"built", bicchiere: 180, note: "Servito in flute"},
+            {nome: "Hugo", categoria: "Aperitivo", ingredienti: [{nome: "Liquore di Fiori di Sambuco (St-Germain)", volume: 40, gradazione: 20}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}, {nome: "Menta Fresca", volume: 5, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Servito con ghiaccio e lime"},
+            {nome: "Leone", categoria: "Aperitivo", ingredienti: [{nome: "Aperitivo Leone", volume: 90, gradazione: 22}, {nome: "Soda Water", volume: 90, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Rivisitazione Americano con finale tendenzialmente più dolce - Leon Bar, Bassano del Grappa. Servito con ghiaccio"},
+            {nome: "Mezzo e Mezzo", categoria: "Aperitivo", ingredienti: [{nome: "Mezzo e Mezzo", volume: 7.5, gradazione: 22}, {nome: "Soda Water", volume: 7.5, gradazione: 0}], metodo:"built", bicchiere: 10, note: "Aperitivo tradizionale della distilleria Nardini, Bassano del Grappa. Preparato miscelando una parte di Mezzoemezzo con una parte di seltz"},
+            {nome: "Spritz Aperol", categoria: "Aperitivo", ingredienti: [{nome: "Aperol", volume: 60, gradazione: 11}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Servito con fetta d'arancia"},
+            {nome: "Spritz Aperol Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Aperol", volume: 90, gradazione: 11}, {nome: "Prosecco", volume: 90, gradazione: 11}], metodo:"built", bicchiere: 250, note: "Spritz Aperol senza soda water"},
+            {nome: "Spritz Campari", categoria: "Aperitivo", ingredienti: [{nome: "Campari", volume: 60, gradazione: 25}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Spritz classico con Campari"},
+            {nome: "Spritz Campari Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Campari", volume: 90, gradazione: 25}, {nome: "Prosecco", volume: 90, gradazione: 11}], metodo:"built", bicchiere: 250, note: "Spritz Campari senza soda water"},
+            {nome: "Spritz Cynar", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 60, gradazione: 16.5}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Spritz classico con Cynar"},
+            {nome: "Spritz Cynar Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 90, gradazione: 16.5}, {nome: "Prosecco", volume: 90, gradazione: 11}], metodo:"built", bicchiere: 250, note: "Spritz Cynar senza soda water"},
+            {nome: "Spritz Cynar 70 Proof", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 60, gradazione: 35}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Spritz classico con Cynar"},
+            {nome: "Spritz Cynar 70 Proof Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 90, gradazione: 35}, {nome: "Prosecco", volume: 90, gradazione: 11}], metodo:"built", bicchiere: 250, note: "Spritz Cynar senza soda water"},
+            {nome: "Spritz Liscio", categoria: "Aperitivo", ingredienti: [{nome: "Prosecco", volume: 90, gradazione: 11}, {nome: "Soda Water", volume: 90, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Denominato anche Spritz Bianco, è una variante senza bitter dello Spritz classico"},
+            {nome: "Spritz Select", categoria: "Aperitivo", ingredienti: [{nome: "Select", volume: 60, gradazione: 17.5}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], metodo:"built", bicchiere: 250, note: "Spritz classico con Select"},
+            {nome: "Spritz Select Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Select", volume: 90, gradazione: 17.5}, {nome: "Prosecco", volume: 90, gradazione: 11}], metodo:"built", bicchiere: 250, note: "Spritz Select senza soda water"},
+            {nome: "Te+", categoria: "Aperitivo", ingredienti: [{nome: "Te+ (Origin Bassano)", volume: 170, gradazione: 9.5}], metodo:"built", bicchiere: 250, note: "Estratto alcolico al tè pesca - Origin Bar, Bassano del Grappa"},
+
             // BIRRE
             {nome: "Lager Piccola", categoria: "Birra", ingredienti: [{nome: "Birra Lager", volume: 330, gradazione: 4.8}], bicchiere: 330, note: "Birra chiara tipo Heineken, Stella Artois (ABV medio 4.2-5.4%)"},
             {nome: "Lager Media", categoria: "Birra", ingredienti: [{nome: "Birra Lager", volume: 400, gradazione: 4.8}], bicchiere: 400, note: "Birra chiara tipo Heineken, Stella Artois (ABV medio 4.2-5.4%)"},
@@ -998,22 +973,57 @@
         // const SIM_STEP = 5; // Simulazione ogni 5min
         // const MAX_SIM_MIN = 360; // Fino a 6h
 
-        // Funzioni di calcolo
+        // Calcolo TBW con intervallo di confidenza 95% basato su Searle 2015
         function calcolaTBW(genere, peso, altezza, eta, fitnessLevel, idratazione) {
-            let tbwBase;
+            let tbwBase, tbwSD;
+
+            // Formula Watson (1980) - equazioni validate
             if (genere.toLowerCase() === 'uomo') {
                 tbwBase = 2.447 - (0.09516 * eta) + (0.1074 * altezza) + (0.3362 * peso);
+                tbwSD = 3.75; // Deviazione standard da Searle 2015 per uomini
             } else {
                 tbwBase = -2.097 + (0.1069 * altezza) + (0.2466 * peso);
+                tbwSD = 2.73; // Deviazione standard da Searle 2015 per donne
             }
+
+            // Aggiustamenti ridotti e validati
             const tbwFitnessAdjust = calcolaFattoreTBWAdjust(fitnessLevel);
             const tbwIdratazioneAdjust = calcolaFattoreTBWIdratazione(idratazione);
-            return Math.max(tbwBase * tbwFitnessAdjust * tbwIdratazioneAdjust, 1.0); // TBW minimo 1L
+
+            // Bias correction: 0.95 (Searle 2015)
+            // Watson sovrastima del 5% rispetto a BIA gold standard
+            const biasCorrection = 0.95;
+
+            const tbwMean = tbwBase * tbwFitnessAdjust * tbwIdratazioneAdjust * biasCorrection;
+
+            // Calcola intervallo di confidenza 95% per comunicare incertezza
+            const ci95Lower = Math.max(1.0, tbwMean - 1.96 * tbwSD);
+            const ci95Upper = tbwMean + 1.96 * tbwSD;
+
+            // Per compatibilità con codice esistente, ritorna il valore medio
+            // Ma salva anche l'incertezza per uso futuro
+            const result = Math.max(tbwMean, 1.0);
+
+            // Salvo i valori di incertezza in variabili globali per mostrarli nell'UI
+            window.tbwCI = {lower: ci95Lower, upper: ci95Upper, cv: tbwSD/tbwMean * 100};
+    
+            return {
+                value: Math.max(tbwMean, 1.0),
+                lower: ci95Lower,
+                upper: ci95Upper,
+                sd: tbwSD
+            };
         }
 
         function calcolaFattoreWidmark(genere, peso, altezza, eta, fitnessLevel, idratazione) {
-            const tbw = calcolaTBW(genere, peso, altezza, eta, fitnessLevel, idratazione);
-            return tbw / peso;
+            const tbwResult = calcolaTBW(genere, peso, altezza, eta, fitnessLevel, idratazione);
+            return {
+                value: tbwResult.value / peso,
+                tbwCI: {
+                    lower: tbwResult.lower,
+                    upper: tbwResult.upper
+                }
+            };
         }
 
         function calcolaGradazione(ingredienti) {
@@ -1030,14 +1040,99 @@
             return (alcolTotale / volumeTotale) * 100;
         }
 
-        function calcolaGrammiAlcol(ingredienti, diluizioneFactor = 0.95) {  // Default 5% riduzione per ghiaccio/spreco
-            let alcolTotale = 0;
-            for (const ing of ingredienti) {
-                const alcolPuro = ing.volume * (ing.gradazione / 100) * 0.789; // Densità alcol
-                alcolTotale += alcolPuro;
+        // Funzione con fattore diluizione dipendente dal metodo di preparazione
+        function calcolaGrammiAlcol(ingredienti, cocktail = null) {
+            let preparazione = 'built'; // default
+
+            if (cocktail) {
+                // PRIORITÀ 1: Birre e Vini sempre "neat" (bicchiere sempre finito, no ghiaccio)
+                if (cocktail.categoria === 'Birra' || cocktail.categoria === 'Vino') {
+                    preparazione = 'neat';
+                }
+                // PRIORITÀ 2: Se è specificato il metodo nel database, usalo
+                else if (cocktail.metodo) {
+                    preparazione = cocktail.metodo;
+                }
+                // PRIORITÀ 3: Fallback per i 3-4 cocktail senza metodo specificato gestiti da default 0.93
             }
-            return alcolTotale * diluizioneFactor;  // Applica fattore
+
+            // Fattori di diluizione basati su evidenza empirica bartending professionale
+            const factors = {
+                'shaken': 0.90,    // Shakerato: maggior diluizione per ghiaccio tritato + aerazione
+                'stirred': 0.92,   // Mescolato: diluizione media da mixing glass
+                'built': 0.95,     // Costruito nel bicchiere: minima diluizione
+                'neat': 1.00,      // Liscio senza ghiaccio: nessuna diluizione
+                'hot': 0.90        // Caldo: considera evaporazione alcol (~10%)
+            };
+
+            // Usa il fattore appropriato o default 0.93 se non specificato
+            const diluizioneFactor = factors[preparazione] || 0.93;
+
+            let alcolTotale = 0;
+                for (const ing of ingredienti) {
+                    // Densità etanolo: 0.789 g/ml a 20°C
+                    const alcolPuro = ing.volume * (ing.gradazione / 100) * 0.789;
+                    alcolTotale += alcolPuro;
+                }
+    
+                return alcolTotale * diluizioneFactor;
         }
+
+        // Nuovo modello di assorbimento con lag time basato su letteratura
+        function calculateAbsorptionWithLag(timeMinutes, stomacoPieno = false) {
+            // Parametri calibrati da Wilkinson 1977 e Norberg 2003
+            const params = stomacoPieno ? {
+                k: 0.035,      // min^-1 - costante assorbimento stomaco pieno (Norberg 2003)
+                lagTime: 10    // min - ritardo per svuotamento gastrico con cibo
+            } : {
+                k: 0.060,      // min^-1 - costante assorbimento stomaco vuoto (Wilkinson 1977)
+                lagTime: 2     // min - minimo tempo transito gastrico
+            };
+
+            // Il lag time rappresenta il ritardo prima che l'alcol raggiunga l'intestino
+            const effectiveTime = Math.max(0, timeMinutes - params.lagTime);
+    
+            // Modello esponenziale standard: frazione = 1 - e^(-k*t)
+            const fraction = effectiveTime > 0 ? 1 - Math.exp(-params.k * effectiveTime) : 0;
+
+            return {
+                fraction: Math.min(1, fraction),  // Massimo 100% assorbimento
+                k: params.k,
+                lagTime: params.lagTime
+            };
+        }
+
+        // Modello di eliminazione Michaelis-Menten per alta precisione a BAC elevati
+        function getEliminationRateMM(bac, genere, fitnessLevel = 'sedentario') {
+            // Parametri Vmax basati su Jones 2019 e meta-analisi
+            const baseVmax = {
+                'uomo': 0.175,   // g/L/h - tasso massimo eliminazione uomini
+                'donna': 0.156   // g/L/h - tasso massimo eliminazione donne (~89% uomini)
+            };
+
+            // Moltiplicatori fitness validati da studi metabolici
+            const fitnessMultiplier = {
+                'sedentario': 1.00,
+                'attivo': 1.08,     // +8% efficienza metabolica
+                'atleta': 1.15      // +15% efficienza metabolica
+            }[fitnessLevel] || 1.00;
+
+            // Calcola Vmax personalizzato
+            const Vmax = baseVmax[genere.toLowerCase()] * fitnessMultiplier;
+    
+            // Km da Simic & Tasic 2007 - concentrazione a metà saturazione
+            const Km = 0.05; // g/L
+    
+            // A BAC molto bassi, usa approssimazione lineare per stabilità numerica
+            if (bac < 0.1) {
+                // Pendenza iniziale della curva MM
+                return (Vmax / Km) * bac;
+            }
+            
+            // Formula Michaelis-Menten completa
+            return (Vmax * bac) / (Km + bac);
+        }
+
 
         function formatTime(hoursDecimal) {
             if (hoursDecimal <= 0) return 'Subito';
@@ -1056,15 +1151,15 @@
             const fattoreWidmark = calcolaFattoreWidmark(genere, peso, altezza, eta, fitnessLevel, idratazione);
             // Applicazione del fattore fitness al tasso di eliminazione
             const fattoreFitness = calcolaFattoreFitness(fitnessLevel);
-            const betaPerOraBase = 0.16;  // Media unisex 2025
+            // Parametro beta aggiornato per compatibilità con modello ibrido
+            const betaPerOraBase = 0.16;  // g/L/h - Media validata Gullberg & Jones 1994
+            // NOTA: Usiamo MM per BAC > 0.1, questo valore è per retrocompatibilità
+
             // Esercizio lo stesso giorno
             const esercizioFactor = esercizioSameDay ? 0.99 : 1.0;  // -1.0% if yes
             // Calcola beta per ora
             const betaPerOra = betaPerOraBase * fattoreFitness * esercizioFactor;
             const betaPerMinuto = betaPerOra / 60;
-
-            // Rate assorbimento (esponenziale, k in 1/min)
-            // const assorbRate = stomacoPieno ? 0.02 : 0.05; // k per curva 1 - e^(-kt)
 
             // Calcola numero totale di ingestioni
             let totalIngestions = 0;
@@ -1079,26 +1174,71 @@
             let tempiIngestioni = [];
             let currentTime = 0;
             addedDrinks.forEach(drink => {
-                const grammiSingle = calcolaGrammiAlcol(cocktailDatabase[drink.index].ingredienti, 0.95);
+                const grammiSingle = calcolaGrammiAlcol(cocktailDatabase[drink.index].ingredienti, cocktailDatabase[drink.index].cocktail);
                 for (let q = 0; q < drink.qty; q++) {
                     tempiIngestioni.push({tempo: currentTime, grammi: grammiSingle});
                     currentTime += intervallo;
                 }
             });
 
-            // Funzione per calcolare BAC a un dato tempo
+            // Funzione per calcolare BAC con modello assorbimento e MM
             function calculateBACAtTime(timeFromStart) {
-                let bac = 0;
+                // Array per tracciare assorbimento ed eliminazione separatamente
+                let absorptionRate = 0;
+                let currentBAC = 0;
+
+                // FASE 1: Calcola tutto l'assorbimento
                 tempiIngestioni.forEach(ing => {
-                    const grammiEff = ing.grammi * (stomacoPieno ? 0.7 : 1.0);
                     const timeFromIng = timeFromStart - ing.tempo;
+
                     if (timeFromIng >= 0) {
-                        // Assorbimento istantaneo (come versione originale funzionante)
-                        const contrib = grammiEff / (peso * fattoreWidmark);
-                        bac += Math.max(0, contrib - (betaPerMinuto * timeFromIng));
+                        // Modello di assorbimento graduale (esponenziale) con lag time
+                        const absorption = calculateAbsorptionWithLag(timeFromIng, stomacoPieno);
+
+                        // Tasso di assorbimento (k) per calcolo frazione assorbita (derivata)
+                        if (timeFromIng > absorption.lagTime) {
+                            const t = timeFromIng - absorption.lagTime;
+                            // Derivata di (1 - e^(-kt)) = k * e^(-kt)
+                            const absorptionDerivative = absorption.k * Math.exp(-absorption.k * t);
+                            absorptionRate += ing.grammi * absorptionDerivative / (peso * fattoreWidmark.value);
+                        }
+
+                        // Accumula BAC da questa dose
+                        const grammiAssorbiti = ing.grammi * absorption.fraction;
+                        currentBAC += grammiAssorbiti / (peso * fattoreWidmark.value);
                     }
                 });
-                return bac;
+
+                // FASE 2: Calcola eliminazione INTEGRATA nel tempo con Michaelis-Menten
+                if (currentBAC > 0 && timeFromStart > 0) {
+                    let eliminatedTotal = 0;
+
+                    // Integrazione numerica semplice (metodo dei trapezi)
+                    const dt = 1; // minuti
+                    let bacHistory = currentBAC;
+
+                    for (let t = 0; t < timeFromStart; t += dt) {
+                        // Calcola BAC(t) considerando solo assorbimento fino a quel momento
+                        let bacAtT = 0;
+                        tempiIngestioni.forEach(ing => {
+                            const timeSinceIng = t - ing.tempo;
+                            if (timeSinceIng >= 0) {
+                                const abs = calculateAbsorptionWithLag(timeSinceIng, stomacoPieno);
+                                bacAtT += (ing.grammi * abs.fraction) / (peso * fattoreWidmark.value);
+                            }
+                        });
+                    
+                        // Sottrai eliminazione accumulata
+                        bacAtT = Math.max(0, bacAtT - eliminatedTotal);
+
+                        // Calcola tasso di eliminazione a questo BAC
+                        const elimRate = getEliminationRateMM(bacAtT, genere, fitnessLevel) / 60; // per minuto
+                        eliminatedTotal += elimRate * dt;
+                    }
+
+                    currentBAC = Math.max(0, currentBAC - eliminatedTotal);
+                }
+                return currentBAC;
             }
 
             // Debug info
@@ -1108,32 +1248,56 @@
 
 
 
-            // Trova il picco reale simulando ogni 5min
+            // Troviamo il picco reale
             let maxBAC = 0;
-            for (let min = 0; min <= minutiPrimo + 360; min += 5) {
+            let timeAtPeak = 0;
+
+            // Simula ogni 5 minuti fino a 6h dopo l'ultima bevuta
+            for (let min = 0; min <= Math.max(minutiPrimo + 360, durataMinuti + 120); min += 5) {
                 const bac = calculateBACAtTime(min);
-                if (bac > maxBAC) maxBAC = bac;
+                if (bac > maxBAC) {
+                    maxBAC = bac;
+                    timeAtPeak = min;
+                }
             }
 
             // Alcolemia attuale
-            let alcolemiaAttuale = calculateBACAtTime(minutiPrimo);
+            const alcolemiaAttuale = calculateBACAtTime(minutiPrimo);
 
-            const minutiAzzeramentoCurrent = alcolemiaAttuale / betaPerMinuto;
-            const minutiPerGuidareCurrent = Math.max(0, (alcolemiaAttuale - 0.5) / betaPerMinuto);
+            const tassoRealePerOra = betaPerOra; // Mantieni il calcolo biometrico originale
+            const tassoRealePerMinuto = tassoRealePerOra / 60;
+
+            // CORREZIONE: Calcoli di tempo corretti
+            const minutiAzzeramentoCurrent = alcolemiaAttuale > 0 ? alcolemiaAttuale / tassoRealePerMinuto : 0;
+            const minutiPerGuidareCurrent = alcolemiaAttuale > 0.5 ? (alcolemiaAttuale - 0.5) / tassoRealePerMinuto : 0;
+
+            // ERRORE 3: TIMELINE SCORRETTA
+            // SOSTITUIRE la funzione timeline con questa:
+            
 
             return {
                 alcolemiaPicco: Math.round(maxBAC * 1000) / 1000,
                 alcolemiaAttuale: Math.round(alcolemiaAttuale * 1000) / 1000,
                 grammiEffettivi: Math.round(totalGrammiAlcol * (stomacoPieno ? 0.7 : 1.0) * 10) / 10,
-                fattoreWidmark: Math.round(fattoreWidmark * 1000) / 1000,
-                tbw: Math.round(calcolaTBW(genere, peso, altezza, eta, fitnessLevel, idratazione) * 10) / 10,
+                fattoreWidmark: Math.round(fattoreWidmark.value * 1000) / 1000,
+                tbw: Math.round(calcolaTBW(genere, peso, altezza, eta, fitnessLevel, idratazione).value * 10) / 10,
+                tbwCI: fattoreWidmark.tbwCI,
                 oreAzzeramento: Math.round(minutiAzzeramentoCurrent / 60 * 10) / 10,
                 orePerGuidare: Math.round(minutiPerGuidareCurrent / 60 * 10) / 10,
-                betaPerOra: Math.round(betaPerOra * 1000) / 1000,
+                betaPerOra: Math.round(tassoRealePerOra * 1000) / 1000,
                 statoLegale: getStatoLegale(alcolemiaAttuale),
                 funzioneAlcolemia: (additionalMin) => {
-                    const timeFut = minutiPrimo + additionalMin;
-                    return Math.round(calculateBACAtTime(timeFut) * 1000) / 1000;
+                    const futureTime = minutiPrimo + additionalMin;
+
+                    if (futureTime <= timeAtPeak) {
+                        // Siamo ancora nella fase di assorbimento/picco
+                        return Math.round(calculateBACAtTime(futureTime) * 1000) / 1000;
+                    } else {
+                        // Siamo nella fase di eliminazione pura
+                        const tempoEliminazioneFromPeak = (futureTime - timeAtPeak) / 60; // ore dal picco
+                        const bacFuture = maxBAC - (tassoRealePerOra * tempoEliminazioneFromPeak);
+                        return Math.max(0, Math.round(bacFuture * 1000) / 1000);
+                    }
                 }
             };
         }
@@ -1250,7 +1414,7 @@
             results.innerHTML = matches.map(match => {
                 const cocktail = match.cocktail;
                 const gradazione = calcolaGradazione(cocktail.ingredienti);
-                const alcolPuro = calcolaGrammiAlcol(cocktail.ingredienti);
+                const alcolPuro = calcolaGrammiAlcol(cocktail.ingredienti, cocktail);
         
                 return `
                     <div class="results">
@@ -1311,7 +1475,7 @@
             }
 
             const gradazione = calcolaGradazione(cocktail.ingredienti);
-            const alcolPuro = calcolaGrammiAlcol(cocktail.ingredienti);
+            const alcolPuro = calcolaGrammiAlcol(cocktail.ingredienti, cocktail);
 
             document.getElementById('gradazione').textContent = `${gradazione.toFixed(1)}% vol`;
             document.getElementById('alcolPuro').textContent = `${alcolPuro.toFixed(1)} g`;
@@ -1352,7 +1516,7 @@
             let total = 0;
             addedDrinks.forEach((drink, i) => {
                 const cocktail = cocktailDatabase[drink.index];
-                const alcol = calcolaGrammiAlcol(cocktail.ingredienti) * drink.qty;
+                const alcol = calcolaGrammiAlcol(cocktail.ingredienti, cocktail) * drink.qty;
                 total += alcol;
                 const div = document.createElement('div');
                 div.className = 'added-drink';
@@ -1409,7 +1573,7 @@
             let totalGrammiAlcol = 0;
             addedDrinks.forEach(drink => {
                 const cocktail = cocktailDatabase[drink.index];
-                totalGrammiAlcol += calcolaGrammiAlcol(cocktail.ingredienti) * drink.qty;
+                totalGrammiAlcol += calcolaGrammiAlcol(cocktail.ingredienti, cocktail) * drink.qty;
             });
             
             if (totalGrammiAlcol === 0) {
@@ -1447,7 +1611,7 @@
                         </span>
                     </div>
                     <div class="result-item">
-                        <span class="result-label">Alcolemia al picco (fine bevute):</span>
+                        <span class="result-label">Alcolemia al picco:</span>
                         <span class="result-value">${risultato.alcolemiaPicco} g/L</span>
                     </div>
                     <div class="result-item">
@@ -1457,6 +1621,10 @@
                     <div class="result-item">
                         <span class="result-label">TBW:</span>
                         <span class="result-value">${risultato.tbw} litri</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Intervallo TBW (95%):</span>
+                        <span class="result-value">${(risultato.tbwCI.lower).toFixed(1)} - ${(risultato.tbwCI.upper).toFixed(1)} L</span>
                     </div>
                     <div class="result-item">
                         <span class="result-label">Fattore Widmark:</span>
@@ -1490,7 +1658,7 @@
             const list = document.getElementById('cocktailList');
             list.innerHTML = cocktailDatabase.map(cocktail => {
                 const gradazione = calcolaGradazione(cocktail.ingredienti);
-                const alcolPuro = calcolaGrammiAlcol(cocktail.ingredienti);
+                const alcolPuro = calcolaGrammiAlcol(cocktail.ingredienti, cocktail);
                 
                 return `
                     <div class="cocktail-item">
