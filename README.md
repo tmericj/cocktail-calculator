@@ -391,7 +391,7 @@ Questa sezione è il cuore scientifico dell’app, dove avviene il calcolo della
 
   Suggerimenti in tempo reale durante la digitazione del nome drink - seleziona per aggiungere automaticamente al riepilogo bevute.
 
-  <img src="assets/demos/final_autocomplete-bac.gif" alt="Autocomplete BAC" width="300">
+  <img src="assets/demos/autocomplete-bac.gif" alt="Autocomplete BAC" width="300">
 
   *Se nel box apposito non si inserisce alcuna quantità, l’app di default considera 1, come avviene in questo esempio*
 
@@ -419,7 +419,7 @@ In questa sezione
 
   Sistema di selezione multipla con intensità graduata (★, ★★, ★★★)
 
-  <img src="assets/demos/final_quiz-multiselect.gif" alt="Quiz con sistema priorità" width="300">
+  <img src="assets/demos/quiz-multiselect.gif" alt="Quiz con sistema priorità" width="300">
 
   *Click ripetuti sullo stesso aroma/caratteristica aumentano la priorità, influenzando il matching score*
 
@@ -434,7 +434,7 @@ In questa sezione
 
   Segui il cursore per scoprire tutte le funzionalità delle card risultato.
 
-  <img src="assets/demos/final_expand-collapse.gif" alt="Expand collapse card" width="300">
+  <img src="assets/demos/expand-collapse.gif" alt="Expand collapse card" width="300">
 
   *Card compatte espandibili on-click con dettagli completi, note degustative, e pulsanti azione (Aggiungi/Confronta)*
 
@@ -445,7 +445,7 @@ In questa sezione
   La funzione “Confronto Dettagliato” assume una veste grafica diversa, a seconda che la si sperimenti su desktop/tablet o su smartphone.
 
   <p><em>Card swipeable Mobile experience</em></p>
-  <img src="assets/demos/final_comparison-mobile.gif" alt="Confronto mobile stile Stories" width="300">
+  <img src="assets/demos/comparison-mobile.gif" alt="Confronto mobile stile Stories" width="300">
 
   *Navigazione fluida tra drink salvati con swipe laterale - evidenziazioni MIN (verde) e MAX (rosso) per metriche chiave*
 
