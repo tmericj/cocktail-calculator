@@ -20,4 +20,36 @@
 *.ppt
 
 # File di log
-*.log
+*.log# ========== AGGIUNTE PER PRIVACY E PULIZIA ==========
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Versioni private (v4+, v5+)
+cocktail-app-v4*.html
+cocktail-app-v5*.html
+*-private_deploy/
+
+# File di debug e test
+bisect_debug.py
+compare_files.js
+find_error_after_db.js
+search_html_attributes.js
+syntax_checker.js
+test_bisect.html
+
+# PNG/immagini temporanee
+PNG-*.png
+PNG-*.ipynb
+emoji_*.png
+
+# HTML vecchi/prove
+*-prove*.html
+*_NO.html
+Old\ Layout*.html
+
+# File vari da non condividere
+report_refactoring.md
+Prova_*.pdf

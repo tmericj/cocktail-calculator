@@ -1,0 +1,2443 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P03QLJK0W7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-P03QLJK0W7');
+    </script>
+    <title>Calcolatore Gradazione Alcolica</title>
+    <style>
+        /* CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        input, textarea {
+            -webkit-user-select: text;
+            -khtml-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { 
+                transform: translateX(-20px) translateY(-20px); 
+                opacity: 0; 
+            }
+            50% { 
+                transform: translateX(20px) translateY(20px); 
+                opacity: 1; 
+            }
+        }
+
+        .header h1, .header p {
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 30px 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 8px 25px rgba(116, 185, 255, 0.4);
+            color: white;
+        }
+
+        .results {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 1px solid rgba(79, 172, 254, 0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #856404;
+        }
+
+        .cocktail-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 1px solid rgba(79, 172, 254, 0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            -webkit-overflow-scrolling: touch;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .results:hover, .cocktail-list:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .cocktail-item {
+            padding: 15px;
+            border-bottom: 1px solid #e1e8ed;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .cocktail-item:active {
+            background: #e9ecef;
+        }
+
+        .cocktail-item:last-child {
+            border-bottom: none;
+        }
+
+        .cocktail-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .cocktail-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        /* Stili per i filtri di ricerca */
+        .search-filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: nowrap; /* Impedisce ai filtri di andare a capo */
+            -webkit-overflow-scrolling: touch; /* Scorrimento fluido su iOS */
+            /* overflow-x: auto; /* Abilita lo scorrimento orizzontale */
+        }
+
+        .filter-chip {
+            flex: 1; /* Ogni chip occupa spazio uguale */
+            padding: 12px 8px; /* Aumentato da 8px a 12px per mobile */
+            background: #f8f9fa;
+            border: 1px solid #e1e8ed;
+            border-radius: 12px; /* Allineato con il border-radius degli input */
+            font-size: 14px; /* Aumentato da 12px per leggibilità mobile */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            text-align: center; /* Centra il testo */
+            min-height: 44px; /* Altezza minima per touch targets */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .filter-chip.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            transform: scale(1.02); /* Leggero effetto di "pressione" */
+        }
+
+        /* Hover solo su dispositivi che supportano il hover (desktop) */
+        @media (hover: hover) and (pointer: fine) {
+            .filter-chip:active {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+
+            .filter-chip:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                transition: all 0.2s ease;
+            }
+
+            .filter-chip.active:hover {
+                transform: translateY(-1px) scale(1.02);
+            }
+
+            .tab:hover, .btn:hover {
+                opacity: 0.9;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        /* Effetti touch specifici per mobile */
+        @media (hover: none) and (pointer: coarse) {
+            .filter-chip {
+                /* Feedback visivo migliore per touch */
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
+            }
+
+            .filter-chip:active {
+                transform: scale(0.95);
+                box-shadow: 0 2px 8px rgba(79, 172, 254, 0.3);
+                transition: all 0.1s ease;
+            }
+
+            /* Touch feedback per bottoni */
+            .btn:active {
+                transform: scale(0.96) translateY(1px);
+                box-shadow: 0 4px 15px rgba(79, 172, 254, 0.5);
+                transition: all 0.15s ease;
+            }
+
+            .btn-secondary:active {
+                box-shadow: 0 4px 15px rgba(168, 237, 234, 0.5);
+            }
+
+            /* Touch feedback per tabs */
+            .tab:active {
+                transform: scale(0.95);
+                background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+                transition: all 0.1s ease;
+            }
+
+            .tab.active:active {
+                transform: scale(0.97);
+                box-shadow: 0 4px 15px rgba(116, 185, 255, 0.4);
+            }
+
+            /* Touch feedback per cocktail items */
+            .cocktail-item {
+                transition: all 0.2s ease;
+                border-radius: 8px;
+                margin-bottom: 3px;
+            }
+
+            .cocktail-item:active {
+                background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                color: white;
+                transform: scale(0.98);
+                box-shadow: 0 3px 15px rgba(79, 172, 254, 0.4);
+            }
+
+            .cocktail-item:active .cocktail-name {
+                color: white;
+            }
+
+            .cocktail-item:active .cocktail-info {
+                color: rgba(255, 255, 255, 0.9);
+            }
+
+            /* Touch feedback per input fields */
+            input:focus, select:focus {
+                transform: scale(1.02);
+                transition: all 0.2s ease;
+            }
+
+            /* Touch feedback per results e cocktail-list */
+            .results, .cocktail-list {
+                touch-action: pan-y;
+            }
+
+            /* Miglioramento scrolling per cocktail-list */
+            .cocktail-list {
+                -webkit-overflow-scrolling: touch;
+                scroll-behavior: smooth;
+            }
+
+            /* Touch feedback per added-drink buttons */
+            .added-drink button:active {
+                transform: scale(0.9);
+                box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+                transition: all 0.1s ease;
+            }
+
+            /* Vibration effect per legal status (se supportato) */
+            .legal-danger, .legal-warning {
+                animation: mobileAlert 0.5s ease-in-out;
+            }
+
+            @keyframes mobileAlert {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+                20%, 40%, 60%, 80% { transform: translateX(2px); }
+            }
+
+            /* Feedback tattile per form validation errors */
+            input:invalid:focus {
+                animation: shakeInput 0.3s ease-in-out;
+                border-color: #fd79a8;
+                box-shadow: 0 0 0 3px rgba(253, 121, 168, 0.2);
+            }
+
+            @keyframes shakeInput {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                75% { transform: translateX(5px); }
+            }
+
+            /* Touch target improvements */
+            .tab {
+                min-height: 48px; /* Linee guida Material Design per touch targets */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .filter-chip {
+                min-height: 48px;
+            }
+
+            /* Focus states per navigazione con switch control */
+            .btn:focus,
+            .tab:focus,
+            .cocktail-item:focus,
+            .filter-chip:focus {
+                outline: 3px solid #4facfe;
+                outline-offset: 2px;
+            }
+
+            /* Stati di caricamento per feedback immediato */
+            .btn.loading {
+                position: relative;
+                color: transparent;
+            }
+
+            .btn.loading::after {
+                content: '';
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                top: 50%;
+                left: 50%;
+                margin-left: -8px;
+                margin-top: -8px;
+                border-radius: 50%;
+                border: 2px solid #ffffff;
+                border-color: #ffffff transparent #ffffff transparent;
+                animation: spin 1.2s linear infinite;
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+            /* Miglioramento per landscape mode mobile */
+            @media (orientation: landscape) {
+                .header {
+                    padding: 15px 20px;
+                }
+        
+                .content {
+                    padding: 15px 20px;
+                }
+        
+                .cocktail-list {
+                    max-height: 180px;
+                }
+        
+                .section {
+                    min-height: 250px;
+                }
+            }
+        }
+
+        .search-stats {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 15px;
+            text-align: center;
+            min-height: 18px; /* Previene il "salto" della UI quando appare/scompare */
+        }
+
+        .ingredient-highlight {
+            background: #fff3cd;
+            padding: 1px 4px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #856404;
+        }
+
+        /* Quick Add Controls - Bottoni +/– */
+        .quick-add-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding: 12px;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e7ecff 100%);
+            border-radius: 10px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .quick-add-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quick-add-btn.add {
+            background: linear-gradient(180deg, #4c63b6 0%, #364ba0 100%);
+            color: white;
+        }
+
+        .quick-add-btn.remove {
+            background: #f43f5e;
+            color: white;
+        }
+
+        .quick-add-btn:active {
+            transform: scale(0.9);
+            }
+
+        .quick-add-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .quick-add-counter {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .tab-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 4px;
+            min-width: 16px;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .tabs {
+            display: flex;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .tab:active {
+            transform: scale(0.98);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .legal-status {
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        .legal-ok {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .legal-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .legal-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .added-drink {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .added-drink button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .total-alcol {
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: right;
+        }
+
+        .fitness-info {
+            background: #e8f8f4;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #0c5460;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                margin: 0;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .content {
+                padding: 20px 15px;
+            }
+
+            .form-group { margin-bottom: 15px; }
+            input, select { font-size: 14px; padding: 12px; }
+            .cocktail-list { max-height: 250px; overflow-y: auto; }
+        }
+
+        /* Nasconde il select legacy, mantenendolo nel DOM */
+        #fitnessLevel { display: none; }
+
+        .fitness-cards {
+            display: flex;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .fitness-card {
+            border: 1px solid #e0e0e0; 
+            border-radius: 8px; 
+            padding: 10px; 
+            cursor: pointer;
+            background: #fafafa; 
+            transition: all .15s ease-in-out;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            word-wrap: break-word;
+            overflow: hidden;
+        }
+
+        .fitness-card:hover {
+            border-color: #667eea; 
+            background: #f0f4ff;
+        }
+
+        .fitness-card.active {
+            border-color: #667eea; 
+            background: #e7ecff;
+            color: white;
+            box-shadow: 0 0 0 2px rgba(102,126,234,.15) inset; 
+        }
+
+        .fitness-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .fitness-sub {
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+
+        .fitness-desc {
+            font-size: 13.5px;
+            color: #888;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        .tbw-preview {
+            text-align: center;
+            color: #444;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Gradazione Alcolica</h1>
+            <p>Calcola gradazione e alcolemia dei cocktail</p>
+        </div>
+        
+        <div class="content">
+            <div class="tabs">
+                <div class="tab active" data-section="search"><i class="fas fa-search"></i> Cerca</div>
+                <div class="tab" data-section="alcolemia">
+                    <i class="fas fa-flask"></i> Alcolemia
+                    <span class="tab-badge" id="tabBadge" style="display: none;">0</span>
+                </div>
+                <div class="tab" data-section="lista"><i class="fas fa-list"></i> Lista</div>
+            </div>
+
+            <!-- Sezione Ricerca Cocktail -->
+            <div id="search" class="section active">
+                <div class="form-group">
+                    <label>Cerca un cocktail</label>
+                    <input type="text" id="searchInput" placeholder="Es: Negroni, Spritz Aperol..." aria-label="Cerca cocktail">
+                </div>
+                
+                <!-- Filtri di ricerca -->
+                <div class="search-filters" id="searchFilters">
+                    <div class="filter-chip active" data-filter="nome">Nome</div>
+                    <div class="filter-chip" data-filter="ingredienti">Ingredienti</div>
+                    <div class="filter-chip" data-filter="categoria">Categoria</div>
+                </div>
+
+                <div class="search-stats" id="searchStats"></div>
+
+                <div id="searchResults"></div>
+            </div>
+
+            <!-- Sezione Calcolo Alcolemia -->
+            <div id="alcolemia" class="section">
+                <div class="form-group">
+                    <label>Inserisci nome cocktail</label>
+                    <input type="text" id="cocktailName" placeholder="Nome cocktail...">
+                </div>
+
+                <div class="form-group">
+                    <input type="number" id="quantita" placeholder="Quantità (default 1)" min="1" value="1">
+                </div>
+
+                <button class="btn btn-secondary" id="aggiungiDrinkBtn">Aggiungi Drink</button>
+
+                <div id="addedDrinks" class="cocktail-list"></div>
+
+                <div class="total-alcol">Totale alcol puro: <span id="totalAlcol">0</span> g</div>
+
+                <div id="cocktailInfo" style="display: none;">
+                    <div class="results">
+                        <div class="result-item">
+                            <span class="result-label">Gradazione:</span>
+                            <span class="result-value" id="gradazione">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Alcol puro:</span>
+                            <span class="result-value" id="alcolPuro">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dati personali -->
+                <div class="form-group">
+                    <label>I tuoi dati</label>
+                    <select id="genere">
+                        <option value="uomo">Uomo</option>
+                        <option value="donna">Donna</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <input type="number" id="peso" placeholder="Peso (kg)" min="30" max="200">
+                </div>
+
+                <div class="form-group">
+                    <input type="number" id="altezza" placeholder="Altezza (cm)" min="120" max="250">
+                </div>
+
+                <div class="form-group">
+                    <input type="number" id="eta" placeholder="Età (anni)" min="14" max="110">
+                </div>
+
+                <!-- Fitness -->
+                <div class="form-group">
+                    <label>Livello di forma fisica</label>
+                    <select id="fitnessLevel" style="display: none;">
+                        <option value="sedentario">Sedentario</option>
+                        <option value="attivo">Attivo (~2 allenamenti/settimana)</option>
+                        <option value="atleta">Atleta (5+ allenamenti/settimana)</option>
+                    </select>
+                    <div class="fitness-info">
+                        L'allenamento migliora il metabolismo (+10/20%)
+                    </div>
+                    <div id="esercizioSameDayGroup" class="form-group" style="display: none;">
+                        <label>Allenato oggi?</label>
+                        <select id="esercizioSameDay">
+                            <option value="no">No</option>
+                            <option value="si">Sì</option>
+                        </select>
+                        <div class="fitness-info">Esercizio acuto rallenta metabolismo (-1.0%, fino 24h)</div>
+                    </div>
+                    <!-- Fitness Card -->
+                    <div id="fitnessSelector" class="fitness-cards">
+                        <div class="fitness-card" data-level="sedentario">
+                            <div class="fitness-title">Sedentario</div>
+                            <div class="fitness-sub">No attività,<br>fuori forma</div>
+                            <div class="fitness-desc">Massa magra bassa</div>
+                        </div>
+                        <div class="fitness-card" data-level="attivo">
+                            <div class="fitness-title">Attivo</div>
+                            <div class="fitness-sub">2-3 allenamenti/<br>settimana</div>
+                            <div class="fitness-desc">Massa magra media</div>
+                        </div>
+                        <div class="fitness-card" data-level="atleta">
+                            <div class="fitness-title">Atleta</div>
+                            <div class="fitness-sub">Professionista/<br>agonista</div>
+                            <div class="fitness-desc">Massa magra alta</div>
+                        </div>
+                    </div>
+            
+                    <div id="tbwPreview" class="tbw-preview" style="margin-top:8px;color:#444;font-size:13px;">
+                        Preview TBW: — L (aggiorna inserendo dati e selezionando un livello)
+                    </div>
+                </div>
+
+                <!-- Acqua bevuta -->
+                <div class="form-group">
+                    <label>Idratazione durante bevuta</label>
+                    <select id="idratazione">
+                        <option value="assente">Assente</option>
+                        <option value="bassa" selected="selected">Bassa (< 100 ml)</option>
+                        <option value="media">Media (300 ml)</option>
+                        <option value="alta">Alta (> 1000 ml)</option>
+                    </select>
+                    <div class="fitness-info">Bere acqua pura diluisce l'alcol (±2.5/5% BAC) <br> <strong>Con 3+ cocktail e no idratazione attiva scegli "bassa"</strong></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="litriAcqua">Litri di acqua bevuti oggi (opzionale)</label>
+                    <input id="litriAcqua" type="number" min="0" step="0.1" placeholder="es. 1.5">
+                    <small style="color:#666;text-align:justify;">Se compilato, sostituisce il livello di idratazione.</small>
+                </div>
+
+                <!-- Stato dello stomaco -->
+                <div class="form-group">
+                    <label>Stomaco</label>
+                    <select id="stomaco">
+                        <option value="false">Vuoto</option>
+                        <option value="true">Pieno</option>
+                    </select>
+                </div>
+
+                <!-- Sessione bevuta -->
+                <div class="form-group">
+                    <label>Durata totale sessione (minuti)</label>
+                    <input type="number" id="durataMinuti" placeholder="Es: 120 per 2 ore" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Minuti passati dal primo drink</label>
+                    <input type="number" id="minutiPrimo" placeholder="Es: 180 per 3 ore fa" min="0">
+                    <div class="fitness-info">Durante la bevuta, il BAC aumenta; dopo, diminuisce.</div>
+                </div>
+
+                <button class="btn" id="calcolaBtn">Calcola Alcolemia</button>
+
+                <div id="alcolemiaResults"></div>
+            </div>
+
+            <!-- Sezione Lista Cocktail -->
+            <div id="lista" class="section">
+                <div class="search-box">
+                    <input type="text" id="filterInput" placeholder="Filtra cocktail...">
+                </div>
+                <div class="cocktail-list" id="cocktailList"></div>
+            </div>
+        </div>
+        <!-- Copyright -->
+        <div style="text-align: center; padding: 15px 20px; font-size: 11px; color: #888; border-top: 1px solid #e1e8ed; background: rgba(248,249,250,0.5);">
+            © 2025 Tommaso Merici - Alcohol Gradation & BAC Estimator
+        </div>
+    </div>
+
+    <script>
+        // Database cocktail completo. Classificazioni IBA rivisitate.
+        const cocktailDatabase = [
+            // Cocktail Classic (The Unforgettables) 24
+            {nome: "Alexander", categoria: "Classic", ingredienti: [{nome: "Cognac", volume: 30, gradazione: 40}, {nome: "Crème de Cacao (Brown)", volume: 30, gradazione: 24}, {nome: "Fresh Cream", volume: 30, gradazione: 0}], metodo: "Shaken", bicchiere: 120, note: "Servito con noce moscata fresca macinata"},
+            {nome: "Americano", categoria: "Classic", ingredienti: [{nome: "Campari", volume: 60, gradazione: 25}, {nome: "Vermouth Rosso", volume: 60, gradazione: 16}, {nome: "Soda Water", volume: 60, gradazione: 0}], metodo: "Built", bicchiere: 250, note: "Servito con ghiaccio e mezza fetta d'arancia"},
+            {nome: "Aviation", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Maraschino", volume: 15, gradazione: 30}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Crème de Violette", volume: 1, gradazione: 20}], metodo: "Shaken", bicchiere: 120, note: "Servito in coppa cocktail"},
+            {nome: "Boulevardier", categoria: "Classic", ingredienti: [{nome: "Bourbon", volume: 40, gradazione: 45}, {nome: "Campari", volume: 30, gradazione: 25}, {nome: "Vermouth Rosso", volume: 30, gradazione: 16}], metodo: "Stirred", bicchiere: 200, note: "Versione whiskey del Negroni. <br> IBA vorrebbe Bourbon 45ml, alcuni ne mettono 30ml, altri 50ml."},
+            {nome: "Clover Club", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Sciroppo di Lampone", volume: 15, gradazione: 0}, {nome: "Albume", volume: 15, gradazione: 0}], metodo: "Shaken", bicchiere: 120, note: "Servito con schiuma rosa"},
+            {nome: "Daiquiri", categoria: "Classic", ingredienti: [{nome: "Rum Bianco", volume: 60, gradazione: 40}, {nome: "Succo di Lime", volume: 20, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 10, gradazione: 0}], metodo: "Shaken", bicchiere: 110, note: "Shakerato e servito up"},
+            {nome: "Dirty Martini", categoria: "Classic", ingredienti: [{nome: "Gin o Vodka", volume: 60, gradazione: 40}, {nome: "Vermouth Secco", volume: 10, gradazione: 18}, {nome: "Salamoia d'Oliva", volume: 10, gradazione: 0}], bicchiere: 120, note: "Gin o Vodka a scelta; <br> Guarnizione: olive verdi; <br> Metodo: mescolato o shakerato; <br> Coppa Martini ben fredda"},
+            {nome: "Dry Martini", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 60, gradazione: 40}, {nome: "Vermouth Secco", volume: 10, gradazione: 18}], bicchiere: 120, note: "Gin e Vermouth (Martini Dry/Extra Dry) a scelta; <br> Guarnizione: olive verdi (in salamoia o meno) o scorza di limone; <br> Metodo: mescolato (Stirred) o shakerato (Shaken); <br> Coppa Martini ben fredda"},
+            {nome: "Gin Fizz", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 10, gradazione: 0}, {nome: "Soda Water", volume: 45, gradazione: 0}], metodo: "Shaken", bicchiere: 200, note: "Servire senza ghiaccio (IBA)"},
+            {nome: "Gin Lemon", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Limonata", volume: 150, gradazione: 0}], metodo: "Built", bicchiere: 250, note: "Servito con fette di limone"},
+            {nome: "Gin Soda e Lime", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Soda Water", volume: 150, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}], metodo: "Built", bicchiere: 250, note: "Servito con fette di lime"},
+            {nome: "Gin Tonic", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Acqua Tonica", volume: 150, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Servito con ghiaccio e lime o scorza di limone"},
+            {nome: "Manhattan", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 50, gradazione: 40}, {nome: "Vermouth Rosso", volume: 20, gradazione: 17}, {nome: "Angostura Bitter", volume: 1, gradazione: 44.7}], metodo:"Stirred", bicchiere: 120, note: "Servito con ciliegia"},
+            {nome: "Martinez", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Vermouth Rosso", volume: 45, gradazione: 17}, {nome: "Maraschino Luxardo", volume: 5, gradazione: 40}, {nome: "Orange Bitters", volume: 1, gradazione: 28}], metodo:"Stirred", bicchiere: 120, note: "Servito con scorza di limone"},
+            {nome: "Negroni", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Campari", volume: 30, gradazione: 25}, {nome: "Vermouth Rosso", volume: 30, gradazione: 16}], metodo:"Stirred", bicchiere: 200, note: "Servito con ghiaccio e scorza d'arancia"},
+            {nome: "Negroni Bianco", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Lillet Blanc", volume: 30, gradazione: 17}, {nome: "Vermouth Bianco (Dry)", volume: 30, gradazione: 18}], metodo:"Stirred", bicchiere: 200, note: "Servito con ghiaccio e scorza di limone"},
+            {nome: "Negroni Sbagliato", categoria: "Classic", ingredienti: [{nome: "Prosecco", volume: 30, gradazione: 11.5}, {nome: "Vermouth Rosso", volume: 30, gradazione: 16}, {nome: "Campari", volume: 30, gradazione: 25}], metodo:"Built", bicchiere: 200, note: "Versione con Prosecco al posto del gin"},
+            {nome: "Novebuche", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Campari", volume: 30, gradazione: 25}, {nome: "Succo di Pompelmo", volume: 60, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Servito con ghiaccio"},
+            {nome: "Old Fashioned", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 45, gradazione: 40}, {nome: "Zucchero", volume: 10, gradazione: 0}, {nome: "Angostura Bitter", volume: 2, gradazione: 44.7}, {nome: "Acqua", volume: 10, gradazione: 0}], metodo:"Stirred", bicchiere: 120, note: "Servito con ghiaccio e scorza arancia"},
+            {nome: "Sazerac", categoria: "Classic", ingredienti: [{nome: "Whiskey Rye", volume: 50, gradazione: 40}, {nome: "Zucchero", volume: 5, gradazione: 0}, {nome: "Peychaud's Bitters", volume: 3, gradazione: 35}, {nome: "Assenzio", volume: 2, gradazione: 68}], metodo:"Stirred", bicchiere: 120, note: "Cocktail storico di New Orleans"},
+            {nome: "Vodka Martini", categoria: "Classic", ingredienti: [{nome: "Vodka", volume: 60, gradazione: 40}, {nome: "Vermouth Secco", volume: 10, gradazione: 18}], bicchiere: 120, note: "Vodka e Vermouth a scelta; Guarnizione: olive verdi o scorza di limone; Metodo: mescolato o shakerato; Coppa Martini ben fredda"},
+            {nome: "Whiskey Soda", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 50, gradazione: 40}, {nome: "Soda Water", volume: 150, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Highball classico con limone"},
+            {nome: "Whiskey Sour", categoria: "Classic", ingredienti: [{nome: "Whiskey", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 20, gradazione: 0}], metodo:"Shaken", bicchiere: 200, note: "Opzionale albume d'uovo"},
+            {nome: "White Lady", categoria: "Classic", ingredienti: [{nome: "Gin", volume: 40, gradazione: 40}, {nome: "Triple Sec", volume: 30, gradazione: 30}, {nome: "Succo di Limone", volume: 15, gradazione: 0}], metodo:"Shaken", bicchiere: 120, note: "Servito in coppa cocktail"},
+
+            // Cocktail Contemporary Classics (The Contemporary) 33
+            {nome: "Black Russian", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Kahlúa", volume: 25, gradazione: 20}], metodo:"Built", bicchiere: 200, note: "Servito con ghiaccio"},
+            {nome: "Bloody Mary", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 45, gradazione: 40}, {nome: "Succo di Pomodoro", volume: 90, gradazione: 0}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Salsa Worcestershire", volume: 2, gradazione: 0}, {nome: "Tabasco", volume: 1, gradazione: 0}, {nome: "Sale", volume: 1, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Servito con sedano e spezie"},
+            {nome: "Caipirão", categoria: "Contemporary", ingredienti: [{nome: "Licor Beirão", volume: 60, gradazione: 22}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Pestare lime e zucchero"},
+            {nome: "Caipirinha", categoria: "Contemporary", ingredienti: [{nome: "Cachaça", volume: 60, gradazione: 45}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Pestare lime e zucchero"},
+            {nome: "Caipirissima", categoria: "Contemporary", ingredienti: [{nome: "Rum", volume: 60, gradazione: 40}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Pestare lime e zucchero"},
+            {nome: "Caipiroska", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 60, gradazione: 40}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Pestare lime e zucchero"},
+            {nome: "Caipiroska variante frutta", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Liquore alla frutta", volume: 20, gradazione: 20}, {nome: "Lime", volume: 30, gradazione: 0}, {nome: "Zucchero di Canna", volume: 20, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Varianti alla frutta: fragola, maracuja (passion fruit), mango, ananas, pesca, lampone"},
+            {nome: "Cardinale", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 40, gradazione: 40}, {nome: "Vermouth Secco", volume: 20, gradazione: 18}, {nome: "Campari", volume: 10, gradazione: 25}], metodo:"Stirred", bicchiere: 120, note: "Servito con scorza di limone"},
+            {nome: "Corpse Reviver #2", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 22.5, gradazione: 40}, {nome: "Cointreau", volume: 22.5, gradazione: 40}, {nome: "Lillet Blanc", volume: 22.5, gradazione: 17}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}, {nome: "Assenzio", volume: 1, gradazione: 68}], metodo:"Shaken", bicchiere: 120, note: "Servito con scorza limone"},
+            {nome: "Cosmopolitan", categoria: "Contemporary", ingredienti: [{nome: "Vodka Citron", volume: 40, gradazione: 40}, {nome: "Triple Sec (Cointreau)", volume: 15, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Succo di Mirtillo", volume: 30, gradazione: 0}], metodo:"Shaken", bicchiere: 150, note: "Servito in coppa Martini"},
+            {nome: "Cuba Libre", categoria: "Contemporary", ingredienti: [{nome: "Rum", volume: 50, gradazione: 40}, {nome: "Cola", volume: 120, gradazione: 0}, {nome: "Succo di Lime", volume: 10, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Servito con ghiaccio e lime"},
+            {nome: "French 75", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 15, gradazione: 0}, {nome: "Champagne", volume: 60, gradazione: 12}], metodo:"Shaken", bicchiere: 150, note: "Servito in flute"},
+            {nome: "French Connection", categoria: "Contemporary", ingredienti: [{nome: "Cognac", volume: 35, gradazione: 40}, {nome: "Amaretto", volume: 35, gradazione: 28}], metodo:"Built", bicchiere: 120, note: "Servito con ghiaccio"},
+            {nome: "Garibaldi", categoria: "Contemporary", ingredienti: [{nome: "Campari", volume: 45, gradazione: 25}, {nome: "Succo d'arancia", volume: 120, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Servito con ghiaccio e scorza di arancia"},
+            {nome: "Hemingway Special", categoria: "Contemporary", ingredienti: [{nome: "Rum", volume: 60, gradazione: 40}, {nome: "Succo di Pompelmo", volume: 40, gradazione: 0}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Maraschino (Luxardo)", volume: 15, gradazione: 40}], metodo:"Shaken", bicchiere: 150, note: "Servito in coppa cocktail"},
+            {nome: "Irish Coffee", categoria: "Contemporary", ingredienti: [{nome: "Whiskey Irlandese", volume: 50, gradazione: 40}, {nome: "Caffè", volume: 120, gradazione: 0}, {nome: "Zucchero", volume: 10, gradazione: 0}, {nome: "Panna", volume: 50, gradazione: 0}], metodo:"Hot", bicchiere: 200, note: "Servito caldo con panna montata"},
+            {nome: "Lemon Drop Martini", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 30, gradazione: 40}, {nome: "Triple Sec", volume: 20, gradazione: 30}, {nome: "Succo di Limone", volume: 15, gradazione: 0}], metodo:"Shaken", bicchiere: 120, note: "A scelta, servito con zucchero sul bordo"},
+            {nome: "London Mule", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Ginger Beer", volume: 120, gradazione: 0}, {nome: "Succo di Lime", volume: 10, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Servito in tazza di rame"},
+            {nome: "Long Island", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 15, gradazione: 40}, {nome: "Rum Bianco", volume: 15, gradazione: 40}, {nome: "Gin", volume: 15, gradazione: 40}, {nome: "Tequila", volume: 15, gradazione: 40}, {nome: "Triple Sec", volume: 15, gradazione: 30}], metodo:"Built", bicchiere: 200, note: "Completare con Cola"},
+            {nome: "Long Island Iced Tea", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 15, gradazione: 40}, {nome: "Rum Bianco", volume: 15, gradazione: 40}, {nome: "Gin", volume: 15, gradazione: 40}, {nome: "Tequila", volume: 15, gradazione: 40}, {nome: "Triple Sec", volume: 15, gradazione: 30}, {nome: "Succo di Limone", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 30, gradazione: 0}, {nome: "Cola", volume: 60, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Servito con ghiaccio e fetta di limone (opzionale)"},
+            {nome: "Mai Tai", categoria: "Contemporary", ingredienti: [{nome: "Rum Scuro (Amber Jamaican)", volume: 30, gradazione: 40}, {nome: "Rum Bianco (Martinique Molasses)", volume: 30, gradazione: 40}, {nome: "Triple Sec (Orange Curacao)", volume: 15, gradazione: 25}, {nome: "Sciroppo d'Orzata", volume: 15, gradazione: 0}, {nome: "Succo di Lime", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 7.5, gradazione: 0}], metodo:"Shaken", bicchiere: 200, note: "Servito con ananas, foglie di menta e scorza di lime"},
+            {nome: "Margarita", categoria: "Contemporary", ingredienti: [{nome: "Agave Tequila", volume: 50, gradazione: 42.5}, {nome: "Triple Sec", volume: 20, gradazione: 30}, {nome: "Succo di Lime", volume: 15, gradazione: 0}], metodo:"Shaken", bicchiere: 200, note: "Servito con metà bordo salato (opzionale)"},
+            {nome: "Mimosa", categoria: "Contemporary", ingredienti: [{nome: "Champagne", volume: 75, gradazione: 12}, {nome: "Succo d'Arancia", volume: 75, gradazione: 0}], metodo:"Built", bicchiere: 180, note: "Servito in flute"},
+            {nome: "Mint Julep", categoria: "Contemporary", ingredienti: [{nome: "Bourbon", volume: 60, gradazione: 40}, {nome: "Zucchero a Velo", volume: 5, gradazione: 0}, {nome: "Acqua", volume: 10, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Servito con ghiaccio tritato e 4 rametti di menta fresca"},
+            {nome: "Mojito", categoria: "Contemporary", ingredienti: [{nome: "Rum Bianco (Cubano)", volume: 45, gradazione: 40}, {nome: "Menta", volume: 10, gradazione: 0}, {nome: "Zucchero di Canna Bianco", volume: 10, gradazione: 0}, {nome: "Lime", volume: 20, gradazione: 0}, {nome: "Soda Water", volume: 100, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Pestare menta e zucchero"},
+            {nome: "Moscow Mule", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 45, gradazione: 40}, {nome: "Ginger Beer", volume: 120, gradazione: 0}, {nome: "Succo di Lime", volume: 10, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Servito in tazza di rame"},
+            {nome: "Piña Colada", categoria: "Contemporary", ingredienti: [{nome: "Rum Bianco", volume: 50, gradazione: 40}, {nome: "Latte di Cocco", volume: 30, gradazione: 0}, {nome: "Succo di Ananas", volume: 50, gradazione: 0}], metodo:"Shaken", bicchiere: 200, note: "Servito con una fetta di ananas e una ciliegina da cocktail"},
+            {nome: "Pisco Sour", categoria: "Contemporary", ingredienti: [{nome: "Pisco", volume: 60, gradazione: 45}, {nome: "Succo di Limone", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 20, gradazione: 0}, {nome: "Albume", volume: 15, gradazione: 0}, {nome: "Angostura bitter", volume: 2, gradazione: 44.7}], metodo:"Shaken", bicchiere: 150, note: "Servito con schiuma"},
+            {nome: "Sex on the Beach", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Peach Schnapps", volume: 20, gradazione: 12}, {nome: "Succo d'Arancia", volume: 40, gradazione: 0}, {nome: "Succo di Mirtillo", volume: 40, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Servito con ghiaccio"},
+            {nome: "Tequila Sunrise", categoria: "Contemporary", ingredienti: [{nome: "Tequila", volume: 45, gradazione: 40}, {nome: "Succo d'Arancia", volume: 90, gradazione: 0}, {nome: "Sciroppo di Granatina", volume: 15, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Servito con gradiente di colore"},
+            {nome: "Vesper", categoria: "Contemporary", ingredienti: [{nome: "Gin", volume: 45, gradazione: 40}, {nome: "Vodka", volume: 15, gradazione: 40}, {nome: "Lillet Blanc", volume: 7.5, gradazione: 17}], metodo:"Shaken", bicchiere: 150, note: "Servito con scorza di limone"},
+            {nome: "White Russian", categoria: "Contemporary", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Kahlúa", volume: 25, gradazione: 20}, {nome: "Panna", volume: 25, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Versione cremosa del Black Russian"},
+            {nome: "Zombie", categoria: "Contemporary", ingredienti: [{nome: "Rum Bianco (Gold Puerto Rican)", volume: 45, gradazione: 40}, {nome: "Rum Scuro (Jamaican)", volume: 45, gradazione: 40}, {nome: "Rum Agricolo (Demerara)", volume: 30, gradazione: 43}, {nome: "Succo di Lime", volume: 20, gradazione: 0}, {nome: "Falernum", volume: 15, gradazione: 11}, {nome: "Donn's Mix", volume: 15, gradazione: 0}, {nome: "Sciroppo di Granatina", volume: 5, gradazione: 0}, {nome: "Angostura bitter", volume: 1, gradazione: 44.7}, {nome: "Liquore all'anice (Pernod)", volume: 0.3, gradazione: 40}], metodo:"Shaken", bicchiere: 200, note: "Servire con foglie di menta"},
+
+            // Cocktail New Era (The New Era) 32
+            {nome: "Bee's Knees", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 52.5, gradazione: 40}, {nome: "Sciroppo al Miele", volume: 10, gradazione: 0}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}, {nome: "Succo d'Arancia", volume: 22.5, gradazione: 0}], metodo:"Shaken", bicchiere: 120, note: "Guarnizione facoltativa con una scorza di limone o di arancia"},
+            {nome: "Bramble", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 50, gradazione: 40}, {nome: "Succo di Limone", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 12.5, gradazione: 0}, {nome: "Crème de Mure", volume: 15, gradazione: 16}], metodo:"Shaken", bicchiere: 120, note: "Guarnizione facoltativa con una fetta di limone e more fresche"},
+            {nome: "Cedro Tonic", categoria: "New Era", ingredienti: [{nome: "Acqua di Cedro", volume: 50, gradazione: 29}, {nome: "Acqua Tonica", volume: 150, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Servito con ghiaccio e scorza di cedro. Acqua di Cedro è un liquore fruttato distillato da Nardini"},
+            {nome: "Chartreuse Swizzle", categoria: "New Era", ingredienti: [{nome: "Green Chartreuse", volume: 45, gradazione: 55}, {nome: "Succo di Lime", volume: 22.5, gradazione: 0}, {nome: "Sciroppo d'Ananas", volume: 30, gradazione: 0}, {nome: "Liquore speziato (Falernum)", volume: 15, gradazione: 11}], metodo:"Built", bicchiere: 150, note: "Guarnizione con foglie di menta e noce moscata grattugiata"},
+            {nome: "Dark 'n' Stormy", categoria: "New Era", ingredienti: [{nome: "Rum Scuro (Goslings)", volume: 60, gradazione: 75.5}, {nome: "Ginger Beer", volume: 100, gradazione: 0}, {nome: "Succo di Lime", volume: 10, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Guarnizione con uno spicchio di lime o una fetta di lime. Trademark di Gosling's"},
+            {nome: "Don's Special Daiquiri", categoria: "New Era", ingredienti: [{nome: "Gold Jamaican Rum", volume: 30, gradazione: 40}, {nome: "Cuban Rum", volume: 15, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Sciroppo al Passion Fruit", volume: 15, gradazione: 0}, {nome: "Sciroppo al Miele", volume: 15, gradazione: 0}], metodo:"Built", bicchiere: 150, note: "Guarnizione con 1/2 passion fruit. Servito con ghiaccio tritato"},
+            {nome: "Espresso Martini", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Kahlúa", volume: 30, gradazione: 16}, {nome: "Espresso", volume: 25, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 10, gradazione: 0}], metodo:"Shaken", bicchiere: 130, note: "Servito con 3 chicchi di caffè"},
+            {nome: "Fernandito", categoria: "New Era", ingredienti: [{nome: "Fernet Branca", volume: 50, gradazione: 39}, {nome: "Cola", volume: 150, gradazione: 0}], metodo:"Built", bicchiere: 200, note: "Servito con ghiaccio e fetta di limone (opzionale)"},
+            {nome: "French Martini", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 45, gradazione: 40}, {nome: "Liquore di Lamponi (Chambord)", volume: 15, gradazione: 16.5}, {nome: "Succo di Ananas", volume: 15, gradazione: 0}], metodo:"Shaken", bicchiere: 100, note: "Spremere l'olio dalla buccia di limone sulla bevanda. Servito in coppa cocktail"},
+            {nome: "Gimlet", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 60, gradazione: 40}, {nome: "Cordiale di Lime", volume: 30, gradazione: 0}], metodo:"Stirred", bicchiere: 120, note: "Servito ghiacciato. Possibile sostituzione del Gin con Vodka"},
+            {nome: "Gin Basil Smash", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 60, gradazione: 40}, {nome: "Basilico Fresco", volume: 5, gradazione: 0}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 22.5, gradazione: 0}], metodo:"Shaken", bicchiere: 180, note: "Pestare basilico e zucchero"},
+            {nome: "Grand Margarita", categoria: "New Era", ingredienti: [{nome: "Agave Tequila", volume: 45, gradazione: 42.5}, {nome: "Grand Marnier", volume: 30, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}], metodo:"Shaken", bicchiere: 200, note: "Guarnizione con una fetta di lime"},
+            {nome: "Hot Toddy", categoria: "New Era", ingredienti: [{nome: "Whiskey", volume: 50, gradazione: 40}, {nome: "Miele", volume: 10, gradazione: 0}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Acqua Calda", volume: 120, gradazione: 0}], metodo:"Hot", bicchiere: 250, note: "Drink caldo invernale. Aggiungere spezie come Cannella e Chiodi di Garofano"},
+            {nome: "Iba Tiki", categoria: "New Era", ingredienti: [{nome: "Rum Bianco (Profundo Havana Club)", volume: 30, gradazione: 35}, {nome: "Rum Scuro (Smoky Havana Club)", volume: 30, gradazione: 40}, {nome: "Amaretto", volume: 15, gradazione: 28}, {nome: "Liquore alle Nocciole (Frangelico)", volume: 5, gradazione: 36.5}, {nome: "Maraschino (Luxardo)", volume: 3, gradazione: 40}, {nome: "Purea di Passion Fruit", volume: 30, gradazione: 0}, {nome: "Succo d'Ananas", volume: 90, gradazione: 0}, {nome: "Succo di Lime", volume: 30, gradazione:0}], metodo:"Shaken", bicchiere: 300, note: "Guarnizione con agrumi e una fetta d'ananas disidratato"},
+            {nome: "Jager Bomb", categoria: "New Era", ingredienti: [{nome: "Jägermeister", volume: 50, gradazione: 35}, {nome: "Energy Drink", volume: 150, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Preferibilmente servito con un bicchierino di Jägermeister da far cadere nell'energy drink"},
+            {nome: "Malibu Cola", categoria: "New Era", ingredienti: [{nome: "Malibu", volume: 50, gradazione: 21}, {nome: "Cola", volume: 150, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Servito con ghiaccio, fetta di lime o menta (opzionali)"},
+            {nome: "Naked and Famous", categoria: "New Era", ingredienti: [{nome: "Mezcal", volume: 22.5, gradazione: 60}, {nome: "Aperol", volume: 22.5, gradazione: 11}, {nome: "Yellow Chartreuse", volume: 22.5, gradazione: 43}, {nome: "Succo di Limone", volume: 22.5, gradazione: 0}], metodo:"Shaken", bicchiere: 120, note: "Cocktail affumicato e agrumato"},
+            {nome: "New York Sour", categoria: "New Era", ingredienti: [{nome: "Whiskey", volume: 60, gradazione: 41.5}, {nome: "Succo di Limone", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 22.5, gradazione: 0}, {nome: "Vino Rosso", volume: 15, gradazione: 13.5}], metodo:"Shaken", bicchiere: 200, note: "Aggiungere alcune gocce di albume d'uovo. Guarnizione con scorza di limone o arancia e ciliegia"},
+            {nome: "Old Cuban", categoria: "New Era", ingredienti: [{nome: "Rum Scuro (Aged)", volume: 45, gradazione: 40}, {nome: "Champagne/Prosecco (Brut)", volume: 60, gradazione: 12}, {nome: "Succo di Lime", volume: 22.5, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 30, gradazione: 0}, {nome: "Angostura bitter", volume: 1, gradazione: 44.7}], metodo:"Shaken", bicchiere: 200, note: "Guarnizione con menta fresca e scorza di lime"},
+            {nome: "Painkiller", categoria: "New Era", ingredienti: [{nome: "Rum Scuro (Pusser's)", volume: 60, gradazione: 40}, {nome: "Succo di Ananas", volume: 60, gradazione: 0}, {nome: "Succo d'Arancia", volume: 30, gradazione: 0}, {nome: "Latte di Cocco", volume: 30, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Guarnizione con noce moscata grattuggiata"},          
+            {nome: "Paloma", categoria: "New Era", ingredienti: [{nome: "Agave Tequila", volume: 50, gradazione: 42.5}, {nome: "Pink Grapefruit Soda", volume: 100, gradazione: 0}, {nome: "Succo di Lime", volume: 5, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Servito con sale sul bordo"},
+            {nome: "Paper Plane", categoria: "New Era", ingredienti: [{nome: "Bourbon", volume: 30, gradazione: 40}, {nome: "Aperol", volume: 30, gradazione: 11}, {nome: "Amaro Nonino", volume: 30, gradazione: 35}, {nome: "Succo di Limone", volume: 30, gradazione: 0}], metodo:"Shaken", bicchiere: 150, note: "Un tempo pensato con il Campari; rivisitazione del cocktail Last Word"},
+            {nome: "Porn Star Martini", categoria: "New Era", ingredienti: [{nome: "Vanilla Vodka", volume: 50, gradazione: 38}, {nome: "Liquore al Passion Fruit", volume: 20, gradazione: 17}, {nome: "Purea di Passion Fruit", volume: 50, gradazione: 0}, {nome: "Sciroppo alla Vaniglia", volume: 10, gradazione: 0}, {nome: "Champagne", volume: 50, gradazione: 12.2}], metodo:"Shaken", bicchiere: 150, note: "Accompagnare con un bicchierino di Champagne (50 ml)"},
+            {nome: "Rum e Cola", categoria: "New Era", ingredienti: [{nome: "Rum Bianco", volume: 50, gradazione: 40}, {nome: "Cola", volume: 150, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Servito con ghiaccio"},
+            {nome: "Skinny Bitch", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Succo di Lime", volume: 15, gradazione: 0}, {nome: "Soda Water", volume: 150, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Versione leggera del Vodka Soda"},
+            {nome: "Suffering Bastard", categoria: "New Era", ingredienti: [{nome: "Gin", volume: 30, gradazione: 40}, {nome: "Cognac/Brandy", volume: 30, gradazione: 40}, {nome: "Succo di Limone", volume: 15, gradazione: 0}, {nome: "Ginger Beer", volume: 90, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Servito con Ginger Beer a parte"},
+            {nome: "Tom Collins", categoria: "New Era", ingredienti: [{nome: "Gin (Old Tom)", volume: 45, gradazione: 40}, {nome: "Succo di Limone", volume: 30, gradazione: 0}, {nome: "Sciroppo di Zucchero", volume: 15, gradazione: 0}, {nome: "Soda Water", volume: 60, gradazione: 0}], bicchiere: 200, note: "Guarnizione con fetta di limone. Versione lunga del Gin Sour. Metodo: shaken o built"},
+            {nome: "Tommy's Margarita", categoria: "New Era", ingredienti: [{nome: "Agave Tequila", volume: 60, gradazione: 42.5}, {nome: "Succo di Lime", volume: 30, gradazione: 0}, {nome: "Sciroppo di Agave", volume: 30, gradazione: 0}], metodo:"Shaken", bicchiere: 150, note: "Versione senza Triple Sec"},
+            {nome: "Vieux Carré", categoria: "New Era", ingredienti: [{nome: "Whiskey Rye", volume: 30, gradazione: 40}, {nome: "Cognac", volume: 30, gradazione: 40}, {nome: "Vermouth Rosso", volume: 30, gradazione: 19}, {nome: "Bénédictine", volume: 15, gradazione: 40}, {nome: "Peychaud's Bitters", volume: 2, gradazione: 35}], metodo:"Stirred", bicchiere: 150, note: "Prende il nome dal quartiere Vieux Carré, il centro storico più antico di New Orleans"},
+            {nome: "Vodka Redbull", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Redbull", volume: 150, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Servito con ghiaccio"},
+            {nome: "Vodka Soda", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 40, gradazione: 40}, {nome: "Soda Water", volume: 150, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Servito con ghiaccio e fetta di lime (opzionale)"},
+            {nome: "Vodka Tonic", categoria: "New Era", ingredienti: [{nome: "Vodka", volume: 50, gradazione: 40}, {nome: "Acqua Tonica", volume: 150, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Servito con ghiaccio e fetta di lime (opzionale)"},
+
+            // APERITIVI 19
+            {nome: "Agua de Valencia", categoria: "Aperitivo", ingredienti: [{nome: "Gin", volume: 5, gradazione: 40}, {nome: "Vodka", volume: 5, gradazione: 40}, {nome: "Succo d'Arancia", volume: 40, gradazione: 0}, {nome: "Cava", volume: 130, gradazione: 11}, {nome: "Zucchero", volume: 5, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Cocktail spagnolo originariamente servito in pitcher"},
+            {nome: "Bellini", categoria: "Aperitivo", ingredienti: [{nome: "Prosecco", volume: 100, gradazione: 11}, {nome: "Purè di Pesca", volume: 50, gradazione: 0}], metodo:"Built", bicchiere: 180, note: "Servito in flute"},
+            {nome: "Campari Soda", categoria: "Aperitivo", ingredienti: [{nome: "Miscela di Campari e Seltz", volume: 98, gradazione: 10}], metodo:"Neat", bicchiere: 100, note: "È il primo pre-mix pronto all'uso nella storia dei prodotti a bassa gradazione alcolica. A Bassano del Grappa è tristemente noto per essere il protagonista di una roulette alcolica."},
+            {nome: "Hugo", categoria: "Aperitivo", ingredienti: [{nome: "Liquore di Fiori di Sambuco (St-Germain)", volume: 40, gradazione: 20}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}, {nome: "Menta Fresca", volume: 5, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Servito con ghiaccio e lime"},
+            {nome: "Leone", categoria: "Aperitivo", ingredienti: [{nome: "Aperitivo Leone", volume: 90, gradazione: 22}, {nome: "Soda Water", volume: 90, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Rivisitazione Americano con finale tendenzialmente più dolce - Leon Bar, Bassano del Grappa. Servito con ghiaccio"},
+            {nome: "Mezzo e Mezzo", categoria: "Aperitivo", ingredienti: [{nome: "Mezzo e Mezzo", volume: 7.5, gradazione: 22}, {nome: "Soda Water", volume: 7.5, gradazione: 0}], metodo:"Built", bicchiere: 80, note: "Aperitivo tradizionale della distilleria Nardini, Bassano del Grappa. Preparato miscelando una parte di Mezzoemezzo con una parte di seltz"},
+            {nome: "Milano Torino", categoria: "Aperitivo", ingredienti: [{nome: "Campari", volume: 40, gradazione: 25}, {nome: "Vermouth Rosso", volume: 40, gradazione: 16}], metodo:"Built", bicchiere: 150, note:"Un grande classico dell'aperitivo italiano, base di molti cocktail famosi. Servito con ghiaccio e fetta d'arancia"},
+            {nome: "Spritz Aperol", categoria: "Aperitivo", ingredienti: [{nome: "Aperol", volume: 60, gradazione: 11}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Servito con fetta d'arancia"},
+            {nome: "Spritz Aperol Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Aperol", volume: 90, gradazione: 11}, {nome: "Prosecco", volume: 90, gradazione: 11}], metodo:"Built", bicchiere: 250, note: "Spritz Aperol senza soda water"},
+            {nome: "Spritz Campari", categoria: "Aperitivo", ingredienti: [{nome: "Campari", volume: 60, gradazione: 25}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Spritz classico con Campari"},
+            {nome: "Spritz Campari Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Campari", volume: 90, gradazione: 25}, {nome: "Prosecco", volume: 90, gradazione: 11}], metodo:"Built", bicchiere: 250, note: "Spritz Campari senza soda water"},
+            {nome: "Spritz Cynar", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 60, gradazione: 16.5}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Spritz classico con Cynar"},
+            {nome: "Spritz Cynar Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 90, gradazione: 16.5}, {nome: "Prosecco", volume: 90, gradazione: 11}], metodo:"Built", bicchiere: 250, note: "Spritz Cynar senza soda water"},
+            {nome: "Spritz Cynar 70 Proof", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 60, gradazione: 35}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Spritz classico con Cynar"},
+            {nome: "Spritz Cynar 70 Proof Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Cynar", volume: 90, gradazione: 35}, {nome: "Prosecco", volume: 90, gradazione: 11}], metodo:"Built", bicchiere: 250, note: "Spritz Cynar senza soda water"},
+            {nome: "Spritz Liscio", categoria: "Aperitivo", ingredienti: [{nome: "Prosecco", volume: 90, gradazione: 11}, {nome: "Soda Water", volume: 90, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Denominato anche Spritz Bianco, è una variante senza bitter dello Spritz classico"},
+            {nome: "Spritz Select", categoria: "Aperitivo", ingredienti: [{nome: "Select", volume: 60, gradazione: 17.5}, {nome: "Prosecco", volume: 60, gradazione: 11}, {nome: "Soda Water", volume: 60, gradazione: 0}], metodo:"Built", bicchiere: 250, note: "Spritz classico con Select"},
+            {nome: "Spritz Select Veneziana", categoria: "Aperitivo", ingredienti: [{nome: "Select", volume: 90, gradazione: 17.5}, {nome: "Prosecco", volume: 90, gradazione: 11}], metodo:"Built", bicchiere: 250, note: "Spritz Select senza soda water"},
+            {nome: "Te+", categoria: "Aperitivo", ingredienti: [{nome: "Te+ (Origin Bassano)", volume: 170, gradazione: 9.5}], metodo:"Neat", bicchiere: 250, note: "Estratto alcolico al tè pesca - Origin Bar, Bassano del Grappa"},
+
+            // BIRRE 14
+            {nome: "Lager Piccola", categoria: "Birra", ingredienti: [{nome: "Birra Lager", volume: 330, gradazione: 4.8}], metodo:"Neat", bicchiere: 330, note: "Birra chiara stile Pilsner e Helles, tipo Heineken, Corona Extra, Budweiser, Beck's, Peroni, Nastro Azzurro, Moretti, Carlsberg, Menabrea, Forst, Stella Artois.<br>(ABV medio 4.2-5.4%)"},
+            {nome: "Lager Media", categoria: "Birra", ingredienti: [{nome: "Birra Lager", volume: 400, gradazione: 4.8}], metodo:"Neat", bicchiere: 400, note: "Birra chiara stile Pilsner e Helles, tipo Heineken, Corona Extra, Budweiser, Beck's, Peroni, Nastro Azzurro, Moretti, Carlsberg, Menabrea, Forst, Stella Artois.<br>(ABV medio 4.2-5.4%)"},
+            {nome: "Weiss Piccola", categoria: "Birra", ingredienti: [{nome: "Birra Weiss", volume: 330, gradazione: 5.0}], metodo:"Neat", bicchiere: 330, note: "Birra di frumento tipo Franziskaner Hell, Paulaner, Erdinger, Weihenstephaner, Schneider, Hofbräu, Lowenbräu.<br>(ABV medio 4.5-5.5%)"},
+            {nome: "Weiss Media", categoria: "Birra", ingredienti: [{nome: "Birra Weiss", volume: 400, gradazione: 5.0}], metodo:"Neat", bicchiere: 400, note: "Birra di frumento tipo Franziskaner Hell, Paulaner, Erdinger, Weihenstephaner, Schneider, Hofbräu, Lowenbräu.<br>(ABV medio 4.5-5.5%)"},
+            {nome: "IPA Piccola", categoria: "Birra", ingredienti: [{nome: "Birra IPA", volume: 330, gradazione: 6.0}], metodo:"Neat", bicchiere: 330, note: "India Pale Ale tipo BrewDog, Stone Brewing, Mikkeller.<br>Stili: American, English, New England.<br>(ABV medio 4.5-7.5%)"},
+            {nome: "IPA Media", categoria: "Birra", ingredienti: [{nome: "Birra IPA", volume: 400, gradazione: 6.0}], metodo:"Neat", bicchiere: 400, note: "India Pale Ale tipo BrewDog, Stone Brewing, Mikkeller.<br>Stili: American, English, New England.<br>(ABV medio 4.5-7.5%)"},
+            {nome: "Double/Imperial IPA Piccola", categoria: "Birra", ingredienti: [{nome: "Birra IPA", volume: 330, gradazione: 9.0}], metodo:"Neat", bicchiere: 330, note: "India Pale Ale. Stile Double o Imperial.<br>(ABV medio 7.5-10.5%)"},
+            {nome: "Double/Imperial IPA Media", categoria: "Birra", ingredienti: [{nome: "Birra IPA", volume: 400, gradazione: 9.0}], metodo:"Neat", bicchiere: 400, note: "India Pale Ale. Stile Double o Imperial.<br>(ABV medio 7.5-10.5%)"},
+            {nome: "Session IPA Piccola", categoria: "Birra", ingredienti: [{nome: "Birra IPA", volume: 330, gradazione: 4.3}], metodo:"Neat", bicchiere: 330, note: "India Pale Ale. Stile Session.<br>(ABV medio 3.7-5%)"},
+            {nome: "Session IPA Media", categoria: "Birra", ingredienti: [{nome: "Birra IPA", volume: 400, gradazione: 4.3}], metodo:"Neat", bicchiere: 400, note: "India Pale Ale. Stile Session.<br>(ABV medio 3.7-5%)"},
+            {nome: "Scura Piccola", categoria: "Birra", ingredienti: [{nome: "Birra Scura", volume: 330, gradazione: 5.2}], metodo:"Neat", bicchiere: 330, note: "Birra scura tipo Guinnes, Chimay, Gulden Draak, Anchor Porter, Baladin Leon.<br>Stili: Stout, Porter, Trappist.<br>(ABV medio 4-6.5%)"},
+            {nome: "Scura Media", categoria: "Birra", ingredienti: [{nome: "Birra Scura", volume: 400, gradazione: 5.2}], metodo:"Neat", bicchiere: 400, note: "Birra scura tipo Guinnes, Chimay, Gulden Draak, Anchor Porter.<br>Stili: Stout, Porter, Trappist.<br>(ABV medio 4-6.5%)"},
+            {nome: "Doppio Malto Piccola", categoria: "Birra", ingredienti: [{nome: "Birra Doppio Malto", volume: 330, gradazione: 8.5}], metodo:"Neat", bicchiere: 330, note: "Birra forte tipo Chimay Tappo Blu, Duvel, Baladin Leon, Peroni Doppio Malto, Forst Sixtus, Leffe Rouge, Tennent's (Super), Ceres (Extreme Ten).<br>Stili: Strong Ale, Barley Wine, Imperial Stout.<br>(ABV medio 7-10%)"},
+            {nome: "Doppio Malto Media", categoria: "Birra", ingredienti: [{nome: "Birra Doppio Malto", volume: 400, gradazione: 8.5}], metodo:"Neat", bicchiere: 400, note: "Birra forte tipo Chimay Tappo Blu, Duvel, Baladin Leon, Peroni Doppio Malto, Forst Sixtus, Leffe Rouge, Tennent's (Super), Ceres (Extreme Ten).<br>Stili: Strong Ale, Barley Wine, Imperial Stout.<br>(ABV medio 7-10%)"},
+            
+            // VINI - Standard 7
+            {nome: "Vino Rosso", categoria: "Vino", ingredienti: [{nome: "Vino Rosso", volume: 135, gradazione: 13.5}], metodo:"Neat", bicchiere: 350, note: "Etichette tipo Chianti Classico, Barolo, Barbaresco, Sangiovese, Sassicaia, Ornellaia, Tignanello, Amarone della Valpolicella, Brunello di Montalcino, Montepulciano, Montefalco Sagrantino, Cannonau, Etna Rosso.<br>(ABV medio 12-15%)"},
+            {nome: "Vino Bianco", categoria: "Vino", ingredienti: [{nome: "Vino Bianco", volume: 120, gradazione: 12.5}], metodo:"Neat", bicchiere: 300, note: "Etichette tipo Soave, Pinot Grigio, Falanghina, Vermentino, Ribolla Gialla, (Cortese di) Gavi, Etna Bianco, Greco di Tufo, Verdicchio, Fiano, Chardonnay, Chablis, Sauvignon Blanc, Riesling, Gewürztraminer, Grüner Veltliner.<br>(ABV medio 11-14%)"},
+            {nome: "Vino Rosato", categoria: "Vino", ingredienti: [{nome: "Vino Rosato", volume: 120, gradazione: 12.0}], metodo:"Neat", bicchiere: 300, note: "Etichette tipo Cerasuolo d'Abruzzo, Chiaretto, Rosati del Salento, Trentodoc Rosé, Cremant de Bourgogne, Côtes de Provence, Tavel AOC.<br>(ABV medio 11-13.5%)"},
+            {nome: "Prosecco", categoria: "Vino", ingredienti: [{nome: "Prosecco", volume: 100, gradazione: 11.0}], metodo:"Neat", bicchiere: 180, note: "Etichette tipo Santa Margherita, Mionetto, Valdo, Carpenè-Malvolti, Zonin, Ruggeri, Nino Franco.<br>Vigneti: Valdobbiadene, Conegliano, Cartizze, Rive.<br> (ABV medio 10.5-12%)"},
+            {nome: "Champagne", categoria: "Vino", ingredienti: [{nome: "Champagne", volume: 110, gradazione: 12.5}], metodo:"Neat", bicchiere: 180, note: "Etichette tipo Barons de Rothschild, Bollinger, Charles Heidsieck, Dom Pérignon, Drappier, Krug, Laurent-Perrier, Louis Roederer, Moët & Chandon, Veuve Clicquot.<br>(ABV medio 12-13%)"},
+            {nome: "Vino Dolce", categoria: "Vino", ingredienti: [{nome: "Vino Dolce", volume: 100, gradazione: 7.0}], metodo:"Neat", bicchiere: 200, note: "Etichette tipo Moscato d'Asti, Asti Spumante, Fior d'Arancio Colli Euganei, Malvasia di Castelnuovo Don Bosco, Lambrusco, Cagnina di Romagna, Riesling Spätlese, Clairette de Die Méthode Dioise Ancestrale.<br>(ABV medio 5-9%)"},
+            {nome: "Passito", categoria: "Vino", ingredienti: [{nome: "Passito", volume: 70, gradazione: 15.5}], metodo:"Neat", bicchiere: 200, note: "Etichette tipo Passito (Pantelleria, Siracusa), Vin Santo (Chianti, Montepulciano), Recioto (Valpolicella, Soave, Gambellara), Torcolato Breganze, Sagrantino di Montefalco Passito, Picolit del Friuli, Sciacchetrà, Sauternes, Malvasia, Moscato de Setúbal.<br>(ABV medio 14-18%)"}
+        ];
+
+        let addedDrinks = [];
+
+        // Calcolare il fattore fitness
+        function calcolaFattoreFitness(fitnessLevel) {
+            // Basato sulle evidenze scientifiche trovate:
+            // - Un fisico sano aumenta l'eliminazione dell'alcol
+            // - Maggiore massa magra = eliminazione più veloce
+            // - Le persone allenate hanno migliore composizione corporea
+            
+            switch(fitnessLevel) {
+                case 'atleta':
+                    return 1.18; // +18% di efficienza
+                case 'attivo':
+                    return 1.12; // +12% di efficienza
+                case 'sedentario':
+                default:
+                    return 1.0;  // Baseline
+            }
+        }
+
+        // Calcolare adjust TBW per atleti
+        // L'alcol si distribuisce principalmente nell'acqua corporea. Le persone allenate hanno:
+        // - Più massa muscolare (che contiene ~75% di acqua)
+        // - Meno tessuto adiposo (che contiene solo ~10% di acqua)
+        // - Quindi a parità di peso, hanno più acqua corporea totale
+        function calcolaFattoreTBWAdjust(fitnessLevel) {
+            switch(fitnessLevel) {
+                case 'atleta':
+                    return 1.03;  // +3% TBW (massa magra alta)
+                case 'attivo':
+                    return 1.02;  // +2% TBW
+                case 'sedentario':
+                default:
+                    return 1.0;   // Baseline
+            }
+        }
+
+        // Idratazione: supporta sia livelli qualitativi sia litri giornalieri (numero)
+        // Ritorna un moltiplicatore adimensionale da applicare a TBW
+        function calcolaFattoreTBWIdratazione(idratazione) {
+	        // Caso 1: numero -> litri di acqua bevuti nella giornata
+	        if (typeof idratazione === 'number' && !isNaN(idratazione)) {
+		        const L = Math.max(0, idratazione); // clamp
+		        // Mappa saturante e prudente:
+		        if (L < 0.5) return 0.995;    // < 0.5 L: -0.5% (disidratazione) tipo baseline
+		        if (L < 1.5) return 1.0125;   // 0.5–1.5 L: +1.25%
+                if (L < 2.0) return 1.025;    // 1.5–2.0 L: +2.5%
+		        if (L < 2.5) return 1.0275;   // 2.0–2.5 L: +2.75%
+		        return 1.030;                 // > 2.5 L: +3%
+	        }
+
+	        // Caso 2: livelli qualitativi legacy
+	        switch(idratazione) {
+		        case 'alta':
+			        return 1.0275;   // +2.75%  (TBW base più alto, dunque BAC iniziale inferiore)
+		        case 'media':
+			        return 1.015;   // +1.5%  (TBW base più alto, dunque BAC iniziale inferiore)
+		        case 'bassa':
+			        return 1.0;   // Baseline (si presuppone che un minimo d'acqua sia stato bevuto)
+		        case 'assente':
+			        return 0.99;   // -1.0% (dehyd causa BAC iniziale più alto)
+		        default:
+			        return 1.0;
+	        }
+        }
+
+        // Calcolo TBW con intervallo di confidenza 95% basato su Searle 2015
+        function calcolaTBW(genere, peso, altezza, eta, fitnessLevel, idratazione) {
+            let tbwBase, tbwSD;
+
+            // Formula Watson (1980) - equazioni validate
+            if (genere.toLowerCase() === 'uomo') {
+                tbwBase = 2.447 - (0.09516 * eta) + (0.1074 * altezza) + (0.3362 * peso);
+                tbwSD = 3.75; // Deviazione standard da Searle 2015 per uomini
+            } else {
+                tbwBase = -2.097 + (0.1069 * altezza) + (0.2466 * peso);
+                tbwSD = 2.73; // Deviazione standard da Searle 2015 per donne
+            }
+
+            // Aggiustamenti ridotti e validati
+            const tbwFitnessAdjust = calcolaFattoreTBWAdjust(fitnessLevel);
+            const tbwIdratazioneAdjust = calcolaFattoreTBWIdratazione(idratazione);
+
+            // Bias correction: 0.95 (Searle 2015)
+            // Watson sovrastima del 5% rispetto a BIA gold standard
+            const biasCorrection = 1.05; //0.95; AGGIUNGO BIAS POSITIVO PER ALZARE TBW UOMINI. NELLE DONNE POTREBBE ESSERE UN PROBLEMA
+
+            const tbwMean = tbwBase * tbwFitnessAdjust * tbwIdratazioneAdjust * biasCorrection;
+
+            // Calcola intervallo di confidenza 95% per comunicare incertezza
+            const ci95Lower = Math.max(1.0, tbwMean - 1.96 * tbwSD);
+            const ci95Upper = tbwMean + 1.96 * tbwSD;
+
+            // Per compatibilità con codice esistente, ritorna il valore medio
+            // Ma salva anche l'incertezza per uso futuro
+            const result = Math.max(tbwMean, 1.0);
+
+            // Salvo i valori di incertezza in variabili globali per mostrarli nell'UI
+            window.tbwCI = {lower: ci95Lower, upper: ci95Upper, cv: tbwSD/tbwMean * 100};
+    
+            return {
+                value: Math.max(tbwMean, 1.0),
+                lower: ci95Lower,
+                upper: ci95Upper,
+                sd: tbwSD
+            };
+        }
+
+        function calcolaFattoreWidmark(genere, peso, altezza, eta, fitnessLevel, idratazione) {
+            const tbwResult = calcolaTBW(genere, peso, altezza, eta, fitnessLevel, idratazione);
+            return {
+                value: tbwResult.value / peso,
+                tbwCI: {
+                    lower: tbwResult.lower,
+                    upper: tbwResult.upper
+                }
+            };
+        }
+
+        function calcolaGradazione(ingredienti) {
+            let alcolTotale = 0;
+            let volumeTotale = 0;
+
+            for (const ing of ingredienti) {
+                const alcolPuro = ing.volume * (ing.gradazione / 100);
+                alcolTotale += alcolPuro;
+                volumeTotale += ing.volume;
+            }
+
+            if (volumeTotale === 0) return 0;
+            return (alcolTotale / volumeTotale) * 100;
+        }
+
+        // Funzione con fattore diluizione dipendente dal metodo di preparazione
+        function calcolaGrammiAlcol(ingredienti, cocktail = null) {
+            let preparazione = 'built'; // default
+
+            if (cocktail) {
+                // PRIORITÀ 1: Birre e Vini sempre "neat" (bicchiere sempre finito, no ghiaccio)
+                if (cocktail.categoria === 'Birra' || cocktail.categoria === 'Vino') {
+                    preparazione = 'neat';
+                }
+                // PRIORITÀ 2: Se è specificato il metodo nel database, usalo
+                else if (cocktail.metodo) {
+                    preparazione = cocktail.metodo;
+                }
+                // PRIORITÀ 3: Fallback per i 3-4 cocktail senza metodo specificato di default 0.93
+            }
+
+            // Fattori di diluizione basati su evidenza empirica bartending professionale
+            const factors = {
+                'shaken': 0.90,    // Shakerato: maggior diluizione per ghiaccio tritato + aerazione
+                'stirred': 0.92,   // Mescolato: diluizione media da mixing glass
+                'built': 0.95,     // Costruito nel bicchiere: minima diluizione
+                'neat': 1.00,      // Liscio senza ghiaccio: nessuna diluizione
+                'hot': 0.90        // Caldo: considera evaporazione alcol (~10%)
+            };
+
+            // PRIORITÀ 3: Uso il fattore appropriato o default 0.93 se non specificato
+            const diluizioneFactor = factors[preparazione] || 0.93;
+
+            let alcolTotale = 0;
+            for (const ing of ingredienti) {
+                // Densità etanolo: 0.789 g/ml a 20°C
+                const alcolPuro = ing.volume * (ing.gradazione / 100) * 0.789; // g
+                alcolTotale += alcolPuro;
+            }
+    
+            return alcolTotale * diluizioneFactor;
+        }
+
+        // Modello di assorbimento con lag time basato su letteratura
+        function calculateAbsorptionWithLag(grammiAlcol, tempoMinuti, stomacoPieno, durataMinuti) {
+            if (tempoMinuti < 0) return 0;
+            // Parametri ottimizzati per assorbimento più realistico, basati sempre su Jones 2019 e Levitt et al. 2020
+            const lagTime = stomacoPieno ? 15 : 5; // Ridotto lag time per stomaco vuoto
+            const kGastrico = stomacoPieno ? 0.8 : 2.5; // Assorbimento più rapido a stomaco vuoto
+            const kDuodenale = stomacoPieno ? 1.2 : 3.0; // Assorbimento duodenale più rapido
+
+            if (tempoMinuti < lagTime) return 0;
+
+            const t = tempoMinuti - lagTime;
+
+            // Per stomaco vuoto: assorbimento bifasico (rapido iniziale + graduale)
+            if (!stomacoPieno) {
+                // Fase rapida: 60% dell'alcol assorbito rapidamente nei primi 30 min
+                const faserapida = 0.6 * grammiAlcol * (1 - Math.exp(-4.0 * t / 30));
+                // Fase graduale: 40% rimanente assorbito più lentamente
+                const faseGraduale = 0.4 * grammiAlcol * (1 - Math.exp(-kGastrico * t / 60));
+        
+                return Math.min(grammiAlcol, faserapida + faseGraduale);
+            }
+            // Per stomaco pieno: modello a due compartimenti originale ma ottimizzato
+            const gastrico = grammiAlcol * (1 - Math.exp(-kGastrico * t / 60));
+            const duodenale = grammiAlcol * kGastrico * t / 60 * Math.exp(-kDuodenale * t / 60);
+    
+            return Math.min(grammiAlcol, gastrico + duodenale);
+        }
+            // SPIEGAZIONE SEMPLICE:
+            // - Stomaco pieno = alcol entra lentamente nel sangue (BAC più basso, picco ritardato)
+            // - Stomaco vuoto = alcol entra velocemente nel sangue (BAC più alto, picco rapido)
+            // - Lag time = tempo che ci vuole prima che l'alcol raggiunga l'intestino
+
+        
+
+        // Modello di eliminazione Michaelis-Menten per alta precisione a BAC elevati
+        function getEliminationRateMM(bac, genere, fitnessLevel, timeFromFirst, activelyDrinking, idratazione, esercizioSameDay) {
+            if (bac <= 0) return 0;
+
+            // Parametri Michaelis-Menten calibrati su dati reali
+            let Vm = genere === 'uomo' ? 0.25 : 0.20; // g/L/h - Aumentato per uomini
+            let Km = 0.04; // g/L - Ridotto per metabolismo più efficiente
+
+            // Aggiustamenti per fitness level
+            const fitnessMultiplier = {
+                'sedentario': 1.0,
+                'attivo': 1.10,     // +10% per attivi
+                'atleta': 1.18      // +18% per atleti
+            };
+
+            Vm *= fitnessMultiplier[fitnessLevel] || 1.0;
+
+            // Aggiustamento per tempo dall'inizio (metabolismo si "scalda")
+            if (timeFromFirst < 60) {
+                const warmupFactor = 0.85 + 0.15 * (timeFromFirst / 60);
+                Vm *= warmupFactor;
+            }
+
+            // Aggiustamento per fase di bevuta attiva (leggero rallentamento)
+            if (activelyDrinking) {
+                Vm *= 0.95; // -5% durante bevuta attiva
+            }
+
+            // Aggiustamento per idratazione (se disponibile nel contesto)
+            if (typeof idratazione === 'number') {
+                const idratazioneBonus = Math.min(0.05, idratazione * 0.01);
+                Vm *= (1 + idratazioneBonus);
+            } else if (typeof idratazione === 'string') {
+                const idratazioneMultiplier = {
+                    'assente': 0.95,
+                    'bassa': 1.0,
+                    'media': 1.03,
+                    'alta': 1.05
+                };
+                Vm *= idratazioneMultiplier[idratazione] || 1.0;
+            }
+
+            // Formula Michaelis-Menten
+            return (Vm * bac) / (Km + bac);
+        }
+
+
+        function formatTime(hoursDecimal) {
+            if (hoursDecimal === null || hoursDecimal === undefined) return '>12h';
+            if (hoursDecimal <= 0) return 'Subito';
+            const totalMin = Math.round(hoursDecimal * 60);
+            if (totalMin < 60) {
+                return totalMin + ' minuti';
+            } else {
+                const hours = Math.floor(totalMin / 60);
+                const min = totalMin % 60;
+                return hours + ':' + (min < 10 ? '0' + min : min) + ' ore';
+            }
+        }
+
+        // FUNZIONE PRINCIPALE (con curva assorbimento)
+        function calcolaAlcolemiaMultipla(totalGrammiAlcol, genere, peso, altezza, eta, stomacoPieno = false, durataMinuti, minutiPrimo, fitnessLevel = 'sedentario', esercizioSameDay = false, idratazione, beta) {
+    
+            // Calcolo TBW e fattore Widmark con incertezza
+            const tbwResult = calcolaTBW(genere, peso, altezza, eta, fitnessLevel, idratazione);
+            const fattoreWidmark = {
+                value: tbwResult.value / peso,
+                cv: 0.092  // Coefficiente di variazione da Searle 2015
+            };
+    
+            // Parametri con incertezza (Searle 2015, Gullberg)
+            const parametriIncertezza = {
+                e_r: 0.092,    // CV fattore Widmark  
+                e_b: 0.22,     // CV tasso eliminazione
+                e_z: 0.03,     // CV gradazione alcolica (ABV)
+                e_a: 0.05,     // CV assorbimento (stimato)
+                e_v: 0.05,     // CV volume bevuto (stimato)
+                e_t: durataMinuti > 0 ? 0.1 : 0,  // CV durata (10% se non nota esattamente)
+                rho_rb: -0.135 // Correlazione r-beta
+            };
+    
+            // Calcolo BAC nominale (esistente)
+            const fattoreFitness = calcolaFattoreFitness(fitnessLevel);
+            const betaPerOraBase = 0.16;
+            const esercizioFactor = esercizioSameDay ? 0.99 : 1.0;
+
+            // Calcolo beta ottimizzato per individui attivi
+            let betaBase = genere === 'uomo' ? 0.16 : 0.13; // g/L/h - Aumentato
+
+            // Aggiustamenti per fitness
+            const fitnessAdjustment = {
+                'sedentario': 1.0,
+                'attivo': 1.12,     // +12% per attivi
+                'atleta': 1.18      // +18% per atleti
+            };
+
+            betaBase *= fitnessAdjustment[fitnessLevel] || 1.0;
+
+            // Aggiustamento per esercizio stesso giorno (leggero rallentamento)
+            if (esercizioSameDay) {
+                betaBase *= 0.99; // -1% se allenato oggi
+            }
+
+            // Aggiustamento per idratazione
+            if (typeof idratazione === 'number') {
+                // Se litri di acqua specificati
+                const idratazioneBonus = Math.min(0.05, idratazione * 0.01); // Max +5%
+                betaBase *= (1 + idratazioneBonus);
+            } else {
+                // Categorie di idratazione legacy
+                const idratazioneMultiplier = {
+                    'assente': 0.99,
+                    'bassa': 1.0,
+                    'media': 1.03,
+                    'alta': 1.05
+                };
+                betaBase *= idratazioneMultiplier[idratazione] || 1.0;
+            }
+            const betaPerOra = betaBase;
+    
+            // Preparazione tempi ingestioni
+            let tempiIngestioni = [];
+            let totalDrinks = addedDrinks.reduce((sum, drink) => sum + drink.qty, 0);
+            
+            if (totalDrinks === 1) {
+                // Un solo drink all'inizio
+                addedDrinks.forEach(drink => {
+                    const grammiSingle = calcolaGrammiAlcol(cocktailDatabase[drink.index].ingredienti, cocktailDatabase[drink.index]);
+                    if (grammiSingle <= 0) return;
+                    tempiIngestioni.push({tempo: 0, grammi: grammiSingle});
+                });
+            } else {
+                // Distribuzione con primo drink subito, altri distribuiti
+                let drinkCount = 0;
+                addedDrinks.forEach(drink => {
+                    const grammiSingle = calcolaGrammiAlcol(cocktailDatabase[drink.index].ingredienti, cocktailDatabase[drink.index]);
+                    if (grammiSingle <= 0) return;
+        
+                    for (let q = 0; q < drink.qty; q++) {
+                        // Primo drink a t=0, altri distribuiti uniformemente
+                        const tempo = drinkCount === 0 ? 0 : 
+                            (drinkCount * durataMinuti) / (totalDrinks - 1);
+                        tempiIngestioni.push({tempo: tempo, grammi: grammiSingle});
+                        drinkCount++;
+                    }
+                });
+            }
+
+            // NUOVA FUNZIONE: Integratore numerico accurato per BAC
+            function integrateBACWithMM(tempiIngestioni, params, timePoint) {
+            // params deve contenere: peso, fattoreWidmark, genere, fitnessLevel, stomacoPieno
+                // Guard clauses
+                if (!tempiIngestioni || tempiIngestioni.length === 0) {
+                    console.warn('Nessuna ingestione definita');
+                    return 0;
+                }
+    
+                if (!params || !params.peso || !params.fattoreWidmark) {
+                    throw new Error('Parametri mancanti: peso e fattoreWidmark richiesti');
+                }
+    
+                if (timePoint < 0) {
+                    console.warn('Tempo negativo, uso 0');
+                    timePoint = 0;
+                }
+
+                // Runge-Kutta 4 per maggior precisione
+                function calculateAbsorptionRateAt(timeMinuti, tempiIngestioni, params) {
+                    let totalRate = 0;
+
+                    tempiIngestioni.forEach(ingestione => {
+                        const timeSinceThisDrink = timeMinuti - ingestione.tempo;
+                        // Ferma l'assorbimento dopo 60 minuti dall'ingestione – Jones 2019 indica 60-90 min per assorbimento completo
+                        if (timeSinceThisDrink <= 0) return; // Drink non ancora consumato
+                        
+                        const grammiAlcol = ingestione.grammi;
+                        const stomacoPieno = params.stomacoPieno;
+
+                        // Parametri ottimizzati per assorbimento più rapido
+                        const ka = stomacoPieno ? 0.012 : 0.025; // min^-1
+                        const tmax = stomacoPieno ? 60 : 30; // minuti al picco
+
+                        // Modello Weibull modificato per assorbimento più realistico
+                        if (timeSinceThisDrink < 180) { // Assorbimento completo entro 3 ore
+                            const beta = 2.0; // Fattore di forma
+                            const lambda = tmax / Math.pow(Math.log(2), 1/beta);
+
+                            // Frazione assorbita al tempo t
+                            const fractionAbsorbed = 1 - Math.exp(-Math.pow(timeSinceThisDrink/lambda, beta));
+
+                            // Derivata = tasso di assorbimento
+                            const rate = (beta/lambda) * Math.pow(timeSinceThisDrink/lambda, beta-1) * 
+                                         Math.exp(-Math.pow(timeSinceThisDrink/lambda, beta)) * grammiAlcol;
+
+                            totalRate += Math.max(0, rate);
+                        }
+                    });
+                    return totalRate; // g/min
+                }
+
+                // Adaptive timestep per maggior precisione vicino ai picchi
+                function getTimeStep(t) {
+                    // Passo temporale più piccolo nelle prime 2 ore (fase critica)
+                    if (t < 60) return 0.25;  // 15 secondi per la prima ora
+                    if (t < 180) return 0.5;  // 30 secondi per le successive 2 ore
+                    if (t < 360) return 1.0;  // 1 minuto fino a 6 ore
+                    return 2.0;               // 2 minuti dopo
+                }
+
+                // Usa Runge-Kutta 4° ordine per precisione
+                // const dt = 0.5; // Step di 30 secondi per precisione
+                // const steps = Math.ceil(timePoint / dt);
+    
+                let bac = 0;
+                let t = 0;
+                let peakReached = false;
+                let lastBAC = 0;
+
+                while (t <= timePoint) {
+                    const dt = getTimeStep(t);
+
+                    // Determina se siamo in fase di bevuta attiva
+                    const activelyDrinking = tempiIngestioni.some(ing => {
+                        const tSince = t - ing.tempo;
+                        return tSince >= 0 && tSince < 45;
+                    });
+
+                    // Calcola eliminazione con context awareness e RK4 preciso
+                    const timeFromFirst = t - (tempiIngestioni[0]?.tempo || 0);
+
+                    const abs1 = calculateAbsorptionRateAt(t, tempiIngestioni, params);
+                    // Converto in g/L/min dividendo per Volume di Distribuzione (VD)
+                    const volumeDistribuzione = params.peso * params.fattoreWidmark;
+                    const absorptionRateBAC1 = abs1 / volumeDistribuzione; // ora in g/L/min
+
+                    // Calcola eliminazione in g/L/min (già nella giusta unità)
+                    const elim1 = bac > 0 ? getEliminationRateMM(bac, params.genere, params.fitnessLevel, timeFromFirst, activelyDrinking, params.idratazione, params.esercizioSameDay) / 60 : 0;
+                    const k1 = dt * (absorptionRateBAC1 - elim1);
+
+                    // Ripeto per k2, k3, k4 con la stessa logica
+                    const abs2 = calculateAbsorptionRateAt(t + dt/2, tempiIngestioni, params);
+                    const absorptionRateBAC2 = abs2 / volumeDistribuzione;
+                    const elim2 = (bac + k1/2) > 0 ? getEliminationRateMM(bac + k1/2, params.genere, params.fitnessLevel, timeFromFirst + dt/2, activelyDrinking, params.idratazione, params.esercizioSameDay) / 60 : 0;
+                    const k2 = dt * (absorptionRateBAC2 - elim2);
+
+                    const abs3 = calculateAbsorptionRateAt(t + dt/2, tempiIngestioni, params);
+                    const absorptionRateBAC3 = abs3 / volumeDistribuzione;
+                    const elim3 = (bac + k2/2) > 0 ? getEliminationRateMM(bac + k2/2, params.genere, params.fitnessLevel, timeFromFirst + dt/2, activelyDrinking, params.idratazione, params.esercizioSameDay) / 60 : 0;
+                    const k3 = dt * (absorptionRateBAC3 - elim3);
+
+                    const abs4 = calculateAbsorptionRateAt(t + dt, tempiIngestioni, params);
+                    const absorptionRateBAC4 = abs4 / volumeDistribuzione;
+                    const elim4 = (bac + k3) > 0 ? getEliminationRateMM(bac + k3, params.genere, params.fitnessLevel, timeFromFirst + dt, activelyDrinking, params.idratazione, params.esercizioSameDay) / 60 : 0;
+                    const k4 = dt * (absorptionRateBAC4 - elim4);
+
+                    bac = Math.max(0, bac + (k1 + 2*k2 + 2*k3 + k4) / 6);
+
+                    // Rileva quando raggiungiamo il picco
+                    if (bac < lastBAC && !peakReached) {
+                        peakReached = true;
+                        // Debug opzionale, ma non influente sul ritorno:
+                        // console.log(`Picco provvisorio a t=${t} min con BAC=${lastBAC.toFixed(3)} g/L`);
+                    }
+
+                    // SAFETY CHECK: Se BAC supera valori impossibili, fermati
+                    if (bac > 5.0) {
+                        console.error(`BAC impossibile: ${bac} a t=${t}. Interrompo.`);
+                        return Math.min(bac, 5.0);  // Cap a 5 g/L per sicurezza
+                    }
+
+                    lastBAC = bac;
+
+                    t += dt;
+                }
+                return bac;
+            }
+    
+            const params = {
+                peso: peso,
+                fattoreWidmark: fattoreWidmark.value,
+                genere: genere,
+                fitnessLevel: fitnessLevel,
+                stomacoPieno: stomacoPieno,
+                durataMinuti: durataMinuti,
+                idratazione: idratazione,
+                esercizioSameDay: esercizioSameDay
+            };
+
+            // TEST: Calcola BAC a vari tempi per debugging
+            console.log("=== TEST BAC ===");
+            for (let testTime = 0; testTime <= 240; testTime += 30) {
+                const testBAC = integrateBACWithMM(tempiIngestioni, params, testTime);
+               console.log(`t=${testTime}min: BAC=${testBAC.toFixed(3)} g/L`);
+    
+                // Se vediamo valori > 3 g/L c'è sicuramente un problema
+                if (testBAC > 3) {
+                   console.error(`ERRORE: BAC troppo alto a t=${testTime}`);
+                    break;
+               }
+            }
+            console.log("=== FINE TEST ===");
+    
+            // Calcolo BAC nominale con integrazione esistente
+            const alcolemiaAttuale = integrateBACWithMM(tempiIngestioni, params, minutiPrimo);
+    
+            // NUOVO: Calcolo incertezza BAC usando formula Searle eq. (1)
+            const C0 = totalGrammiAlcol / (fattoreWidmark.value * peso);  // BAC teorico senza eliminazione
+            const bt = betaPerOra * (minutiPrimo / 60);  // Eliminazione totale
+            const C = Math.max(0, C0 - bt/100);  // BAC con eliminazione
+    
+            // Formula propagazione errore Searle (2015) eq. (1)
+            const rapportoC0C = C > 0 ? C0 / C : 1;
+            const termineBt = bt / C0;
+    
+            const varianzaRelativa = 
+                Math.pow(parametriIncertezza.e_v, 2) +
+                Math.pow(parametriIncertezza.e_a, 2) + 
+                Math.pow(parametriIncertezza.e_z, 2) +
+                Math.pow(parametriIncertezza.e_r, 2) +
+                Math.pow(termineBt, 2) * (
+                    Math.pow(parametriIncertezza.e_b, 2) + 
+                    Math.pow(parametriIncertezza.e_t, 2)
+                ) -
+                0.27 * termineBt * parametriIncertezza.e_r * parametriIncertezza.e_b;
+    
+            const cvBAC = rapportoC0C * Math.sqrt(Math.max(0, varianzaRelativa));
+    
+            // Intervallo di confidenza 95% (±2 CV come suggerito da Gullberg)
+            const bacCI95Lower = Math.max(0, alcolemiaAttuale * (1 - 2 * cvBAC));
+            const bacCI95Upper = alcolemiaAttuale * (1 + 2 * cvBAC);
+    
+            // Trova picco con incertezza
+            let maxBAC = 0;
+            let maxBACLower = 0;
+            let maxBACUpper = 0;
+            let timeAtPeak = 0;
+
+            // Ricerca estesa ma ragionevole:
+            // - Durante la bevuta + 60 min dopo per sessioni brevi
+            // - Durante la bevuta + 45 min dopo per sessioni lunghe
+
+            const searchEndTime = durataMinuti <= 120 ? 
+                durataMinuti + 60 :  // Sessioni < 2h: cerca fino a 1h dopo
+                durataMinuti + 45;   // Sessioni > 2h: cerca fino a 45min dopo
+    
+            for (let min = 0; min <= searchEndTime; min += 5) {
+                const bac = integrateBACWithMM(tempiIngestioni, params, min);
+                if (bac > maxBAC) {
+                    maxBAC = bac;
+                    timeAtPeak = min;
+                    // Propaga incertezza al picco
+                    const C0_peak = totalGrammiAlcol / (fattoreWidmark.value * peso);
+                    const bt_peak = betaPerOra * (min / 60);
+                    const C_peak = Math.max(0, C0_peak - bt_peak/100);
+                    const rapporto_peak = C_peak > 0 ? C0_peak / C_peak : 1;
+                    const termine_peak = bt_peak / C0_peak;
+            
+                    const var_peak = 
+                        Math.pow(parametriIncertezza.e_v, 2) +
+                        Math.pow(parametriIncertezza.e_a, 2) + 
+                        Math.pow(parametriIncertezza.e_z, 2) +
+                        Math.pow(parametriIncertezza.e_r, 2) +
+                        Math.pow(termine_peak, 2) * (
+                            Math.pow(parametriIncertezza.e_b, 2) + 
+                            Math.pow(parametriIncertezza.e_t, 2)
+                        ) -
+                        0.27 * termine_peak * parametriIncertezza.e_r * parametriIncertezza.e_b;
+                
+                    const cv_peak = rapporto_peak * Math.sqrt(Math.max(0, var_peak));
+                    maxBACLower = Math.max(0, bac * (1 - 2 * cv_peak));
+                    maxBACUpper = bac * (1 + 2 * cv_peak);
+                }
+            }
+    
+            // Helper per tempi con incertezza
+            function findHoursToLevel(startMin, targetBAC) {
+                const EPS = 1e-4; // g/L tolleranza numerica
+                const b0 = integrateBACWithMM(tempiIngestioni, params, startMin);
+                if (b0 <= targetBAC + EPS) return 0;
+                // Trova tempo nominale
+                for (let m = startMin + 5; m <= startMin + 720; m += 5) { // entro 12h, evita t=0
+                    const b = integrateBACWithMM(tempiIngestioni, params, m);
+                    if (b <= targetBAC + EPS) {
+                        return (m - startMin) / 60; // ore
+                    }
+                }
+                return null; // non raggiunto entro 12h
+            }
+    
+            const oreAzzeramento = alcolemiaAttuale > 0 ? findHoursToLevel(minutiPrimo, 0.0) : 0;
+            const orePerGuidare = alcolemiaAttuale > 0.5 ? findHoursToLevel(minutiPrimo, 0.5) : 0;
+
+            // Dopo il ciclo che ha calcolato maxBAC e timeAtPeak
+            if (typeof maxBAC === "number" && typeof timeAtPeak === "number") {
+                console.log(
+                    `Picco raggiunto a t=${timeAtPeak} min con BAC=${maxBAC.toFixed(3)} g/L`
+                );
+            }
+
+    
+            // Output esteso con incertezza
+            return {
+                // Valori nominali (retrocompatibilità)
+                alcolemiaPicco: Math.round(maxBAC * 1000) / 1000,
+                alcolemiaAttuale: Math.round(alcolemiaAttuale * 1000) / 1000,
+                grammiEffettivi: Math.round(totalGrammiAlcol * 10) / 10,
+                fattoreWidmark: Math.round(fattoreWidmark.value * 1000) / 1000,
+                tbw: Math.round(tbwResult.value * 10) / 10,
+                tbwCI: {lower: tbwResult.lower, upper: tbwResult.upper},
+                oreAzzeramento: Math.round(oreAzzeramento * 10) / 10,
+                orePerGuidare: Math.round(orePerGuidare * 10) / 10,
+                betaPerOra: Math.round(betaPerOra * 1000) / 1000,
+                statoLegale: getStatoLegale(alcolemiaAttuale),
+        
+                // Incertezza espressa con Intervalli di Confidenza
+                alcolemiaAttualeCI95: {
+                    lower: Math.round(bacCI95Lower * 1000) / 1000,
+                    upper: Math.round(bacCI95Upper * 1000) / 1000
+                },
+                alcolemiaPiccoCI95: {
+                    lower: Math.round(maxBACLower * 1000) / 1000,
+                    upper: Math.round(maxBACUpper * 1000) / 1000
+                },
+                coefficienteVariazioneBAC: Math.round(cvBAC * 1000) / 1000,
+        
+                // Funzione timeline con incertezza
+                funzioneAlcolemia: (additionalMin) => {
+                    const futureTime = minutiPrimo + additionalMin;
+                    // Controlliamo che il tempo futuro sia sensato
+                    if (futureTime < 0) return { mean: 0, lower: 0, upper: 0, cv: 0 };
+
+                    const bacFuture = integrateBACWithMM(tempiIngestioni, params, futureTime);
+                    // Se BAC è irrealisticamente alto, c'è un problema
+                    if (bacFuture > 10) {
+                        console.error(`BAC irrealistico: ${bacFuture} a t=${futureTime}`);
+                        return { mean: 0, lower: 0, upper: 0, cv: 0 };
+                    }
+            
+                    // Calcolo CV per questo timepoint
+                    const C0_fut = totalGrammiAlcol / (fattoreWidmark.value * peso);
+                    const bt_fut = betaPerOra * (futureTime / 60);
+                    const C_fut = Math.max(0, C0_fut - bt_fut/100);
+                    const rapporto_fut = C_fut > 0 ? C0_fut / C_fut : 1;
+                    const termine_fut = bt_fut / C0_fut;
+            
+                    const var_fut = 
+                        Math.pow(parametriIncertezza.e_v, 2) +
+                        Math.pow(parametriIncertezza.e_a, 2) + 
+                        Math.pow(parametriIncertezza.e_z, 2) +
+                        Math.pow(parametriIncertezza.e_r, 2) +
+                        Math.pow(termine_fut, 2) * (
+                            Math.pow(parametriIncertezza.e_b, 2) + 
+                            Math.pow(parametriIncertezza.e_t, 2)
+                        ) -
+                        0.27 * termine_fut * parametriIncertezza.e_r * parametriIncertezza.e_b;
+                
+                    const cv_fut = rapporto_fut * Math.sqrt(Math.max(0, var_fut));
+            
+                    return {
+                        mean: Math.max(0, Math.round(bacFuture * 1000) / 1000),
+                        lower: Math.max(0, Math.round(bacFuture * (1 - 2 * cv_fut) * 1000) / 1000),
+                        upper: Math.round(bacFuture * (1 + 2 * cv_fut) * 1000) / 1000,
+                        cv: Math.round(cv_fut * 1000) / 1000
+                    };
+                }
+            };
+        }
+
+        function getStatoLegale(alcolemia) {
+            if (alcolemia <= 0.5) return {status: 'ok', text: 'Entro i limiti (guida consentita)'};
+            else if (alcolemia <= 0.8) return {status: 'warning', text: 'OLTRE I LIMITI - Sanzione amministrativa'};
+            else if (alcolemia <= 1.5) return {status: 'danger', text: 'OLTRE I LIMITI - Sanzione penale'};
+            else return {status: 'danger', text: 'OLTRE I LIMITI - Sanzione penale grave'};
+        }
+
+        
+
+        // Funzioni di interfaccia
+        function showSection(sectionId, tab) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            tab.classList.add('active');
+            
+            if (sectionId === 'lista') {
+                loadCocktailList();
+            }
+        }
+
+
+        // Funzione di ricerca avanzata
+        // Inizzializziamo i filtri attivi
+        let activeFilters = ['nome']; // Array che mantiene di default il filtro "nome" attivo
+
+        function highlightText(text, query) {
+            if (!query) return text;
+            // RegExp con flag 'gi': g=global (tutte le occorrenze), i=case insensitive
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<span class="ingredient-highlight">$1</span>');
+        }
+
+        function searchInIngredients(cocktail, query) {
+            // some() restituisce true se ALMENO UN ingrediente contiene la query
+            return cocktail.ingredienti.some(ingrediente => 
+                ingrediente.nome.toLowerCase().includes(query.toLowerCase())
+            );
+        }
+
+        function getMatchingIngredients(cocktail, query) {
+            // filter() restituisce TUTTI gli ingredienti che matchano
+            return cocktail.ingredienti.filter(ingrediente => 
+                ingrediente.nome.toLowerCase().includes(query.toLowerCase())
+            );
+        }
+
+        function getMatchingNoteText(cocktail, query) {
+            if (!cocktail.note) return '';
+    
+            const lowerNote = cocktail.note.toLowerCase();
+            const lowerQuery = query.toLowerCase();
+            const index = lowerNote.indexOf(lowerQuery);
+    
+            if (index === -1) return '';
+
+            // Estrai un contesto intorno alla query
+            const start = Math.max(0, index - 25);
+            const end = Math.min(cocktail.note.length, index + query.length + 25);
+
+            let context = cocktail.note.substring(start, end);
+
+            if (start > 0) context = '...' + context;
+            if (end < cocktail.note.length) context = context + '...';
+    
+            return context;
+        }
+
+        // Vera funzione di ricerca
+        function searchCocktail() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const results = document.getElementById('searchResults');
+            const stats = document.getElementById('searchStats');
+            const cocktailInfo = document.createElement('div');
+            cocktailInfo.className = 'cocktail-info';
+    
+            if (query.length < 2) {
+                results.innerHTML = '';
+                stats.innerHTML = '';
+                return;
+            }
+
+            let matches = [];
+
+            // forEach vs for loop: forEach è più "funzionale", for è più "imperativo"
+            cocktailDatabase.forEach(cocktail => {
+                let found = false;
+                let matchType = '';
+                let matchDetails = '';
+
+                // Cerca nel nome e nelle note se il filtro è attivo
+                if (activeFilters.includes('nome')) {
+                    const nameMatch = cocktail.nome.toLowerCase().includes(query);
+                    const noteMatch = cocktail.note && cocktail.note.toLowerCase().includes(query);
+                    
+                    if (nameMatch || noteMatch) {
+                        found = true;
+                        if (nameMatch && noteMatch) {
+                            matchType = 'Nome, Note';
+                            matchDetails = getMatchingNoteText(cocktail, query);
+                        } else if (nameMatch) {
+                            matchType = 'Nome';
+                        } else {
+                            matchType = 'Nome (nelle note)';
+                            matchDetails = getMatchingNoteText(cocktail, query);
+                        }
+                    }
+                }
+
+                // Cerca nella categoria se il filtro è attivo
+                if (activeFilters.includes('categoria') && cocktail.categoria.toLowerCase().includes(query)) {
+                    found = true;
+                    // Operatore ternario: condizione ? valore_se_vero : valore_se_falso
+                    matchType = matchType ? matchType + ', Categoria' : 'Categoria';
+                }
+
+                // Cerca negli ingredienti se il filtro è attivo
+                if (activeFilters.includes('ingredienti') && searchInIngredients(cocktail, query)) {
+                    found = true;
+                    const matchingIngredients = getMatchingIngredients(cocktail, query);
+                    matchType = matchType ? matchType + ', Ingredienti' : 'Ingredienti';
+                    if (matchDetails) {
+                        // map() trasforma ogni ingrediente nel suo nome, join() li unisce con virgole
+                        matchDetails += ` | Ingredienti: ${matchingIngredients.map(ing => ing.nome).join(', ')}`;
+                    } else {
+                        matchDetails = matchingIngredients.map(ing => ing.nome).join(', ');
+                    }
+                }
+
+                if (found) {
+                    // push() aggiunge un elemento alla fine dell'array
+                    matches.push({
+                        cocktail: cocktail,
+                        matchType: matchType,
+                        matchDetails: matchDetails
+                    });
+                }
+            });
+
+            // Template literal (backticks) per interpolazione di stringhe
+            stats.innerHTML = matches.length === 1 ?
+                `Trovato 1 risultato per "${query}"` : 
+                `Trovati ${matches.length} risultati per "${query}"`;
+
+            if (matches.length === 0) {
+                results.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Nessun cocktail trovato</p>';
+                return;
+            }
+
+            // map() trasforma ogni match in HTML, join('') unisce tutto senza separatori
+            results.innerHTML = matches.map(match => {
+                const cocktail = match.cocktail;
+                const gradazione = calcolaGradazione(cocktail.ingredienti);
+                const alcolPuro = calcolaGrammiAlcol(cocktail.ingredienti, cocktail);
+
+                // Evidenzia le note SOLO se il match type indica che è stato trovato nelle note
+                let noteContent = cocktail.note;
+                    if (match.matchType.includes('Note') || match.matchType.includes('nelle note')) {
+                        noteContent = highlightText(cocktail.note, query);
+                }
+        
+                return `
+                    <div class="results">
+                        <h3 style="color: #333; margin-bottom: 10px;">
+                            ${cocktail.nome}
+                        </h3>
+                        <div style="font-size: 12px; color: #667eea; margin-bottom: 10px;">
+                            <i class="fas fa-search"></i> Trovato in: ${match.matchType}
+                            ${match.matchDetails ? ` (${match.matchDetails})` : ''}
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Categoria:</span>
+                            <span class="result-value">
+                                ${cocktail.categoria}
+                            </span>
+                        </div>
+                        <div class="result-item">
+	                        <span class="result-label">Metodo:</span>
+	                        <span class="result-value">${cocktail.metodo || 'A scelta'}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Gradazione:</span>
+                            <span class="result-value">${gradazione.toFixed(1)}% vol</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Alcol puro:</span>
+                            <span class="result-value">${alcolPuro.toFixed(1)} g</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Bicchiere:</span>
+                            <span class="result-value">${cocktail.bicchiere} ml</span>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <strong>Ingredienti:</strong><br>
+                            <div style="margin-top: 8px;"></div>
+                            ${cocktail.ingredienti.map(ing => {
+                                // Evidenzia se il filtro ingredienti è attivo E questo ingrediente contiene la query, anche se sono attivi altri filtri
+                                const shouldHighlight = activeFilters.includes('ingredienti') &&
+                                                        ing.nome.toLowerCase().includes(query.toLowerCase());
+                                const highlighted = shouldHighlight ? highlightText(ing.nome, query) : ing.nome;
+                                return `• ${highlighted}: ${ing.volume} ml${ing.gradazione > 0 ? ` (${ing.gradazione}% vol)` : ' (analcolico)'}`;
+                            }).join('<br>')}
+                        </div>
+                        <div style="margin-top: 10px; font-size: 15px; color: #555;">
+                            <em>${noteContent}</em>
+                        </div>
+                        ${getQuickAddHTML(cocktailDatabase.indexOf(cocktail))}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Gestione Quick Add dei cocktail
+        let quickAddQuantities = {}; // Memorizza le quantità per ogni cocktail
+        
+        function getQuickAddHTML(cocktailIndex) {
+            const qty = quickAddQuantities[cocktailIndex] || 0;
+            return `
+                <div class="quick-add-controls" data-cocktail-index="${cocktailIndex}">
+                    <button class="quick-add-btn remove" onclick="quickRemoveDrink(${cocktailIndex})" ${qty === 0 ? 'disabled' : ''}>
+                        –
+                    </button>
+                    <span class="quick-add-counter">
+                        ${qty > 0 ? `${qty} aggiunt${qty > 1 ? 'i' : 'o'}` : 'Non aggiunto'}
+                    </span>
+                    <button class="quick-add-btn add" onclick="quickAddDrink(${cocktailIndex})">
+                        +
+                    </button>
+                </div>
+            `;
+        }
+
+        function quickAddDrink(cocktailIndex) {
+            // Incrementa il contatore locale
+            if (!quickAddQuantities[cocktailIndex]) {
+                quickAddQuantities[cocktailIndex] = 0;
+            }
+            quickAddQuantities[cocktailIndex]++;
+
+            // Aggiorna l'UI della ricerca
+            updateQuickAddUI(cocktailIndex);
+    
+            // Aggiungi effettivamente alla lista drinks
+            const existingDrink = addedDrinks.find(d => d.index === cocktailIndex);
+            if (existingDrink) {
+                existingDrink.qty++;
+            } else {
+                addedDrinks.push({index: cocktailIndex, qty: 1});
+            }
+
+            updateAddedDrinks();
+            updateTabBadge();
+        }
+
+        function quickRemoveDrink(cocktailIndex) {
+            if (!quickAddQuantities[cocktailIndex] || quickAddQuantities[cocktailIndex] === 0) return;
+    
+            quickAddQuantities[cocktailIndex]--;
+
+            // Aggiorna l'UI della ricerca
+            updateQuickAddUI(cocktailIndex);
+    
+            // Rimuovi dalla lista drinks
+            const drinkIndex = addedDrinks.findIndex(d => d.index === cocktailIndex);
+            if (drinkIndex !== -1) {
+                if (addedDrinks[drinkIndex].qty > 1) {
+                    addedDrinks[drinkIndex].qty--;
+                } else {
+                    addedDrinks.splice(drinkIndex, 1);
+                }
+            }
+    
+            updateAddedDrinks();
+            updateTabBadge();
+        }
+
+        function updateQuickAddUI(cocktailIndex) {
+            const controls = document.querySelector(`.quick-add-controls[data-cocktail-index="${cocktailIndex}"]`);
+            if (!controls) return;
+
+            const qty = quickAddQuantities[cocktailIndex] || 0;
+            const counter = controls.querySelector('.quick-add-counter');
+            const removeBtn = controls.querySelector('.quick-add-btn.remove');
+    
+            counter.textContent = qty > 0 ? `${qty} aggiunt${qty > 1 ? 'i' : 'o'}` : 'Non aggiunto';
+            removeBtn.disabled = qty === 0;
+        }
+
+        function updateTabBadge() {
+            const badge = document.getElementById('tabBadge');
+            const totalDrinks = addedDrinks.reduce((sum, drink) => sum + drink.qty, 0);
+
+            if (totalDrinks > 0) {
+                badge.textContent = totalDrinks;
+                badge.style.display = 'inline-block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        // Sincronizza le quantità quando si rimuove un drink dalla sezione alcolemia
+        function syncQuickAddQuantities() {
+            // Reset tutte le quantità
+            quickAddQuantities = {};
+    
+            // Ricostruisci dalle drink aggiunte
+            addedDrinks.forEach(drink => {
+                quickAddQuantities[drink.index] = drink.qty;
+            });
+        }
+
+    
+
+
+        // Stampa risultato finale
+        function updateCocktailInfo() {
+            const input = document.getElementById('cocktailName');
+            const info = document.getElementById('cocktailInfo');
+            const name = input.value.trim().toLowerCase();
+            
+            const cocktail = cocktailDatabase.find(c => c.nome.toLowerCase() === name);
+            
+            if (!cocktail) {
+                info.style.display = 'none';
+                return;
+            }
+
+            const gradazione = calcolaGradazione(cocktail.ingredienti);
+            const alcolPuro = calcolaGrammiAlcol(cocktail.ingredienti, cocktail);
+
+            document.getElementById('gradazione').textContent = `${gradazione.toFixed(1)}% vol`;
+            document.getElementById('alcolPuro').textContent = `${alcolPuro.toFixed(1)} g`;
+            
+            info.style.display = 'block';
+        }
+
+        function aggiungiDrink() {
+            const nameInput = document.getElementById('cocktailName');
+            const quantitaInput = document.getElementById('quantita');
+            const name = nameInput.value.trim().toLowerCase();
+            const cocktail = cocktailDatabase.find(c => c.nome.toLowerCase() === name);
+            if (!cocktail) {
+                alert('Cocktail non trovato!');
+                return;
+            }
+            const qty = parseInt(quantitaInput.value) || 1;
+            if (qty <= 0) {
+                alert('Quantità deve essere almeno 1!');
+                return;
+            }
+            const index = cocktailDatabase.indexOf(cocktail);
+            addedDrinks.push({index, qty});
+            updateAddedDrinks();
+            syncQuickAddQuantities();
+            updateTabBadge();
+            quantitaInput.value = '1';
+            nameInput.value = '';
+            document.getElementById('cocktailInfo').style.display = 'none';
+        }
+
+        function removeDrink(i) {
+            addedDrinks.splice(i, 1);
+            updateAddedDrinks();
+            syncQuickAddQuantities();
+            updateTabBadge();
+        }
+
+        function updateAddedDrinks() {
+            const list = document.getElementById('addedDrinks');
+            list.innerHTML = '';
+            let total = 0;
+            addedDrinks.forEach((drink, i) => {
+                const cocktail = cocktailDatabase[drink.index];
+                const alcol = calcolaGrammiAlcol(cocktail.ingredienti, cocktail) * drink.qty;
+                total += alcol;
+                const div = document.createElement('div');
+                div.className = 'added-drink';
+                div.innerHTML = `
+                    ${cocktail.nome} x ${drink.qty} - Alcol: ${alcol.toFixed(1)}g
+                    <button onclick="removeDrink(${i})">X</button>
+                `;
+                list.appendChild(div);
+            });
+            document.getElementById('totalAlcol').textContent = total.toFixed(1);
+        }
+
+        function calcolaAlcolemia() {
+            if (addedDrinks.length === 0) {
+                document.getElementById('alcolemiaResults').innerHTML = '<div class="warning">Aggiungi almeno un drink!</div>';
+                return;
+            }
+            const genere = document.getElementById('genere').value;
+            const peso = parseFloat(document.getElementById('peso').value);
+            const altezza = parseFloat(document.getElementById('altezza').value);
+            const eta = parseInt(document.getElementById('eta').value);
+            const stomacoPieno = document.getElementById('stomaco').value === 'true';
+            const durataMinuti = parseInt(document.getElementById('durataMinuti').value) || 0;
+            const minutiPrimo = parseInt(document.getElementById('minutiPrimo').value) || 0;
+            // Leggi il checkbox solo se è visibile (attivo/atleta)
+            const fitnessLevel = document.getElementById('fitnessLevel').value;
+            const esercizioSameDay = (fitnessLevel === 'attivo' || fitnessLevel === 'atleta') ? 
+                document.getElementById('esercizioSameDay').value === 'si' : false;
+            const idratazione = document.getElementById('idratazione').value;
+            // Preferisci un input numerico se presente: litri di acqua bevuti oggi
+            const litriAcquaEl = document.getElementById('litriAcqua');
+            const idratazioneParam = (litriAcquaEl && litriAcquaEl.value)
+	            ? parseFloat(litriAcquaEl.value)
+	            : idratazione; // fallback alle categorie legacy
+            const resultsDiv = document.getElementById('alcolemiaResults');
+
+            if (!peso || !altezza || !eta) {
+                resultsDiv.innerHTML = '<div class="warning">Compila tutti i campi!</div>';
+                return;
+            }
+
+            let warningHTML = '';
+            if (eta < 18 || peso > 150) {
+                warningHTML = '<div class="warning" style="font-size: 13px; line-height: 1.4; margin-top: 20px;">';
+                if (eta < 18) {
+                    warningHTML += 'Attenzione: Per età inferiore a 18, <br> BAC reale potrebbe essere più alto <br> (sottostima TBW ~10/20%). <br>';
+                }
+                if (peso > 150) {
+                    warningHTML += 'Attenzione: Per peso maggiore a 150kg, <br> BAC reale potrebbe essere più alto <br> (sovrastima TBW ~10/20%).';
+                }
+                warningHTML += '</div>';
+            }
+
+            if (durataMinuti > minutiPrimo) {
+                resultsDiv.innerHTML = '<div class="warning">Durata non può essere maggiore dei minuti dal primo drink</div>';
+                return;
+            }
+
+            let totalGrammiAlcol = 0;
+            addedDrinks.forEach(drink => {
+                const cocktail = cocktailDatabase[drink.index];
+                totalGrammiAlcol += calcolaGrammiAlcol(cocktail.ingredienti, cocktail) * drink.qty;
+            });
+            
+            if (totalGrammiAlcol === 0) {
+                resultsDiv.innerHTML = '<div class="warning">Nessun alcol nei drink selezionati!</div>';
+                return;
+            }
+            // Verifica che i grammi totali siano realistici
+            console.log(`Grammi totali alcol: ${totalGrammiAlcol.toFixed(1)}g`);
+            if (totalGrammiAlcol > 200) {
+                console.warn(`Attenzione: ${totalGrammiAlcol}g di alcol sono una quantità molto elevata`);
+            }
+
+            // Chiamata finale
+            const risultato = calcolaAlcolemiaMultipla(totalGrammiAlcol, genere, peso, altezza, eta, stomacoPieno, durataMinuti, minutiPrimo, fitnessLevel, esercizioSameDay, idratazioneParam);
+            
+            let timelineHTML = ""; // '<h4>Timeline Alcolemia</h4>'
+            for (let h = 1; h <= 6; h++) {
+                const fut = risultato.funzioneAlcolemia(h * 60);
+                if (!fut || typeof fut.mean !== "number" || fut.mean <= 0) break;
+                timelineHTML += `
+                    <div class="result-item">
+                        <span class="result-label">Tra ${h} ore:</span>
+                        <span class="result-value">
+                            ${fut.mean.toFixed(3)} g/L
+                            <span style="color: #666; font-size: 11px;">
+                                (${fut.lower.toFixed(3)}–${fut.upper.toFixed(3)})
+                            </span>
+                        </span>
+                    </div>
+                `;
+            }
+            document.getElementById("alcolemiaResults").innerHTML = timelineHTML;
+
+            // Descrizione del livello fitness
+            const fitnessDescription = {
+                'atleta': 'Atleta (+18% metabolismo)',
+                'attivo': 'Attivo (+12% metabolismo)', 
+                'sedentario': 'Sedentario (metabolismo base)'
+            };
+
+            resultsDiv.innerHTML = `
+                <div class="results">
+                    <h3 style="color: #333; margin-bottom: 15px;">Risultati Alcolemia</h3>
+                    <div class="result-item">
+                        <span class="result-label">Livello fitness:</span>
+                        <span class="result-value" style="font-size: 13px;">
+                            ${fitnessDescription[fitnessLevel]}
+                        </span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Alcolemia al picco:</span>
+                        <span class="result-value">${risultato.alcolemiaPicco} g/L
+                            <span style="color: #666; font-size: 12px;">
+                                <br>(${risultato.alcolemiaPiccoCI95.lower}-${risultato.alcolemiaPiccoCI95.upper} g/L)
+                            </span>
+                        </span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Alcolemia attuale:</span>
+                        <span class="result-value">${risultato.alcolemiaAttuale} g/L
+                            <span style="color: #666; font-size: 12px;">
+                                <br>(${risultato.alcolemiaAttualeCI95.lower}-${risultato.alcolemiaAttualeCI95.upper} g/L)
+                            </span>
+                        </span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Coefficiente variazione:</span>
+                        <span class="result-value">${(risultato.coefficienteVariazioneBAC * 100).toFixed(1)}%</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">TBW:</span>
+                        <span class="result-value">${risultato.tbw} litri</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Intervallo TBW (95%):</span>
+                        <span class="result-value">${(risultato.tbwCI.lower).toFixed(1)} - ${(risultato.tbwCI.upper).toFixed(1)} L</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Fattore Widmark:</span>
+                        <span class="result-value">${risultato.fattoreWidmark}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Tasso eliminazione:</span>
+                        <span class="result-value">${risultato.betaPerOra} g/L/h</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Tempo per azzeramento:</span>
+                        <span class="result-value">${formatTime(risultato.oreAzzeramento)}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Tempo per guidare:</span>
+                        <span class="result-value">${formatTime(risultato.orePerGuidare)}</span>
+                    </div>
+                    <div class="legal-status legal-${risultato.statoLegale.status}">
+                        ${risultato.statoLegale.text}
+                    </div>
+                    <h4>Timeline Alcolemia</h4>
+                    ${[1,2,3,4,5,6].map(h => {
+                        const fut = risultato.funzioneAlcolemia(h * 60);
+                        if (fut.mean <= 0) return '';
+                        return `<div class="result-item">
+                            <span class="result-label">Tra ${h} ore:</span>
+                            <span class="result-value">${fut.mean} g/L 
+                                <span style="color: #666; font-size: 11px;">(${fut.lower}-${fut.upper})</span>
+                            </span>
+                        </div>`;
+                    }).join('')}
+                </div>
+                ${warningHTML}
+                <div class="warning" style="font-size: 13px; line-height: 1.4;">
+                    ATTENZIONE: Calcolo teorico con incertezza del ±${(risultato.coefficienteVariazioneBAC * 200).toFixed(0)}% (Intervallo di Confidenza 95%).<br>
+                    L'alcolemia reale può variare per fattori individuali.<br>
+                    Non guidare mai dopo aver bevuto alcol.
+                </div>
+            `;
+        }
+
+        function loadCocktailList() {
+            const list = document.getElementById('cocktailList');
+            list.innerHTML = cocktailDatabase.map(cocktail => {
+                const gradazione = calcolaGradazione(cocktail.ingredienti);
+                const alcolPuro = calcolaGrammiAlcol(cocktail.ingredienti, cocktail);
+                
+                return `
+                    <div class="cocktail-item">
+                        <div class="cocktail-name">${cocktail.nome}</div>
+                        <div class="cocktail-info">
+                            ${gradazione.toFixed(1)}% vol • ${alcolPuro.toFixed(1)}g alcol • ${cocktail.categoria}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterCocktails() {
+            const filter = document.getElementById('filterInput').value.toLowerCase();
+            const items = document.querySelectorAll('.cocktail-item');
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(filter) ? 'block' : 'none';
+            });
+        }
+
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCocktailList();
+            
+            // Event listeners
+            document.getElementById('searchInput').addEventListener('input', searchCocktail);
+            document.getElementById('filterInput').addEventListener('input', filterCocktails);
+            document.getElementById('cocktailName').addEventListener('input', updateCocktailInfo);
+            document.getElementById('aggiungiDrinkBtn').addEventListener('click', aggiungiDrink);
+            document.getElementById('calcolaBtn').addEventListener('click', calcolaAlcolemia);
+            document.getElementById('fitnessLevel').addEventListener('change', function() {
+                const group = document.getElementById('esercizioSameDayGroup');
+                const level = this.value;
+                group.style.display = (level === 'attivo' || level === 'atleta') ? 'block' : 'none';
+            });
+            // Inizializza selettore fitness a card
+            const fitnessCards = document.querySelectorAll('#fitnessSelector .fitness-card');
+            console.log('Fitness cards trovate:', fitnessCards.length);
+            const fitnessSelect = document.getElementById('fitnessLevel');
+
+            function setFitness(level) {
+	            fitnessSelect.value = level; // aggiorna il select legacy (compatibilità)
+	            fitnessCards.forEach(c => c.classList.toggle('active', c.getAttribute('data-level') === level));
+	            updateTBWPreview();
+            }
+
+            // Click sulle card
+            fitnessCards.forEach(card => {
+	            card.addEventListener('click', () => setFitness(card.getAttribute('data-level')));
+            });
+
+            // Se il select aveva un valore preimpostato, riflettilo sulle card
+            setFitness(fitnessSelect.value || 'sedentario');
+
+            // Preview TBW live
+            function updateTBWPreview() {
+	            const genere = (document.getElementById('genere') || {}).value;
+	            const peso = parseFloat((document.getElementById('peso') || {}).value);
+	            const altezza = parseFloat((document.getElementById('altezza') || {}).value);
+	            const eta = parseInt((document.getElementById('eta') || {}).value);
+	            const idratazioneSel = (document.getElementById('idratazione') || {}).value;
+	            const litriAcquaEl = document.getElementById('litriAcqua');
+	            const idratazioneParam = (litriAcquaEl && litriAcquaEl.value) ? parseFloat(litriAcquaEl.value) : idratazioneSel;
+
+	            if (!genere || !peso || !altezza || !eta || !fitnessSelect.value) {
+		            document.getElementById('tbwPreview').textContent = 'Preview TBW: — L (compila dati)';
+		            return;
+	            }
+	            const tbw = calcolaTBW(genere, peso, altezza, eta, fitnessSelect.value, idratazioneParam);
+	            document.getElementById('tbwPreview').textContent = `Preview TBW: ${tbw.value.toFixed(1)} L (IC95% ${tbw.lower.toFixed(1)}–${tbw.upper.toFixed(1)})`;
+            }
+
+            // Ricalcola preview al variare dei campi rilevanti
+            ['genere','peso','altezza','eta','idratazione','litriAcqua'].forEach(id => {
+	            const el = document.getElementById(id);
+	            if (el) el.addEventListener('input', updateTBWPreview);
+            });
+
+            // Gestione filtri di ricerca
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.addEventListener('click', function() {
+                    // getAttribute legge il valore dell'attributo HTML
+                    const filter = this.getAttribute('data-filter');
+        
+                    if (this.classList.contains('active')) {
+                        // Se è l'ultimo filtro attivo, non permettere di rimuoverlo
+                        if (activeFilters.length === 1) return;
+            
+                        // classList.remove() rimuove una classe CSS
+                        this.classList.remove('active');
+                        // filter() crea un nuovo array escludendo gli elementi che matchano la condizione
+                        activeFilters = activeFilters.filter(f => f !== filter);
+                    } else {
+                        // classList.add() aggiunge una classe CSS
+                        this.classList.add('active');
+                        // push() aggiunge un elemento alla fine dell'array
+                        activeFilters.push(filter);
+                    }
+
+                    // Aggiorna la ricerca solo se c'è testo sufficiente
+                    if (document.getElementById('searchInput').value.length >= 2) {
+                        searchCocktail();
+                    }
+                });
+            });
+            
+            // Tab navigation
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const sectionId = this.getAttribute('data-section');
+                    showSection(sectionId, this);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
